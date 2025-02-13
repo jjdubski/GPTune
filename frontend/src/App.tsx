@@ -6,12 +6,30 @@ import './App.css'
 function App() {
   const [currentTime, setCurrentTime] = useState(0)
   const [currentDate, setCurrentDate] = useState(0)
+
+  // Fetches date and time from backend on load/reload
+  // useEffect(() => {
+  //   fetch('http://localhost:8000').then(res => res.json()).then(data => {
+  //     setCurrentTime(data.current_time)
+  //     setCurrentDate(data.current_date)
+  //   })
+  // }
+
+    // Updates date and time every second
   useEffect(() => {
-    fetch('http://localhost:8000').then(res => res.json()).then(data => {
-      setCurrentTime(data.current_time)
-      setCurrentDate(data.current_date)
-    })
-  }, [])
+    const fetchData = () => {
+      fetch('http://localhost:8000').then(res => res.json()).then(data => {
+        setCurrentTime(data.current_time)
+        setCurrentDate(data.current_date)
+      })
+    }
+
+    fetchData()
+    const interval = setInterval(fetchData, 1000)
+
+    return () => clearInterval(interval)
+  }
+,[])
 
   return (
     <>
