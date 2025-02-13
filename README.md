@@ -3,6 +3,8 @@
 ![Docker](https://img.shields.io/badge/Docker-v27.4-00008B.svg)
 ![Postgres](https://img.shields.io/badge/Postgres-v17-3268a8.svg)
 
+### Runs on http://localhost:3000/
+
 # Table of Contents  
 
 1. [File Structure](#file-structure)
@@ -22,8 +24,8 @@ _Need to update_
 # List of Commands:
 
 ## Docker:
-- **docker compose up** OR **docker-compose up**
-  - Builds the containers that are in the current compose.yaml file and run the project on localhost:1337
+- **docker compose up --build** OR **docker-compose up --build**
+  - Builds the containers that are in the current compose.yaml file and run the project on localhost:3000
   - Using the --build flag will create a fresh build
   - Using the optional -d flag it will run the container in the background until you use: docker-compose down -v
     
