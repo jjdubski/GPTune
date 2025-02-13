@@ -3,6 +3,8 @@
 ![Docker](https://img.shields.io/badge/Docker-v27.4-00008B.svg)
 ![Postgres](https://img.shields.io/badge/Postgres-v17-3268a8.svg)
 
+### Run locally on: http://localhost:3000<br>Using [Docker](#docker)
+
 # Table of Contents  
 
 1. [File Structure](#file-structure)
