@@ -12,3 +12,6 @@
 # All env files
 .env
 .env.*
+
+# Any pycache
+__pycache__
