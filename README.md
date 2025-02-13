@@ -127,14 +127,8 @@
 
 #### First, make sure all your files are saved.
 #### Second, make sure you are in the repository directory.  
-![image](https://github.com/user-attachments/assets/9a385b41-01e8-4644-892c-efd8353c89d9)
-
-#### If you aren't already in a new branch, please create one:  
-![image](https://github.com/user-attachments/assets/eabd54f5-abcb-4d0d-9ccf-c8a309ae4f4d)
-
-#### Then switch to the new branch:  
-![image](https://github.com/user-attachments/assets/51bcc6c1-267f-4d70-8a15-ec8276d5fa71)
-
+#### If you aren't already in a new branch, please create one.
+#### Then switch to the new branch
 #### Add your code, commit the changes and then push:  
 ![image](https://github.com/user-attachments/assets/2c605c77-e13f-464b-a802-966915a5d2ff)
 
