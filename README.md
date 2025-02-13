@@ -33,6 +33,7 @@
   - Stops the running containers and volumes associated with them
  
 **_Any docker compose exec command will not run unless the container is running_**  
+
 **_The docker compose VS docker-compose seems to be a OS specific problem please use them interchangeably if you have issues_**
 
 - **docker compose exec backend python manage.py migrate --noinput**
