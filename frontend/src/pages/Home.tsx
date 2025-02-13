@@ -22,7 +22,7 @@ const Home: React.FC = () => {
     // Updates date and time every second
     useEffect(() => {
         const fetchData = () => {
-            fetch('http://localhost:8000').then(res => res.json()).then(data => {
+            fetch('http://127.0.0.1:8000').then(res => res.json()).then(data => {
                 setCurrentTime(data.current_time)
                 setCurrentDate(data.current_date)
             })
