@@ -25,7 +25,7 @@
 
 ## Docker:
 - **docker compose up --build** OR **docker-compose up --build**
-  - Builds the containers that are in the current compose.yaml file and run the project on localhost:1337
+  - Builds the containers that are in the current compose.yaml file and run the project on localhost:3000
   - Using the --build flag will create a fresh build
   - Using the optional -d flag it will run the container in the background until you use: docker-compose down -v
     
@@ -48,7 +48,7 @@
 - **docker image ls**
   - Lists all docker images
  
-- **docker exec -it django-docker bash**
+- **docker exec -it musicapp bash**
   - Creates an interactive bash shell that is running in the container
   - To exit this bash terminal use the command 'exit'
 ![image](https://github.com/user-attachments/assets/4e614cf1-0d2e-4fcd-8e8e-adc396aea569)
