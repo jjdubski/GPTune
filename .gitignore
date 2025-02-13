@@ -12,6 +12,8 @@
 # All env files
 .env
 .env.*
+staticfiles/
+db.sqlite3
 
 # Any pycache
 __pycache__
