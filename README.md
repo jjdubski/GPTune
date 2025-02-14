@@ -1,7 +1,7 @@
-![Python](https://img.shields.io/badge/python-v3.13-blue.svg)
-![Django](https://img.shields.io/badge/django-v5.1.4-yellow.svg)
-![Docker](https://img.shields.io/badge/Docker-v27.4-00008B.svg)
-![Postgres](https://img.shields.io/badge/Postgres-v17-3268a8.svg)
+![Python](https://img.shields.io/badge/python-v3.13-yellow.svg)
+![Django](https://img.shields.io/badge/django-v5.1.4-092e20.svg)
+![Docker](https://img.shields.io/badge/Docker-v27.4-118eed.svg)
+![Postgres](https://img.shields.io/badge/Postgres-v17-4287f5.svg)
 
 ### Run locally on: http://localhost:3000
 
