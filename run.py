@@ -1,5 +1,4 @@
 import subprocess
-import sys
 import os
 
 def check_command(command):
