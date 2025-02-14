@@ -3,8 +3,6 @@
 ![Docker](https://img.shields.io/badge/Docker-v27.4-118eed.svg)
 ![Postgres](https://img.shields.io/badge/Postgres-v17-4287f5.svg)
 
-### Run locally on: http://localhost:3000
-
 # Table of Contents  
 
 1. [How to run](#how-to-run)
@@ -18,22 +16,23 @@
 
 # How to run
 
+### Prerequisites:
+ - **Docker Desktop**
+ - **Python**  
+   
 #### 1. Clone the repo
 #### 2. Launch Docker Desktop and make sure it's running.
 #### 3. Open a terminal and cd musicApp/
-#### 4. Use [docker](#docker) compose up --build to start (or use docker-compose with the dash)
-![image](https://github.com/user-attachments/assets/aeedd436-a0ec-45bd-b61f-75b82151cb08)  
-![image](https://github.com/user-attachments/assets/6ca1a55f-ed52-410f-ba06-e98a97cb572e)
+#### 4. Run the project using Python
+- **Windows:**
+   - **python run.py**
+- **MacOS or Linux:**
+   - **python3 run.py**
+ 
+### Visit: http://localhost:3000
 
 #### **_To stop running the project use CTRL+C (or CMD+C for Mac) then use: docker compose down -v_**  
 ![image](https://github.com/user-attachments/assets/17e3333b-0a9c-4a17-928d-e7d1379af5bf)
-
----
-
-## To remove missing errors in React code you need to install the node_modules locally  
-
-#### cd musicApp/frontend
-#### npm install
    
 # File Structure:
 
@@ -177,3 +176,7 @@ Or this:
 ![image](https://github.com/user-attachments/assets/5783e301-885f-4c24-b2f4-644b63a6cd3d)
 
 Make sure Docker Desktop is running, if it is, restart and try again.
+
+An error like this means you are missing the .env file
+![image](https://github.com/user-attachments/assets/df964348-9a8d-4de3-aa0f-5c925d81c4e7)
+
