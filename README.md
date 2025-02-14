@@ -3,17 +3,25 @@
 ![Docker](https://img.shields.io/badge/Docker-v27.4-00008B.svg)
 ![Postgres](https://img.shields.io/badge/Postgres-v17-3268a8.svg)
 
-### Run locally on: http://localhost:3000<br>Using [Docker](#docker)
+### Run locally on: http://localhost:3000
 
 # Table of Contents  
 
-1. [File Structure](#file-structure)
-2. [List of Commands](#list-of-commands)  
-   2.1.  [Docker](#docker)  
-   2.2.  [PSQL](#psql)  
-   2.3.  [Git](#git--github)  
+1. [How to run](#how-to-run)
+2. [File Structure](#file-structure)
+3. [List of Commands](#list-of-commands)  
+   3.1.  [Docker](#docker)  
+   3.2.  [PSQL](#psql)  
+   3.3.  [Git](#git--github)  
 4. [How to submit pull request](#how-to-submit-pull-request)
 5. [FAQ](#faq)
+
+# How to run
+
+#### 1. Clone the repo
+#### 2. Open a terminal and cd musicApp/
+#### 3. Make sure Docker Desktop is running
+#### 4. Use [docker](#docker) compose up --build to start
    
 # File Structure:
 
