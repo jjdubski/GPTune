@@ -25,10 +25,10 @@
 
 ---
 
-To remove missing errors in React code you need to install the node_modules locally  
+## To remove missing errors in React code you need to install the node_modules locally  
 
 #### cd musicApp/frontend
-#### npm i
+#### npm install
    
 # File Structure:
 
