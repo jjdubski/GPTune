@@ -22,6 +22,13 @@
 #### 2. Open a terminal and cd musicApp/
 #### 3. Make sure Docker Desktop is running
 #### 4. Use [docker](#docker) compose up --build to start
+
+---
+
+To remove missing errors in React code you need to install the node_modules locally  
+
+#### cd musicApp/frontend
+#### npm i
    
 # File Structure:
 
