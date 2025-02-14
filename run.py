@@ -19,16 +19,24 @@ try:
 
     # Delete node_modules
     print('\033[93mDeleting node_modules directory...\033[0m')
-    print('\033[93mDeleting package-lock.json file...\033[0m')
     if os.name == 'posix':
         subprocess.run(['rm', '-rf', 'frontend/node_modules'])
-        subprocess.run(['rm', 'frontend/package-lock.json'])
     else:
         subprocess.run(['rmdir', '/s', '/q', 'frontend\\node_modules'], shell=True)
+
+    print('\033[93mDeleting package-lock.json file...\033[0m')
+    if os.name == 'posix':
+        subprocess.run(['rm', 'frontend/package-lock.json'])
+    else:
         subprocess.run(['del', '/q', 'frontend\\package-lock.json'], shell=True)
 
     print('\033[92mInstalling node_modules...\033[0m')
-    subprocess.run(['npm', 'install'], cwd='frontend')
+
+    if os.name == 'posix':
+        subprocess.run(['npm', 'install'], cwd='frontend')
+    else:
+        subprocess.run(['npm', 'install'], cwd='frontend', shell=True)
+
     print('\033[92mNode modules installed.\033[0m')
     print('Starting app with\033[94m docker-compose\033[0m...')
 
