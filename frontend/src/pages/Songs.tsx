@@ -6,7 +6,7 @@ const Songs: React.FC = () => {
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        fetch('http://0.0.0.0:8000/songAPI/songs/?format=json')
+        fetch('http://localhost:8000/songAPI/songs/?format=json')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok')

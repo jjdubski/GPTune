@@ -4,8 +4,10 @@ WORKDIR /frontend
 
 COPY package.json ./
 
-RUN npm install
-
 COPY . .
+
+RUN if [ -d "node_modules" ]; then rm -rf node_modules; fi
+
+RUN npm install
 
 CMD ["npm", "run", "dev"]
