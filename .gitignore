@@ -8,6 +8,7 @@
 *.njsproj
 *.sln
 *.sw?
+package-lock.json
 
 # All env files
 .env
