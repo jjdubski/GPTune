@@ -19,9 +19,14 @@
 # How to run
 
 #### 1. Clone the repo
-#### 2. Open a terminal and cd musicApp/
-#### 3. Make sure Docker Desktop is running
-#### 4. Use [docker](#docker) compose up --build to start
+#### 2. Launch Docker Desktop and make sure it's running.
+#### 3. Open a terminal and cd musicApp/
+#### 4. Use [docker](#docker) compose up --build to start (or use docker-compose with the dash)
+![image](https://github.com/user-attachments/assets/aeedd436-a0ec-45bd-b61f-75b82151cb08)  
+![image](https://github.com/user-attachments/assets/6ca1a55f-ed52-410f-ba06-e98a97cb572e)
+
+#### **_To stop running the project use CTRL+C (or CMD+C for Mac) then use: docker compose down -v_**  
+![image](https://github.com/user-attachments/assets/17e3333b-0a9c-4a17-928d-e7d1379af5bf)
 
 ---
 
@@ -122,21 +127,6 @@
 - **git push**
   - Attempts to upload the code in the local branch you are in, to the remote branch associated on GitHub.
   - If successful you will get a message saying your files were pushed with no errors.
-
-# How to run the project:
-
-#### First, launch Docker Desktop and make sure it's running.
-
-#### Second, go to terminal and make sure you are in the repository directory.  
-![image](https://github.com/user-attachments/assets/9a385b41-01e8-4644-892c-efd8353c89d9)
-
-#### Third run the command: docker compose up --build (or use docker-compose with the dash)
-![image](https://github.com/user-attachments/assets/aeedd436-a0ec-45bd-b61f-75b82151cb08)  
-![image](https://github.com/user-attachments/assets/6ca1a55f-ed52-410f-ba06-e98a97cb572e)
-
-#### **_To stop running the project use CTRL+C (or CMD+C for Mac) then use: docker compose down -v_**  
-![image](https://github.com/user-attachments/assets/17e3333b-0a9c-4a17-928d-e7d1379af5bf)
-
 
 # How to submit pull request:
 
