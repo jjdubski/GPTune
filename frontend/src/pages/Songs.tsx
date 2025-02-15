@@ -2,7 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const Songs: React.FC = () => {
-    const [songs, setSongs] = useState<any[]>([])
+    interface Song {
+        id: number;
+        trackID: string;
+        title: string;
+        artist: string;
+        album: string;
+        releaseDate: string;
+    }
+
+    const [songs, setSongs] = useState<Song[]>([])
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
