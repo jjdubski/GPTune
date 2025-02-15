@@ -18,11 +18,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from .views import index
+from .views import index, login, callback
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index), # Default view
+    path("login/",login),
+    path("callback/", callback),
+    
+    
     path('songAPI/', include('songs.urls'))
 ]
 
