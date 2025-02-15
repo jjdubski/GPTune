@@ -5,10 +5,9 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend:/frontend
+      - ./frontend/:/frontend
       - /frontend/node_modules
-    depends_on:
-      - backend
+    
 
   backend:
     build:
@@ -34,6 +33,7 @@ services:
       - .env
     depends_on:
       - db
+      - frontend
 
   db:
     image: postgres:latest
