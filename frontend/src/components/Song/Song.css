@@ -1,0 +1,31 @@
+div {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.song-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0 auto auto 1rem; 
+}
+.song-info p {
+    margin: 0;
+    padding: 0;
+}
+.song{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid black;
+    border-radius: 10px; 
+    height : 150px;
+    margin-bottom: 20px;
+}
+.song img {
+    width: fit-content;
+    height: 100%;
+    object-fit: cover;
+}
