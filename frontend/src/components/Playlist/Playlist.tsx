@@ -30,22 +30,20 @@ const Playlist: React.FC = () => {
     }, []);
 
     return (
-        <div className="playlist">
-            <h2>My Playlist</h2>
-            {songs.length > 0 ? (
-                songs.map(song => (
-                    <div key={song.id} className="playlist-item">
-                        <Song 
-                            title={song.title} 
-                            artist={song.artist} 
-                        />
-                    </div>
-                ))
-            ) : (
-                <p>No songs in the playlist.</p>
-            )}
-        </div>
+        {songs.map((song) => (
+            <div key={song.id}>
+                {/* <p>ID: {song.id}</p>
+                <p>Track ID: {song.trackID}</p>
+                <p>Title: {song.title}</p>
+                <p>Artist: {song.artist}</p>
+                <p>Album: {song.album}</p>
+                <p>Release Date: {song.releaseDate}</p> */}
+                <Song title={song.title} artist={song.artist} album={song.album} img='https://i.scdn.co/image/ab67616d0000b27348f98cb1e0e93226a15fb439' />
+            </div>
+        ))}
+    
     );
 };
+                
 
 export default Playlist;
