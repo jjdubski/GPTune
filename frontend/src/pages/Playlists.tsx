@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Song  from '../components/Song/Song'
 import SongList from '../components/SongList/SongList';
+import Playlist from '../components/Playlist/Playlist';
 
-const Songs: React.FC = () => {
-    interface Song {
+const Playlists: React.FC = () => {
+    interface Playlist {
         id: number;
         trackID: string;
         title: string;
@@ -16,7 +17,7 @@ const Songs: React.FC = () => {
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        fetch('http://localhost:8000/songAPI/songs/?format=json')
+        fetch ('http://localhost:8000/playlists/?format=json')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok')
@@ -33,28 +34,32 @@ const Songs: React.FC = () => {
                 setError(null)
             })
             .catch(error => {
-                console.error('Error fetching songs:', error)
-                setError('Failed to fetch songs. Please try again later.')
+                console.error('Error fetching Playlists:', error)
+                setError('Failed to fetch Playlists. Please try again later.')
             })
     }, [])
 
     return (
         <div>
-            <h2>Songs Page</h2>
-            <p>This is the songs page. Here is the list of songs in the DB:</p>
+            <h2>Playlist Page</h2>
+            <p>This is the Playlist page. Here is the list of songs in the DB:</p>
             {error ? (
                 <p style={{ color: 'red' }}>{error}</p>
             ) : listIsEmpty === true  ? (
-                <p style={{ color: 'red' }}>No songs available</p>
+                <p style={{ color: 'red' }}>No playlists available</p>
             ) : (
-                <SongList />
+                
+                <Playlist title="Sample Title" img="https://example.com/sample.jpg" />
               
-            )}
+            )} 
+            {/* <Playlist title="Sample Title" img="https://example.com/sample.jpg" /> */}
+            
             <Link to="http://localhost:8000/songAPI/">See API</Link>
+
             {/* <Song title='Song Title' artist='Artist Name' album='Album Name' img='https://i.scdn.co/image/ab67616d0000b27348f98cb1e0e93226a15fb439' /> */}
 
         </div>
     )
 }
 
-export default Songs
+export default Playlists

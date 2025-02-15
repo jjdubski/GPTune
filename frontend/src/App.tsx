@@ -3,6 +3,7 @@ import './App.css'
 import Home from './pages/Home.tsx'
 import Songs from './pages/Songs'
 import Navbar from './components/Navbar/Navbar'
+import Playlists from './pages/Playlists'
 
 function App() { 
   return (
@@ -12,6 +13,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/songs" element={<Songs />} />
+          <Route path="/playlist" element={<Playlists />} />
+
         </Routes>
       </div>
     </Router>

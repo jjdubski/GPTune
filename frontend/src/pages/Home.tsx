@@ -37,7 +37,7 @@ const Home: React.FC = () => {
     return (
         <div>
             <h2>Home Page</h2>
-            <p>The date is {currentDate} and the time is {currentTime}.</p>
+            <p>The date is  {currentDate} and the time is {currentTime}.</p>
         </div>
     )
 }
