@@ -6,16 +6,16 @@ import spotipy
 import os
 from spotipy import SpotifyOAuth
 
-sp_oauth = SpotifyOAuth(
-    client_id = os.getenv("DJANGO_APP_SPOTIFY_CLIENT_ID"),
-    client_secret=os.getenv("DJANGO_APP_SPOTIFY_SECRET"),
-    redirect_uri="http://localhost:8000/callback",
-    scope="user-library-read"
-)
+# sp_oauth = SpotifyOAuth(
+#     client_id = os.getenv("DJANGO_APP_SPOTIFY_CLIENT_ID"),
+#     client_secret=os.getenv("DJANGO_APP_SPOTIFY_SECRET"),
+#     redirect_uri="http://localhost:8000/callback",
+#     scope="user-library-read"
+# )
 auth_manager = SpotifyOAuth(client_id=os.getenv("DJANGO_APP_SPOTIFY_CLIENT_ID"),
                             client_secret=os.getenv("DJANGO_APP_SPOTIFY_SECRET"),
                             redirect_uri="http://localhost:8000/callback",
-                            scope="user-library-read"
+                            scope="user-library-read")
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
 def index(request):

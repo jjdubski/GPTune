@@ -20,6 +20,8 @@ div {
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    background-color: palevioletred; /* close to the color we chose in wireframe */
     padding: 1rem;
     border: 1px solid black;
     border-radius: 10px; 
@@ -32,4 +34,18 @@ div {
     height: 100%;
     object-fit: cover;
     align-self: center;
+}
+
+.playlistElement {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+  
+.playlist-info p {
+    color: white; /*all text is white*/
+}
+  
+.playlist:hover {
+    background-color: blue;  /* changes to signify its being hovered over*/
 }
