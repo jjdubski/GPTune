@@ -40,3 +40,29 @@
 .read-the-docs {
   color: #888;
 }
+
+.playlistElement {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.playlist-song {
+  width: 200px;
+  text-align: center;
+  background-color: palevioletred; /* close to the color we chose in wireframe */
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.playlist-item img {
+  border-radius: 5px;
+}
+
+.playlist-item {
+  color: white; /*all text is white*/
+}
+
+.playlist-item:hover {
+  color: blue;  /* changes to signify its being hovered over*/
+}
