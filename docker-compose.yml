@@ -7,6 +7,10 @@ services:
     volumes:
       - ./frontend/:/frontend
       - /frontend/node_modules
+    depends_on:
+      - backend
+    env_file:
+      - .env
     
 
   backend:
@@ -33,7 +37,6 @@ services:
       - .env
     depends_on:
       - db
-      - frontend
 
   db:
     image: postgres:latest
