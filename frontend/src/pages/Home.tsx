@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+import HomeTile from '../components/HomeTile/HomeTile'
 
 // interface HomeProps {
 //   currentDate: number
@@ -38,6 +39,11 @@ const Home: React.FC = () => {
         <div>
             <h2>Home Page</h2>
             <p>The date is  {currentDate} and the time is {currentTime}.</p>
+            <div className="music-home-container">
+                <HomeTile title="Discover" img = "/Discover.png" />  
+                <HomeTile title="Add to Playlist" img="./AddtoPlaylist.png" />
+                <HomeTile title="This or That?" img="./ThisorThat.png" />
+              </div>
         </div>
     )
 }
