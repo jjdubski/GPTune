@@ -41,4 +41,4 @@ def callback(request):
     #to save the spotify token the session keys
     request.session["spotify_token"] = tokenInfo["access_token"]
     
-    return redirect('/')
+    return redirect('http://localhost:3000')
