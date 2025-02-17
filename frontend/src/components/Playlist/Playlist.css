@@ -1,0 +1,51 @@
+div {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.playlist-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: auto auto auto 1rem; 
+
+}
+.playlist-info p {
+    margin: 0;
+    padding: 0;
+    
+}
+.playlist{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: palevioletred; /* close to the color we chose in wireframe */
+    padding: 1rem;
+    border: 1px solid black;
+    border-radius: 10px; 
+    height : 150px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.playlist img {
+    width: fit-content;
+    height: 100%;
+    object-fit: cover;
+    align-self: center;
+}
+
+.playlistElement {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+  
+.playlist-info p {
+    color: white; /*all text is white*/
+}
+  
+.playlist:hover {
+    background-color: blue;  /* changes to signify its being hovered over*/
+}

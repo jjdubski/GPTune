@@ -25,8 +25,6 @@ urlpatterns = [
     path('', index), # Default view
     path("login/",login),
     path("callback/", callback),
-    
-    
     path('songAPI/', include('songs.urls'))
 ]
 
