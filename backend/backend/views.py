@@ -31,7 +31,7 @@ def login(request):
 
 def logout(request):
     request.session.flush()
-    return redirect('http://localhost:3000/')
+    return redirect('http://localhost:3000/login')
 
 def callback(request):
     code = request.GET.get("code")
@@ -42,22 +42,22 @@ def callback(request):
     
     return redirect('http://localhost:3000/')
 
-def getSong(request):
-    #ensure user is logged-in
-    if "spotify_token" not in request.session:
-        return JsonResponse({"error": "User must be logged in to Spotify"}, status = 401)
+# def getSong(request):
+#     #ensure user is logged-in
+#     if "spotify_token" not in request.session:
+#         return JsonResponse({"error": "User must be logged in to Spotify"}, status = 401)
     
-    results = sp.current_user_top_tracks(limit = 10)
-    songs = results['items']
+#     results = sp.current_user_top_tracks(limit = 10)
+#     songs = results['items']
     
-    songList = []
+#     songList = []
     
-    for song in songs:
-        songList.append({
-            'name': song['name'],
-            'artist': song['artists'][0]['name'],
-            'album': song['album']['name'],
-            'previewURL': song['preview_url']
-        })
+#     for song in songs:
+#         songList.append({
+#             'name': song['name'],
+#             'artist': song['artists'][0]['name'],
+#             'album': song['album']['name'],
+#             'previewURL': song['preview_url']
+#         })
         
-    return JsonResponse[songList]
+#     return JsonResponse[songList]
