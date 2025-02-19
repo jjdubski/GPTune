@@ -10,7 +10,9 @@ from utils.spotifyClient import sp
 def index(request):
     current_time = datetime.now().strftime("%H:%M:%S")
     current_date = datetime.now().strftime("%d-%m-%Y")
-    currentUser = sp.current_user()
+    currentUser = None
+    if "spotify_token" not in request.session:
+        currentUser = sp.current_user()
 
     data = {
         'current_time': current_time,
