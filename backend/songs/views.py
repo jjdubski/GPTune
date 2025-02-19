@@ -33,7 +33,7 @@ def AddSongs(request):
     if "spotify_token" not in request.session:
         return JsonResponse({"error": "User must be logged in to Spotify"}, status = 401)
     
-    results = sp.current_user_top_tracks(limit = 10)
+    results = sp.current_user_top_tracks()
     songs = results['items']
     
     songList = []
@@ -46,16 +46,17 @@ def AddSongs(request):
     #         'img': song['album']['images'][0]['url'] if song['album']['images'] else None,
     #         'previewURL': song['preview_url']
     #     })
-    for song in songs:  # Limit to 10 items
-            Song.objects.create(
-                trackID = song['id'],
-                title = song['name'],
-                artist = song['artists'][0]['name'],
-                album = song['album']['name'],
-                release_date =song['album'].get('release_date', None),
-                genre = ", ".join(song.get('genres', [])),
-                coverArt = song['album']['images'][0]['url'] if song['album']['images'] else None
-            )
+    for song in songs:
+        if not Song.objects.filter(trackID=song['id']):
+                Song.objects.create(
+                    trackID = song['id'],
+                    title = song['name'],
+                    artist = song['artists'][0]['name'],
+                    album = song['album']['name'],
+                    release_date =song['album'].get('release_date', None),
+                    genre = ", ".join(song.get('genres', [])),
+                    coverArt = song['album']['images'][0]['url'] if song['album']['images'] else None
+                )
     return Response({"message": "Data successfully added!"}, status=201)
     
 

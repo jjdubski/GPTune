@@ -26,7 +26,8 @@ urlpatterns = [
     path("login/",login),
     path("callback/", callback),
     path('songAPI/', include('songs.urls')),
-    path('logout/', logout)
+    path('logout/', logout),
+    path('playlistAPI/', include('playlists.urls'))
 ]
 
 # if settings.DEBUG:

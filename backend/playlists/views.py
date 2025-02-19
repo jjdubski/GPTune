@@ -1,0 +1,32 @@
+from django.shortcuts import render
+from rest_framework import viewsets
+from .models import Playlist
+from .serializers import PlaylistSerializer
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from utils.spotifyClient import sp
+
+# Create your views here.
+
+class PlaylistViewSet(viewsets.ModelViewSet):
+    queryset = Playlist.objects.all()
+    serializer_class = PlaylistSerializer
+    
+
+@api_view(['GET'])
+def getPlaylists(request):
+    if "spotify_token" not in request.session:
+        return Response({"error": "User must be logged in to Spotify"}, status=401)
+    
+    results = sp.current_user_playlists()
+    playlists = results['items']
+    
+    for playlist in playlists:
+# Check if playlist already exists
+        if not Playlist.objects.filter(name=playlist['name']).exists():
+            Playlist.objects.create(
+                name=playlist['name'],
+                description=playlist.get('description', ''),  # Use get() with default value
+                coverArt=playlist['images'][0]['url'] if playlist['images'] else None
+            )
+    return Response({"message":"Playlist imported successfully"}, status= 201)
