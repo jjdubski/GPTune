@@ -6,6 +6,7 @@ from .serializers import PlaylistSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from utils.spotifyClient import sp
+import logging
 
 # Create your views here.
 
@@ -30,6 +31,10 @@ def AddPlaylists(request):
                 description=playlist.get('description', ''),  # Use get() with default value
                 coverArt=playlist['images'][0]['url'] if playlist['images'] else None
             )
+            logger = logging.getLogger(__name__)
+            logger.info(playlist['images'][0]['url'])
+            
+    
     return Response({"message":"Playlist imported successfully"}, status= 201)
     
 def getPlaylist(request):
