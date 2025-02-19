@@ -13,6 +13,7 @@ interface PlaylistProps {
     img : string;
 }
 
+//playlist itself, not list
 const Playlist: React.FC<PlaylistProps> = ({pname, img}) => {
     const [songs, setSongs] = useState<Song[]>([]);
     const image = 'https://seeded-session-images.scdn.co/v1/img/track/6KXxcGWj6KB5GlW1c2dhY5/en';
