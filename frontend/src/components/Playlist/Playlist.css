@@ -16,7 +16,7 @@ div {
     padding: 0;
     
 }
-.playlist{
+.playlist{ 
     display: flex;
     justify-content: center;
     align-items: center;
