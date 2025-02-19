@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Playlist
@@ -14,15 +15,15 @@ class PlaylistViewSet(viewsets.ModelViewSet):
     
 
 @api_view(['GET'])
-def getPlaylists(request):
+def AddPlaylists(request):
     if "spotify_token" not in request.session:
-        return Response({"error": "User must be logged in to Spotify"}, status=401)
+        return JsonResponse({"error": "User must be logged in to Spotify"}, status = 401)
     
     results = sp.current_user_playlists()
     playlists = results['items']
     
     for playlist in playlists:
-# Check if playlist already exists
+        # Check if playlist already exists
         if not Playlist.objects.filter(name=playlist['name']).exists():
             Playlist.objects.create(
                 name=playlist['name'],
@@ -30,3 +31,6 @@ def getPlaylists(request):
                 coverArt=playlist['images'][0]['url'] if playlist['images'] else None
             )
     return Response({"message":"Playlist imported successfully"}, status= 201)
+    
+def getPlaylist(request):
+    return

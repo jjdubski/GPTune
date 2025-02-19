@@ -7,5 +7,5 @@ router.register(r'playlists', views.PlaylistViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('getPlaylists/', views.getPlaylists, name='getPlaylists'),
+    path('getPlaylists/', views.AddPlaylists, name='AddPlaylists'),
 ]

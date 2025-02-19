@@ -1,63 +1,63 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Song  from '../components/Song/Song'
-import SongList from '../components/SongList/SongList';
-import Playlist from '../components/Playlist/Playlist';
+import Playlist from '../components/Playlist/Playlist'
+
+interface Playlist {
+    id: number;
+    name: string;
+    description: string;
+    coverArt: string;
+}
 
 const Playlists: React.FC = () => {
-    interface Playlist {
-        id: number;
-        trackID: string;
-        title: string;
-        artist: string;
-        album: string;
-        releaseDate: string;       
-    }
-    const [listIsEmpty, setListIsEmpty] = useState<boolean>(true)
+    const [playlists, setPlaylists] = useState<Playlist[]>([])
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        fetch ('http://localhost:8000/playlists/?format=json')
+        // Updated endpoint URL to match backend route
+        fetch('http://localhost:8000/playlistAPI/playlists/')
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok')
+                    throw new Error('Network response was not ok');
                 }
                 return response.json()
             })
             .then(data => {
                 console.log('Data received:', data)
-              
-                if (data.length > 0) {
-                    setListIsEmpty(false)
+                // Check if data.playlists exists and is an array
+                if (data.playlists && Array.isArray(data.playlists)) {
+                    setPlaylists(data.playlists)
+                } else {
+                    // If the response format is different, try to use the data directly
+                    setPlaylists(Array.isArray(data) ? data : [])
                 }
-                // setSongs(data)
                 setError(null)
             })
             .catch(error => {
                 console.error('Error fetching Playlists:', error)
-                setError('Failed to fetch Playlists. Please try again later.')
+                setError('Failed to fetch Playlists. Please try again later.' + error)
             })
     }, [])
 
     return (
         <div>
-            <h2>Playlist Page</h2>
-            <p>This is the Playlist page. Here is the list of songs in the DB:</p>
+            <h2>Your Spotify Playlists</h2>
+            
             {error ? (
                 <p style={{ color: 'red' }}>{error}</p>
-            ) : listIsEmpty === true  ? (
-                <p style={{ color: 'red' }}>No playlists available</p>
+            ) : playlists.length === 0 ? (
+                <p>No playlists available</p>
             ) : (
-                
-                <Playlist title="Sample Title" img="https://example.com/sample.jpg" />
-              
-            )} 
-            {/* <Playlist title="Sample Title" img="https://example.com/sample.jpg" /> */}
-            
-            <Link to="http://localhost:8000/songAPI/">See API</Link>
-
-            {/* <Song title='Song Title' artist='Artist Name' album='Album Name' img='https://i.scdn.co/image/ab67616d0000b27348f98cb1e0e93226a15fb439' /> */}
-
+                <div className="playlists-grid">
+                    {playlists.map(playlist => (
+                        <Playlist
+                            key={playlist.id}
+                            title={playlist.name}
+                            img={playlist.coverArt}
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     )
 }
