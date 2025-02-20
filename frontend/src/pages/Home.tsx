@@ -13,6 +13,7 @@ import SideMenu from '../components/SideMenu/SideMenu'
 const Home: React.FC = () => {
     const [currentTime, setCurrentTime] = useState('')
     const [currentDate, setCurrentDate] = useState('')
+    const [currentUser, setCurrentUser] = useState('')
 
     // Fetches date and time from backend on load/reload
     // useEffect(() => {
@@ -28,6 +29,7 @@ const Home: React.FC = () => {
             fetch('http://127.0.0.1:8000').then(res => res.json()).then(data => {
                 setCurrentTime(data.current_time)
                 setCurrentDate(data.current_date)
+                setCurrentUser(data.user)
             })
         }
 
@@ -44,6 +46,7 @@ const Home: React.FC = () => {
             <div>
                 <h2>Home Page</h2>
                 <p>The date is  {currentDate} and the time is {currentTime}.</p>
+                <p>Logged in as: {currentUser.email}</p>
                 <div className="music-home-container">
                     <HomeTile title="Discover" img = "/Discover.png" />  
                     <HomeTile title="Add to Playlist" img="./AddtoPlaylist.png" />

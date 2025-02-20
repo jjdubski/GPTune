@@ -11,6 +11,7 @@ const SongList: React.FC = () => {
         artist: string;
         album: string;
         releaseDate: string;
+        coverArt: string;
     }
      const [songs, setSongs] = useState<Song[]>([])    
         useEffect(() => {
@@ -37,7 +38,7 @@ const SongList: React.FC = () => {
                 <p>Artist: {song.artist}</p>
                 <p>Album: {song.album}</p>
                 <p>Release Date: {song.releaseDate}</p> */}
-                <Song title={song.title} artist={song.artist} album={song.album} img='https://i.scdn.co/image/ab67616d0000b27348f98cb1e0e93226a15fb439' />
+                <Song title={song.title} artist={song.artist} album={song.album} img={song.coverArt} />
             </div>
         ))}
     </div>

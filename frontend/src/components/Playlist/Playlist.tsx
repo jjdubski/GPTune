@@ -8,10 +8,9 @@ interface PlaylistProps {
 }
 
 const Playlist: React.FC<PlaylistProps> = ({title, img}) => {
-    const image = 'https://seeded-session-images.scdn.co/v1/img/track/6KXxcGWj6KB5GlW1c2dhY5/en';
     return (
         <div className='playlist'>
-            <img src={image} alt={`${title}`} />
+            <img src={img} alt={`${title}`} />
             <div className='playlist-info'>
                 <p>{title || 'Unknown'}</p>z``
             </div>
