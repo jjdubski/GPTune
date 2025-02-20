@@ -86,20 +86,28 @@ def populateSongs():
         return False
     
 def populatePlaylist():
-    results = sp.current_user_playlists()
-    playlists = results['items']
+    try:
+        results = sp.current_user_playlists()
+        playlists = results['items']
+        
+        for playlist in playlists:
+            # Check if playlist already exists
+            if not Playlist.objects.filter(name=playlist['name']).exists():
+                Playlist.objects.create(
+                    name=playlist['name'],
+                    description=playlist.get('description', ''),  # Use get() with default value
+                    coverArt=playlist['images'][0]['url'] if playlist['images'] else None
+                )
+                logger = logging.getLogger(__name__)
+                logger.info(playlist['images'][0]['url'])
+                
+        return True
+    except Exception as e:
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error populating Playlist: {str(e)}")
+        return False
     
-    for playlist in playlists:
-        # Check if playlist already exists
-        if not Playlist.objects.filter(name=playlist['name']).exists():
-            Playlist.objects.create(
-                name=playlist['name'],
-                description=playlist.get('description', ''),  # Use get() with default value
-                coverArt=playlist['images'][0]['url'] if playlist['images'] else None
-            )
-            logger = logging.getLogger(__name__)
-            logger.info(playlist['images'][0]['url'])
-            
+                
         
     
     
