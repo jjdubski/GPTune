@@ -70,3 +70,49 @@ https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84454b55ebabc376868552dc
 https://i.scdn.co/image/ab67616d00001e0253c86b9741ba92dacbe00e43
 https://i.scdn.co/image/ab67616d00001e024ddcd4e2f9e71125af2fa97c
 https://mosaic.scdn.co/640/ab67616d00001e0239aab3a1fc9e60f4e2bb9b8cab67616d00001e026040effba89b9b00a6f6743aab67616d00001e026cda4313e93a7915d985cd49ab67616d00001e02a923f5d2fed06c911c788306
+/backend/songs/views.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/songs/views.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/backend/views.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/backend/views.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/backend/views.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/backend/views.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/backend/views.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/backend/views.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/backend/views.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/backend/views.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/backend/views.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/backend/views.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/backend/views.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/songs/views.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/songs/urls.py changed, reloading.
+Watching for file changes with StatReloader
+/backend/songs/urls.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Error populating songs: name 'Song' is not defined
+Error in callback: name 'Playlist' is not defined
+Internal Server Error: /callback/
+Not Found: /favicon.ico
+Error populating songs: name 'Song' is not defined
+Error in callback: name 'Playlist' is not defined
+Internal Server Error: /callback/
+Not Found: /favicon.ico
+/backend/backend/views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+/backend/backend/views.py changed, reloading.
+Watching for file changes with StatReloader

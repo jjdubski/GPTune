@@ -1,7 +1,11 @@
+import logging
 from django.http import HttpResponse, JsonResponse
 from datetime import datetime
 
 from django.shortcuts import redirect
+
+from playlists.models import Playlist
+from songs.models import Song
 import spotipy
 import os
 from spotipy import SpotifyOAuth
@@ -31,18 +35,74 @@ def login(request):
     auth_url = sp.auth_manager.get_authorize_url()
     return redirect(auth_url)
 
+
 def logout(request):
     request.session.flush()
     return redirect('http://localhost:3000/login')
 
 def callback(request):
-    code = request.GET.get("code")
-    tokenInfo = sp.auth_manager.get_access_token(code)
+    try:
+        code = request.GET.get("code")
+        if not code:
+            return JsonResponse({"error": "No authorization code provided"}, status=400)
+            
+        tokenInfo = sp.auth_manager.get_access_token(code)
+        request.session["spotify_token"] = tokenInfo["access_token"]
+        
+        songs_success = populateSongs()
+        playlists_success = populatePlaylist()
+        
+        if not (songs_success and playlists_success):
+            logger = logging.getLogger(__name__)
+            logger.error("Failed to populate songs or playlists")
+            
+        return redirect('http://localhost:3000/')
+    except Exception as e:
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error in callback: {str(e)}")
+        return JsonResponse({"error": "Authentication failed"}, status=500)
+
+def populateSongs():
+    try:
+        results = sp.current_user_top_tracks()
+        songs = results['items']
+        
+        for song in songs:
+            if not Song.objects.filter(trackID=song['id']).exists():
+                release_date = datetime.strptime(song['album']['release_date'], '%Y-%m-%d').date()
+                Song.objects.create(
+                    trackID=song['id'],
+                    title=song['name'],
+                    artist=song['artists'][0]['name'],
+                    album=song['album']['name'],
+                    release_date=release_date,
+                    genre=", ".join(song.get('genres', [])),
+                    coverArt=song['album']['images'][0]['url'] if song['album']['images'] else None
+                )
+        return True
+    except Exception as e:
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error populating songs: {str(e)}")
+        return False
     
-    #to save the spotify token the session keys
-    request.session["spotify_token"] = tokenInfo["access_token"]
+def populatePlaylist():
+    results = sp.current_user_playlists()
+    playlists = results['items']
     
-    return redirect('http://localhost:3000/')
+    for playlist in playlists:
+        # Check if playlist already exists
+        if not Playlist.objects.filter(name=playlist['name']).exists():
+            Playlist.objects.create(
+                name=playlist['name'],
+                description=playlist.get('description', ''),  # Use get() with default value
+                coverArt=playlist['images'][0]['url'] if playlist['images'] else None
+            )
+            logger = logging.getLogger(__name__)
+            logger.info(playlist['images'][0]['url'])
+            
+        
+    
+    
 
 # def getSong(request):
 #     #ensure user is logged-in
