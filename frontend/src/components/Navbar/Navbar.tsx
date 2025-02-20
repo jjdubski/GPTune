@@ -4,7 +4,9 @@ import reactLogo from '../../assets/react.svg'
 import viteLogo from '/vite.svg'
 import './Navbar.css'; // Assuming you have some CSS for styling
 
+
 const Navbar: React.FC = () => {
+
     return (
         <header className='App-header'>
         <img src={viteLogo} className='logo' alt='Vite logo' />

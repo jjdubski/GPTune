@@ -1,5 +1,8 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+import HomeTile from '../components/HomeTile/HomeTile'
+import SideMenu from '../components/SideMenu/SideMenu'
+
 
 // interface HomeProps {
 //   currentDate: number
@@ -37,10 +40,19 @@ const Home: React.FC = () => {
     }
     ,[])
     return (
-        <div>
-            <h2>Home Page</h2>
-            <p>The date is  {currentDate} and the time is {currentTime}.</p>
-            <p>Logged in as: {currentUser.email}</p>
+        <div className="home-container">
+            {/* Side Menu */}
+            <SideMenu />
+            <div>
+                <h2>Home Page</h2>
+                <p>The date is  {currentDate} and the time is {currentTime}.</p>
+                <p>Logged in as: {currentUser.email}</p>
+                <div className="music-home-container">
+                    <HomeTile title="Discover" img = "/Discover.png" />  
+                    <HomeTile title="Add to Playlist" img="./AddtoPlaylist.png" />
+                    <HomeTile title="This or That?" img="./ThisorThat.png" />
+                </div>
+            </div>
         </div>
     )
 }
