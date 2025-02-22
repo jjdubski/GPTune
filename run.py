@@ -12,6 +12,19 @@ def check_command(command):
         return False
 
 try:
+    # Check if Docker Desktop is running 
+    if check_command(['docker', 'version']) == False:
+        # Try to start Docker desktop
+        print('Starting Docker Desktop...')
+        try:
+            if os.name == 'posix':
+                subprocess.run(['open', '-a', 'Docker'])
+            else:
+                subprocess.run(['powershell', '-Command', 'Start-Process', '"C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe"'])
+        except:
+            print("\033[91mError starting Docker Desktop.\033[0m")
+            print("\033[93mPlease start Docker Desktop manually.\033[0m")
+
     # First check if node modules are installed
     if not os.path.exists('frontend/node_modules'):
         os.makedirs('frontend/node_modules')
@@ -37,6 +50,7 @@ try:
         subprocess.run(['npm', 'install'], cwd='frontend', shell=True)
 
     print('\033[92mNode modules installed.\033[0m')
+
     print('Starting app with\033[94m docker-compose\033[0m...')
 
     if check_command(['docker-compose', 'version']):
