@@ -58,7 +58,7 @@ def callback(request):
                 if token_info:
                     # Save token info to session
                     request.session["token_info"] = token_info
-                    return HttpResponse("Authentication successful")
+                    # return HttpResponse("Authentication successful")
                 else:
                     logger.error("Failed to retrieve access token")
                     return HttpResponse("Failed to retrieve access token", status=500)
