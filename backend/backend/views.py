@@ -9,19 +9,22 @@ from songs.models import Song
 import spotipy
 import os
 from spotipy import SpotifyOAuth
-
 from utils.spotifyClient import sp
+
 def index(request):
     current_time = datetime.now().strftime("%H:%M:%S")
     current_date = datetime.now().strftime("%d-%m-%Y")
     currentUser = None
-    if "spotify_token" not in request.session:
+    
+    if sp.auth_manager.get_cached_token():
         currentUser = sp.current_user()
+    else:
+        currentUser = {'id': None, 'display_name': "None", 'email': "None"}
 
     data = {
         'current_time': current_time,
         'current_date': current_date,
-        'user': {
+        'user': { 
             'id': currentUser['id'],
             'display_name': currentUser['display_name'],
             'email': currentUser['email']
@@ -38,27 +41,37 @@ def login(request):
 
 def logout(request):
     request.session.flush()
-    return redirect('http://localhost:3000/login')
+    # log user out of Spotify
+    sp.auth_manager.cache_handler.delete_cached_token()
+    return redirect('http://localhost:3000/')
 
 def callback(request):
+    logger = logging.getLogger(__name__)
     try:
         code = request.GET.get("code")
-        if not code:
-            return JsonResponse({"error": "No authorization code provided"}, status=400)
-            
-        tokenInfo = sp.auth_manager.get_access_token(code)
-        request.session["spotify_token"] = tokenInfo["access_token"]
-        
-        songs_success = populateSongs()
-        playlists_success = populatePlaylist()
-        
-        if not (songs_success and playlists_success):
-            logger = logging.getLogger(__name__)
-            logger.error("Failed to populate songs or playlists")
-            
-        return redirect('http://localhost:3000/')
+        logger.info(f"Authorization code received: {code}")
+
+        if code:
+            try:
+                token_info = sp.auth_manager.get_access_token(code)
+                logger.info(f"Token info received: {token_info}")
+                if token_info:
+                    # Save token info to session
+                    request.session["token_info"] = token_info
+                    return HttpResponse("Authentication successful")
+                else:
+                    logger.error("Failed to retrieve access token")
+                    return HttpResponse("Failed to retrieve access token", status=500)
+            except spotipy.SpotifyException as e:
+                logger.error(f"Spotify API error: {str(e)}")
+                return HttpResponse(f"Spotify API error: {str(e)}", status=500)
+            except Exception as e:
+                logger.error(f"Error in callback: {str(e)}")
+                return HttpResponse(f"Failed to retrieve access token: {str(e)}", status=500)
+        else:
+            logger.error("No code provided")
+            return HttpResponse("No code provided", status=400)
     except Exception as e:
-        logger = logging.getLogger(__name__)
         logger.error(f"Error in callback: {str(e)}")
         return JsonResponse({"error": "Authentication failed"}, status=500)
 

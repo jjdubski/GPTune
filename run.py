@@ -24,6 +24,8 @@ try:
         except:
             print("\033[91mError starting Docker Desktop.\033[0m")
             print("\033[93mPlease start Docker Desktop manually.\033[0m")
+            os._exit(1)
+            raise KeyboardInterrupt # just in case
 
     # First check if node modules are installed
     if not os.path.exists('frontend/node_modules'):

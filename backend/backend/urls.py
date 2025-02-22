@@ -21,13 +21,13 @@ from django.urls import path, include
 from .views import index, login, callback, logout
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', index), # Default view
-    path("login/",login),
-    path("callback/", callback),
-    path('songAPI/', include('songs.urls')),
-    path('logout/', logout),
-    path('playlistAPI/', include('playlists.urls'))
+    path('admin/', admin.site.urls, name='admin'),
+    path('', index, name='index'), # Default view
+    path("login/", login, name='login'),
+    path("callback/", callback, name='callback'),
+    path('songAPI/', include('songs.urls'), name='songAPI'),
+    path('logout/', logout, name='logout'),
+    path('playlistAPI/', include('playlists.urls'), name='playlistAPI')
 ]
 
 # if settings.DEBUG:
