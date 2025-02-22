@@ -9,12 +9,15 @@
 *.sln
 *.sw?
 package-lock.json
+backend\debug.log
 
 # All env files
 .env
 .env.*
 staticfiles/
 db.sqlite3
+.cache
+*.cache
 
 # Any pycache
 __pycache__

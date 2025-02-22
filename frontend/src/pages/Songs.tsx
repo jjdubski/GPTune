@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Song  from '../components/Song/Song'
+import SongList from '../components/SongList/SongList';
 
 const Songs: React.FC = () => {
     interface Song {
@@ -8,14 +10,13 @@ const Songs: React.FC = () => {
         title: string;
         artist: string;
         album: string;
-        releaseDate: string;
+        releaseDate: string;       
     }
-
-    const [songs, setSongs] = useState<Song[]>([])
+    const [listIsEmpty, setListIsEmpty] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        fetch('http://localhost:8000/songAPI/songs/?format=json')
+        fetch('http://localhost:8000/songAPI/songs')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok')
@@ -24,7 +25,11 @@ const Songs: React.FC = () => {
             })
             .then(data => {
                 console.log('Data received:', data)
-                setSongs(data)
+              
+                if (data.length > 0) {
+                    setListIsEmpty(false)
+                }
+                // setSongs(data)
                 setError(null)
             })
             .catch(error => {
@@ -39,23 +44,15 @@ const Songs: React.FC = () => {
             <p>This is the songs page. Here is the list of songs in the DB:</p>
             {error ? (
                 <p style={{ color: 'red' }}>{error}</p>
-            ) : songs.length === 0 ? (
+            ) : listIsEmpty === true  ? (
                 <p style={{ color: 'red' }}>No songs available</p>
             ) : (
-                <div>
-                    {songs.map((song) => (
-                        <div key={song.id}>
-                            <p>ID: {song.id}</p>
-                            <p>Track ID: {song.trackID}</p>
-                            <p>Title: {song.title}</p>
-                            <p>Artist: {song.artist}</p>
-                            <p>Album: {song.album}</p>
-                            <p>Release Date: {song.releaseDate}</p>
-                        </div>
-                    ))}
-                </div>
+                <SongList />
+              
             )}
             <Link to="http://localhost:8000/songAPI/">See API</Link>
+            {/* <Song title='Song Title' artist='Artist Name' album='Album Name' img='https://i.scdn.co/image/ab67616d0000b27348f98cb1e0e93226a15fb439' /> */}
+
         </div>
     )
 }
