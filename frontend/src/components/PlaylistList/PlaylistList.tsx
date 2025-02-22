@@ -39,7 +39,7 @@ const PlaylistList: React.FC = () => {
         ))}
     </div>
     );
-};
+}; //
 
 export default PlaylistList;
 
