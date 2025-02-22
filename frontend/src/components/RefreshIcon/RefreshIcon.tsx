@@ -7,7 +7,7 @@ interface RefreshButtonProps {
   const RefreshButton: React.FC<RefreshButtonProps> = ({ onRefresh }) => {
     return (
       <button className="refresh-button" onClick={onRefresh}>
-        🔄 Refresh Songs
+        <img src="/refresh-icon.png" alt="Refresh" className="refresh-icon" />
       </button>
     );
   };
