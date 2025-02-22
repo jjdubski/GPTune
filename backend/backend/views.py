@@ -15,8 +15,10 @@ def index(request):
     current_time = datetime.now().strftime("%H:%M:%S")
     current_date = datetime.now().strftime("%d-%m-%Y")
     currentUser = None
-    if "spotify_token" not in request.session:
+    if "spotify_token" in request.session:
         currentUser = sp.current_user()
+    else:
+        currentUser = {'id': None, 'display_name': None, 'email': None}
 
     data = {
         'current_time': current_time,
