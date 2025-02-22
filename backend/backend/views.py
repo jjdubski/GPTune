@@ -15,16 +15,16 @@ def index(request):
     current_time = datetime.now().strftime("%H:%M:%S")
     current_date = datetime.now().strftime("%d-%m-%Y")
     currentUser = None
-    if "spotify_token" not in request.session:
+    if "spotify_token" in request.session:
         currentUser = sp.current_user()
 
     data = {
         'current_time': current_time,
         'current_date': current_date,
         'user': {
-            'id': currentUser['id'],
-            'display_name': currentUser['display_name'],
-            'email': currentUser['email']
+            'id': currentUser['id'] if currentUser else None,
+            'display_name': currentUser['display_name'] if currentUser else None,
+            'email': currentUser['email'] if currentUser else None
         }
     }
 
@@ -38,7 +38,7 @@ def login(request):
 
 def logout(request):
     request.session.flush()
-    return redirect('http://localhost:3000/login')
+    return redirect('http://localhost:3000/')
 
 def callback(request):
     try:
@@ -47,7 +47,7 @@ def callback(request):
             return JsonResponse({"error": "No authorization code provided"}, status=400)
             
         tokenInfo = sp.auth_manager.get_access_token(code)
-        request.session["spotify_token"] = tokenInfo["access_token"]
+        request.session["spotify_token"] = tokenInfo
         
         songs_success = populateSongs()
         playlists_success = populatePlaylist()

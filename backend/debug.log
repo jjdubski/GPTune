@@ -261,3 +261,681 @@ Traceback (most recent call last):
   File "/usr/local/lib/python3.13/site-packages/requests/adapters.py", line 713, in send
     raise ReadTimeout(e, request=request)
 requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='api.spotify.com', port=443): Read timed out. (read timeout=5)
+Watching for file changes with StatReloader
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/backend/backend/views.py", line 19, in index
+    currentUser = sp.current_user()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1265, in current_user
+    return self.me()
+           ~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 1259, in me
+    return self._get("me/")
+           ~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 327, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 251, in _internal_call
+    headers = self._auth_headers()
+  File "/usr/local/lib/python3.13/site-packages/spotipy/client.py", line 242, in _auth_headers
+    token = self.auth_manager.get_access_token(as_dict=False)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 503, in get_access_token
+    "code": code or self.get_auth_response(),
+                    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 458, in get_auth_response
+    return self._get_auth_response_local_server(redirect_port)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 425, in _get_auth_response_local_server
+    server = start_local_http_server(redirect_port)
+  File "/usr/local/lib/python3.13/site-packages/spotipy/oauth2.py", line 1263, in start_local_http_server
+    server = HTTPServer(("127.0.0.1", port), handler)
+  File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Opened https://accounts.spotify.com/authorize?client_id=085ea3179814452a90e57b47282a7cc5&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fcallback&scope=user-library-read+user-read-email+user-top-read+user-read-private+user-follow-read in your browser
+User authentication requires interaction with your web browser. Once you enter your credentials and give authorization, you will be redirected to a url.  Paste that url you were directed to to complete the authorization.
+Opened https://accounts.spotify.com/authorize?client_id=085ea3179814452a90e57b47282a7cc5&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fcallback&scope=user-library-read+user-read-email+user-top-read+user-read-private+user-follow-read in your browser
+Watching for file changes with StatReloader
