@@ -15,8 +15,9 @@ function App() {
     fetch('http://localhost:8000/getToken')
       .then(res => res.json())
       .then(data =>{
-        if (data.token) {
-          setToken(data.token)
+        if (data) {
+          console.log('Token: ', data.access_token)
+          setToken(data.access_token)
         }
         else {
           console.error('Failed to get token')

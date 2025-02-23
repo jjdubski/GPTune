@@ -6,6 +6,7 @@ interface WebPlaybackProps {
 
 const WebPlayback: React.FC<WebPlaybackProps> = ({ token }) => {
     const [player, setPlayer] = useState<Spotify.Player | null>(null);
+    const [trackInfo, setTrackInfo] = useState<{ title: string; artist: string; position: number } | null>(null);
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -30,7 +31,20 @@ const WebPlayback: React.FC<WebPlaybackProps> = ({ token }) => {
             player.addListener('not_ready', ({ device_id }) => {
                 console.log('Device ID has gone offline', device_id);
             });
+            
+            player.addListener('player_state_changed', (state) => {
+                if(!state) {
+                    console.error('No state received');
+                    return;
+                }
 
+                const currentTrack = state.track_window.current_track;
+                const position = state.position;
+                const artist = currentTrack.artists.map((artist) => artist.name).join(', ');
+                const title = currentTrack.name;
+
+                setTrackInfo({title, artist, position});
+            });
             player.connect();
         };
 
@@ -46,6 +60,16 @@ const WebPlayback: React.FC<WebPlaybackProps> = ({ token }) => {
             <div className="main-wrapper">
                 <h1>Spotify Web Playback SDK</h1>
                 <p>Player status: {player ? 'Connected' : 'Not connected'}</p>
+                {trackInfo && (
+                    <div>
+                        <p>Now Playing: {trackInfo.title} by {trackInfo.artist}</p>
+                        <p>Current Position: {trackInfo.position} ms</p>
+                    </div>
+                )}
+                <div id="spotify-player"></div>
+                <button onClick={() => player?.previousTrack()}>Previous</button>
+                <button onClick={() => player?.togglePlay()}>Play/Pause</button>
+                <button onClick={() => player?.nextTrack()}>Next</button>
             </div>
         </div>
     );
