@@ -1,0 +1,42 @@
+/* Position the button in the upper-right corner */
+.spotify-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1DB954; 
+    color: white;
+    font-size: 14px; 
+    font-weight: bold;
+    padding: 8px 14px; 
+    border: none;
+    border-radius: 30px; 
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    outline: none;
+    text-decoration: none;
+    width: auto;
+    min-width: 120px; 
+    
+    /* Positioning for upper-right corner */
+    position: fixed;
+    top: 20px; /* Moves it down from the top */
+    right: 20px; /* Moves it from the right */
+    z-index: 1000; /* Ensures visibility above other elements */
+}
+
+.spotify-icon {
+    width: 20px; /* Reduce size */
+    height: 20px;
+    margin-left: 8px; 
+    object-fit: contain;
+}
+
+.spotify-button:hover {
+    background-color: #1aa34a; 
+    transform: scale(1.05);
+}
+
+.spotify-button:active {
+    transform: scale(0.98);
+}
