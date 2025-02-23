@@ -18,7 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from .views import index, login, callback, logout
+from .views import index, login, callback, logout, getToken
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -27,7 +27,8 @@ urlpatterns = [
     path("callback/", callback, name='callback'),
     path('songAPI/', include('songs.urls'), name='songAPI'),
     path('logout/', logout, name='logout'),
-    path('playlistAPI/', include('playlists.urls'), name='playlistAPI')
+    path('playlistAPI/', include('playlists.urls'), name='playlistAPI'),
+    path('getToken/', getToken, name='getToken')
 ]
 
 # if settings.DEBUG:
