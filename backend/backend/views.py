@@ -43,6 +43,10 @@ def logout(request):
     request.session.flush()
     # log user out of Spotify
     sp.auth_manager.cache_handler.delete_cached_token()
+    #cleanup database
+    Song.objects.all().delete()
+    Playlist.objects.all().delete()
+    
     return redirect('http://localhost:3000/')
 
 def callback(request):
@@ -58,6 +62,7 @@ def callback(request):
                 if token_info:
                     # Save token info to session
                     request.session["token_info"] = token_info
+                    return redirect("http://localhost:3000/")
                     # return HttpResponse("Authentication successful")
                 else:
                     logger.error("Failed to retrieve access token")
