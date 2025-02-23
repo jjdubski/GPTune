@@ -3,13 +3,11 @@
     align-items: center;
     gap: 10px;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #f8f8f8;
+    background-color: white;
   }
   
   .add-button {
-    background-color: #1db954; /* Spotify Green */
+    background-color: #1db954;
     color: white;
     border: none;
     border-radius: 50%;
