@@ -52,7 +52,7 @@ const Home: React.FC = () => {
                 <div className="spotify-button-container">
                     <SpotifyButton 
                         title="Link Spotify"
-                        img="./Spotify.png"
+                        img="./SpotifyButton.png"
                     />
                 </div>
 

@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #1DB954; 
+    background-color:#1ED760; 
     color: white;
     font-size: 14px; 
     font-weight: bold;
@@ -33,7 +33,7 @@
 }
 
 .spotify-button:hover {
-    background-color: #1aa34a; 
+    background-color:#1ED760; 
     transform: scale(1.05);
 }
 
