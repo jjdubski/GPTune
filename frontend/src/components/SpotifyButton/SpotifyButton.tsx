@@ -6,15 +6,15 @@ interface SpotifyButtonProps {
     img: string;
 }
 
-const SpotifyButton: React.FC<SpotifyButtonProps> = ({ title, img }) => {
+const SpotifyButton: React.FC<SpotifyButtonProps> = ({ title, img  }) => {
     const handleClick = () => {
         console.log(`${title} button clicked!`);
     };
 
     return (
-        <button onClick={handleClick} className="spotify-button">
+        <button onClick={() => window.location.href="http://127.0.0.1:8000/login/"} className="spotify-button">
             <span>Link to Spotify</span>
-            <img src="./Spotify.png" alt=" Link to Spotify  " className="spotify-icon" />
+            <img src="./Spotify.png" alt="Link to Spotify" className="spotify-icon" />
         </button>
     );
 };
