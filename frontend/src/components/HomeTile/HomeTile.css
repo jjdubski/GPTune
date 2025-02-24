@@ -1,15 +1,15 @@
-.container {
+/* .container {
     display: flex;
     justify-content: center;
     gap: 20px;
     padding: 20px;
     background-color: #121212;
-}
+} */
 
 .tile {
-    background-color: var(--brightblue);
-    height: 440px;
-    width: 440px;
+    background-color: var(--primary);
+    height: auto;
+    width: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,7 +20,7 @@
 }
 
 .tile-content {
-    background-color: var(--violetpurple);
+    background-color: var(--secondary);
     width: 80%;
     height: 80%;
     display: flex;

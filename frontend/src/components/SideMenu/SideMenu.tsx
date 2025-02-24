@@ -23,7 +23,7 @@ const SideMenu: React.FC = () => {
 
             {/* Sidebar Menu */}
             <div className={`side-menu`}>
-                <p className="menu-item" onClick={() => setIsOpen(!isOpen)}>X</p>
+                <p className="close-btn" onClick={() => setIsOpen(!isOpen)}>X</p>
                 {menuItems.map((item, index) => (
                     <div key={index} className="menu-item">
                         {item.title}

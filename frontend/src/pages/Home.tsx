@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import HomeTile from '../components/HomeTile/HomeTile'
 import SideMenu from '../components/SideMenu/SideMenu'
 import SpotifyButton from '../components/SpotifyButton/SpotifyButton'
+import './Home.css'
 
 
 // interface HomeProps {
