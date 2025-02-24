@@ -43,6 +43,10 @@ def logout(request):
     request.session.flush()
     # log user out of Spotify
     sp.auth_manager.cache_handler.delete_cached_token()
+    #cleanup database
+    Song.objects.all().delete()
+    Playlist.objects.all().delete()
+    
     return redirect('http://localhost:3000/')
 
 def callback(request):
@@ -58,6 +62,9 @@ def callback(request):
                 if token_info:
                     # Save token info to session
                     request.session["token_info"] = token_info
+                    populatePlaylist()
+                    populateSongs()
+                    return redirect("http://localhost:3000/")
                     # return HttpResponse("Authentication successful")
                 else:
                     logger.error("Failed to retrieve access token")
@@ -120,27 +127,11 @@ def populatePlaylist():
         logger.error(f"Error populating Playlist: {str(e)}")
         return False
     
-                
-        
+def getToken(request):
+    tokenInfo = sp.auth_manager.get_cached_token()
+    if tokenInfo:
+        return JsonResponse(tokenInfo)
+    else:
+        return JsonResponse({"error": "No token found"}, status=404)
     
     
-
-# def getSong(request):
-#     #ensure user is logged-in
-#     if "spotify_token" not in request.session:
-#         return JsonResponse({"error": "User must be logged in to Spotify"}, status = 401)
-    
-#     results = sp.current_user_top_tracks(limit = 10)
-#     songs = results['items']
-    
-#     songList = []
-    
-#     for song in songs:
-#         songList.append({
-#             'name': song['name'],
-#             'artist': song['artists'][0]['name'],
-#             'album': song['album']['name'],
-#             'previewURL': song['preview_url']
-#         })
-        
-#     return JsonResponse[songList]

@@ -39,3 +39,29 @@ def AddPlaylists(request):
     
 def getPlaylist(request):
     return
+
+
+
+def populatePlaylistItems(plalist_id):
+    try:
+        results = sp.playlist_items(plalist_id)
+        songs = results['items']
+        
+        for song in songs: 
+            if not Playlist.objects.filter(name=results['name']).exists():
+                Playlist.objects.create(
+                    trackID=song['id'],
+                    title=song['name'],
+                    artist=song['artists'][0]['name'],
+                    album=song['album']['name'],
+                    release_date=song['album']['release_date'],
+                    genre=", ".join(song.get('genres', [])),
+                    coverArt=song['album']['images'][0]['url'] if song['album']['images'] else None
+                )
+        return True
+    except Exception as e:
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error populating songs: {str(e)}")
+        return False
+    
+    return
