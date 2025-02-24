@@ -8,6 +8,16 @@ import spotipy
 import os
 from spotipy import SpotifyOAuth
 from utils.spotifyClient import sp
+from django.shortcuts import render
+from django.http import JsonResponse
+from .openai_service import generate_response
+
+def chat_with_ai(request):
+    if request.method == "POST":
+        user_input = request.POST.get("prompt", "")
+        ai_response = generate_response(user_input)
+        return JsonResponse({"response": ai_response})
+    return render(request, "chat.html")
 
 
 def index(request):
