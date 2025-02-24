@@ -14,36 +14,23 @@ def index(request):
     current_time = datetime.now().strftime("%H:%M:%S")
     current_date = datetime.now().strftime("%d-%m-%Y")
     currentUser = None
-
-# Initialize Spotify client
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
-    client_id="your_client_id",
-    client_secret="your_client_secret",
-    redirect_uri="your_redirect_uri",
-    scope="user-read-private user-read-email"
-))
-
-# Fetch current time
-current_time = datetime.now().strftime("%H:%M:%S")
-current_date = datetime.now().strftime("%d-%m-%Y")
-
-# Authenticate with Spotify
-currentUser = {'id': None, 'display_name': "None", 'email': "None"}
-
-token_info = sp.auth_manager.get_cached_token()
-if token_info and token_info.get('access_token'):
-    sp = spotipy.Spotify(auth=token_info['access_token'])
-    try:
+    
+    if sp.auth_manager.get_cached_token():
         currentUser = sp.current_user()
-    except spotipy.exceptions.SpotifyException as e:
-        print(f"Spotify API Error: {e}")
+    else:
+        currentUser = {'id': None, 'display_name': "None", 'email': "None"}
 
-# Prepare response data
-data = {
-    'current_time': current_time,
-    'current_date': current_date,
-    'user': currentUser
-}
+    data = {
+        'current_time': current_time,
+        'current_date': current_date,
+        'user': { 
+            'id': currentUser['id'],
+            'display_name': currentUser['display_name'],
+            'email': currentUser['email']
+        }
+    }
+
+    return JsonResponse(data)
 
 def login(request):
     # Redirect user to Spotify authorization URL
