@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+import './Home.css'
 import HomeTile from '../components/HomeTile/HomeTile'
 import SideMenu from '../components/SideMenu/SideMenu'
 
