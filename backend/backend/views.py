@@ -1,9 +1,7 @@
 import logging
 from django.http import HttpResponse, JsonResponse
 from datetime import datetime
-
 from django.shortcuts import redirect
-
 from playlists.models import Playlist
 from songs.models import Song
 import spotipy
@@ -11,27 +9,41 @@ import os
 from spotipy import SpotifyOAuth
 from utils.spotifyClient import sp
 
+
 def index(request):
     current_time = datetime.now().strftime("%H:%M:%S")
     current_date = datetime.now().strftime("%d-%m-%Y")
     currentUser = None
-    
-    if sp.auth_manager.get_cached_token():
+
+# Initialize Spotify client
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
+    client_id="your_client_id",
+    client_secret="your_client_secret",
+    redirect_uri="your_redirect_uri",
+    scope="user-read-private user-read-email"
+))
+
+# Fetch current time
+current_time = datetime.now().strftime("%H:%M:%S")
+current_date = datetime.now().strftime("%d-%m-%Y")
+
+# Authenticate with Spotify
+currentUser = {'id': None, 'display_name': "None", 'email': "None"}
+
+token_info = sp.auth_manager.get_cached_token()
+if token_info and token_info.get('access_token'):
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+    try:
         currentUser = sp.current_user()
-    else:
-        currentUser = {'id': None, 'display_name': "None", 'email': "None"}
+    except spotipy.exceptions.SpotifyException as e:
+        print(f"Spotify API Error: {e}")
 
-    data = {
-        'current_time': current_time,
-        'current_date': current_date,
-        'user': { 
-            'id': currentUser['id'],
-            'display_name': currentUser['display_name'],
-            'email': currentUser['email']
-        }
-    }
-
-    return JsonResponse(data)
+# Prepare response data
+data = {
+    'current_time': current_time,
+    'current_date': current_date,
+    'user': currentUser
+}
 
 def login(request):
     # Redirect user to Spotify authorization URL
@@ -46,7 +58,7 @@ def logout(request):
     return redirect('http://localhost:3000/')
 
 def callback(request):
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger (__name__)
     try:
         code = request.GET.get("code")
         logger.info(f"Authorization code received: {code}")
@@ -58,6 +70,9 @@ def callback(request):
                 if token_info:
                     # Save token info to session
                     request.session["token_info"] = token_info
+                    populatePlaylist()
+                    populateSongs()
+                    return redirect("http://localhost:3000/")
                     # return HttpResponse("Authentication successful")
                 else:
                     logger.error("Failed to retrieve access token")
@@ -74,7 +89,7 @@ def callback(request):
     except Exception as e:
         logger.error(f"Error in callback: {str(e)}")
         return JsonResponse({"error": "Authentication failed"}, status=500)
-
+    
 def populateSongs():
     try:
         results = sp.current_user_top_tracks()
