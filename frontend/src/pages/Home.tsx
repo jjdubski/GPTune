@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import './Home.css'
 import HomeTile from '../components/HomeTile/HomeTile'
 import SideMenu from '../components/SideMenu/SideMenu'
+import SpotifyButton from '../components/SpotifyButton/SpotifyButton'
+import './Home.css'
 
 
 // interface HomeProps {
@@ -48,6 +50,16 @@ const Home: React.FC = () => {
                 <h2>Home Page</h2>
                 <p>The date is  {currentDate} and the time is {currentTime}.</p>
                 <p>Logged in as: {currentUser.email}</p>
+
+                <div className="spotify-button-container">
+                    <SpotifyButton 
+                        title="Link Spotify"
+                        img="./SpotifyButton.png"
+                    />
+                </div>
+
+
+                
                 <div className="music-home-container">
                     <HomeTile title="Discover" img = "/Discover.png" />  
                     <HomeTile title="Add to Playlist" img="./AddtoPlaylist.png" />

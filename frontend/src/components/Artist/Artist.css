@@ -1,0 +1,35 @@
+/* Container for the list of artists */
+.artist-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #121212; /* Dark background */
+}
+
+/* Individual artist card */
+.artist-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 150px;
+}
+
+/* Artist image */
+.artist-image {
+    width: 120px; /* Adjust size */
+    height: 120px;
+    border-radius: 50%; /* Circular shape */
+    object-fit: cover;
+    border: 3px solid white; /* Add border for visibility */
+}
+
+/* Artist name */
+.artist-name {
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+}
