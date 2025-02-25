@@ -52,7 +52,7 @@ def index(request):
         currentUser = {'id': None, 'display_name': "None", 'email': "None"}
 
     data = {
-        'response': prompt_for_song ('give me a random color',1),
+     #   'response': prompt_for_song ('give me a random color',1),
         'current_time': current_time,
         'current_date': current_date,
         'user': { 
@@ -64,6 +64,8 @@ def index(request):
     print (prompt_for_song ('give me a random color',1))
 
     return JsonResponse(data)
+def generate_response(request):
+    response = prompt_for_song(prompt, num_runs)
 
 
 def login(request):
