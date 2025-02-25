@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Song  from '../components/Song/Song'
+// import Song  from '../components/Song/Song'
 import SongList from '../components/SongList/SongList';
 
 const Songs: React.FC = () => {
-    interface Song {
-        id: number;
-        trackID: string;
-        title: string;
-        artist: string;
-        album: string;
-        releaseDate: string;       
-    }
+    // interface Song {
+    //     id: number;
+    //     trackID: string;
+    //     title: string;
+    //     artist: string;
+    //     album: string;
+    //     releaseDate: string;       
+    // }
     const [listIsEmpty, setListIsEmpty] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
 
@@ -25,7 +25,6 @@ const Songs: React.FC = () => {
             })
             .then(data => {
                 console.log('Data received:', data)
-              
                 if (data.length > 0) {
                     setListIsEmpty(false)
                 }
@@ -48,7 +47,6 @@ const Songs: React.FC = () => {
                 <p style={{ color: 'red' }}>No songs available</p>
             ) : (
                 <SongList />
-              
             )}
             <Link to="http://localhost:8000/songAPI/">See API</Link>
             {/* <Song title='Song Title' artist='Artist Name' album='Album Name' img='https://i.scdn.co/image/ab67616d0000b27348f98cb1e0e93226a15fb439' /> */}
