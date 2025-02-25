@@ -19,7 +19,7 @@ def index(request):
     if sp.auth_manager.get_cached_token():
         currentUser = sp.current_user()
     else:
-        currentUser = {'id': None, 'display_name': "None", 'email': "None"}
+        currentUser = {'id': '', 'display_name': '', 'email': ''}
 
     data = {
         'current_time': current_time,

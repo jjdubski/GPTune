@@ -30,8 +30,6 @@ const AddToPlaylist: React.FC = () => {
 
     return (
         <div className="add-to-playlist-page">
-            <SideMenu />
-
             <div className="content">
                 <h2>Add to Playlist</h2>
                 <p>Pick a song, any song!</p>

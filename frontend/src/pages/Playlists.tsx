@@ -73,7 +73,6 @@ const Playlists: React.FC = () => {
 
     return (
         <div>
-            <SideMenu />
                         {/* Refresh Button Container */}
             <div className="refresh-button-container">
                 <RefreshButton onRefresh={handleRefresh} />
