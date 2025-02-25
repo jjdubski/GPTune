@@ -19,7 +19,9 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from .views import index, login, callback, logout, getToken
-from backend.views import chat_with_ai
+from .views import recommend_songs 
+
+   
 
 
 urlpatterns = [
@@ -29,7 +31,7 @@ urlpatterns = [
     path("callback/", callback, name='callback'),
     path('songAPI/', include('songs.urls'), name='songAPI'),
     path('logout/', logout, name='logout'),
-    path("chat/", chat_with_ai, name="chat_with_ai"),
+    path("recommend/", recommend_songs, name="recommend-songs"),
     path('playlistAPI/', include('playlists.urls'), name='playlistAPI'),
     path('getToken/', getToken, name='getToken')
      

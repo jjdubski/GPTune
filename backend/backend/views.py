@@ -10,14 +10,20 @@ from spotipy import SpotifyOAuth
 from utils.spotifyClient import sp
 from django.shortcuts import render
 from django.http import JsonResponse
+from rest_framework.decorators import api_view
 from .openai_service import generate_response
+from .openai_service import generate_song_recommendations
 
-def chat_with_ai(request):
-    if request.method == "POST":
-        user_input = request.POST.get("prompt", "")
-        ai_response = generate_response(user_input)
-        return JsonResponse({"response": ai_response})
-    return render(request, "chat.html")
+@api_view(["POST"])
+def recommend_songs(request):
+    """
+    API to recommend songs based on user's Spotify data.
+    """
+    user_data = request.data  # Expecting JSON with user preferences
+    prompt = f"Recommend 5 songs similar to {user_data.get('top_songs', [])}."
+    recommendations = generate_response(prompt)
+
+    return JsonResponse({"recommendations": recommendations})
 
 
 def index(request):
