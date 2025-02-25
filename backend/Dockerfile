@@ -1,32 +1,30 @@
 FROM python:3.13-slim
 
-# Install dependencies (netcat for database wait script)
+# Install netcat
 RUN apt-get update && apt-get install -y netcat-openbsd
 
-# Set environment variables
+# Copy entrypoint and make it executable
+COPY entrypoint.sh /backend/entrypoint.sh
+RUN chmod +x /backend/entrypoint.sh
+
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/backend
 ENV PYTHONDONTWRITEBYTECODE=1
 
-# Set working directory inside container
 WORKDIR /backend
 
-# Copy only the requirements file first (helps with caching layers)
+RUN pip install --upgrade pip
+
 COPY requirements.txt .
 
-# Upgrade pip and install dependencies
-RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy backend files separately
-COPY backend /backend
+COPY . .
 
-# Ensure entrypoint script is executable
-COPY entrypoint.sh /backend/entrypoint.sh
-RUN chmod +x /backend/entrypoint.sh
+# RUN python manage.py migrate
 
-# Expose Django's default port
 EXPOSE 8000
 
-# Start Django application
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
 CMD ["/backend/entrypoint.sh"]
