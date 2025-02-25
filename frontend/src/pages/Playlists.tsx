@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import Playlist from '../components/Playlist/Playlist'
 import './Playlist.css'
 import PlaylistList from '../components/PlaylistList/PlaylistList'
 import RefreshButton from '../components/RefreshIcon/RefreshIcon'
-import SideMenu from '../components/SideMenu/SideMenu'
 interface Playlist {
     id: number;
     name: string;

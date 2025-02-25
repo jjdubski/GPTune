@@ -15,22 +15,28 @@ def index(request):
     current_time = datetime.now().strftime("%H:%M:%S")
     current_date = datetime.now().strftime("%d-%m-%Y")
     currentUser = None
+    profile_pic = '/spotify-logo.png'
     
     if sp.auth_manager.get_cached_token():
         currentUser = sp.current_user()
     else:
-        currentUser = {'id': '', 'display_name': '', 'email': ''}
+        currentUser = {'id': '', 'display_name': '', 'email': '', 'image': ''}
 
+    if currentUser['images'][0]:
+        profile_pic = currentUser['images'][0]['url']
+    
     data = {
         'current_time': current_time,
         'current_date': current_date,
         'user': { 
             'id': currentUser['id'],
             'display_name': currentUser['display_name'],
-            'email': currentUser['email']
+            'email': currentUser['email'],
+            'image': profile_pic
         }
     }
-
+    # print(profile_pic)
+    # print(len(currentUser['images']))
     return JsonResponse(data)
 
 def login(request):

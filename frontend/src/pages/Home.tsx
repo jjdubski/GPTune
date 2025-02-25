@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import './Home.css'
+import { Link } from 'react-router-dom'
 import HomeTile from '../components/HomeTile/HomeTile'
 import User from '../components/User/User'
 import SpotifyButton from '../components/SpotifyButton/SpotifyButton'
@@ -24,7 +24,7 @@ const Home: React.FC = () => {
             setCurrentUser({ 
                 email: data.user.email || '', 
                 username: data.user.display_name || '', 
-                image: data.user.image || ''
+                image: data.user.image || '/spotify-logo.png'
             })
             console.log(data)
         })
@@ -69,9 +69,15 @@ const Home: React.FC = () => {
                 )}
                 
                 <div className="music-home-container">
-                    <HomeTile title="Discover" img = "/Discover.png" />  
-                    <HomeTile title="Add to Playlist" img="./AddtoPlaylist.png" />
-                    <HomeTile title="This or That?" img="./ThisorThat.png" />
+                    <Link to="/discover">
+                        <HomeTile title="Discover" img="/Discover.png" />
+                    </Link>
+                    <Link to="/add-to-playlist">
+                        <HomeTile title="Add to Playlist" img="./AddtoPlaylist.png" />
+                    </Link>
+                    <Link to="/this-or-that">
+                        <HomeTile title="This or That?" img="./ThisorThat.png" />
+                    </Link>
                 </div>
 
                 {/* <p>The date is  {currentDate} and the time is {currentTime}.</p> */}
