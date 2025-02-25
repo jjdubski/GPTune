@@ -19,9 +19,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from .views import index, login, callback, logout, getToken
-from .views import recommend_songs 
+from backend.views import recommend_songs
 
-   
 
 
 urlpatterns = [
