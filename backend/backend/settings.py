@@ -52,6 +52,10 @@ CORS_ORIGIN_WHITELIST = [
     'http://0.0.0.0:3000'
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

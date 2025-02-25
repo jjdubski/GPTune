@@ -14,6 +14,7 @@ const Home: React.FC = () => {
     const [currentTime, setCurrentTime] = useState('')
     const [currentDate, setCurrentDate] = useState('')
     const [currentUser, setCurrentUser] = useState('')
+    const [response, setResponse] = useState('');
 
     // Fetches date and time from backend on load/reload
     // useEffect(() => {
@@ -39,6 +40,37 @@ const Home: React.FC = () => {
         return () => clearInterval(interval)
     }
     ,[])
+
+    const handleGenerateResponse = async () => {
+        const requestData = {
+            prompt: 'give me a random color',
+            num_runs: 1
+        };
+
+        try {
+            const res = await fetch('http://127.0.0.1:8000/generate_response/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                setResponse(data.response);
+            } else {
+                console.error('Error:', data.error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    useEffect(() => {
+        handleGenerateResponse();
+    }, []);
+
     return (
         <div className="home-container">
             {/* Side Menu */}
@@ -51,6 +83,10 @@ const Home: React.FC = () => {
                     <HomeTile title="Discover" img = "/Discover.png" />  
                     <HomeTile title="Add to Playlist" img="./AddtoPlaylist.png" />
                     <HomeTile title="This or That?" img="./ThisorThat.png" />
+                </div>
+                <div>
+                    <h3>Generated Response:</h3>
+                    <p>{response}</p>
                 </div>
             </div>
         </div>

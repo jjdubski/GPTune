@@ -5,6 +5,7 @@ import spotipy
 from django.http import HttpResponse, JsonResponse
 from datetime import datetime
 from django.shortcuts import redirect
+from django.views.decorators.csrf import csrf_exempt
 
 from playlists.models import Playlist
 from songs.models import Song
@@ -60,12 +61,22 @@ def index(request):
             'display_name': currentUser['display_name'],
             'email': currentUser['email']
         }
-    }
-    print (prompt_for_song ('give me a random color',1))
+    } 
 
     return JsonResponse(data)
+
+@csrf_exempt
 def generate_response(request):
-    response = prompt_for_song(prompt, num_runs)
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body.decode("utf-8"))
+            prompt = data.get("prompt", "")
+            num_runs = data.get("num_runs", 1)
+            response = prompt_for_song(prompt, num_runs)
+            return JsonResponse({"response": response})
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON format"}, status=400)
+    return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
 def login(request):

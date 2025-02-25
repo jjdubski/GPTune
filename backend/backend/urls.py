@@ -18,7 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from .views import index, login, callback, logout, getToken
+from .views import index, login, callback, logout, getToken, generate_response
 
 
 
@@ -31,10 +31,9 @@ urlpatterns = [
     path('songAPI/', include('songs.urls'), name='songAPI'),
     path('logout/', logout, name='logout'),
     #path("recommend/", recommend_songs, name="recommend-songs"),
-   # path("openai/", generate_response, name='generate_response'),
+    path("generate_response/", generate_response, name='generate_response'),
     path('playlistAPI/', include('playlists.urls'), name='playlistAPI'),
     path('getToken/', getToken, name='getToken')
-     
 ]
 
 # if settings.DEBUG:
