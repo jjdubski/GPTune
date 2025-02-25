@@ -10,8 +10,7 @@ from playlists.models import Playlist
 from songs.models import Song
 from spotipy import SpotifyOAuth
 from utils.spotifyClient import sp
-from utils import openai_client
-from utils.openai_client import openai_client  # Use OpenAI client from utils
+from utils.openai_client import client, prompt_for_song
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +52,7 @@ def index(request):
         currentUser = {'id': None, 'display_name': "None", 'email': "None"}
 
     data = {
+        'response': prompt_for_song ('give me a random color',1),
         'current_time': current_time,
         'current_date': current_date,
         'user': { 
@@ -61,6 +61,7 @@ def index(request):
             'email': currentUser['email']
         }
     }
+    print (prompt_for_song ('give me a random color',1))
 
     return JsonResponse(data)
 
