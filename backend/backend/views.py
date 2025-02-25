@@ -73,6 +73,7 @@ def generate_response(request):
             prompt = data.get("prompt", "")
             num_runs = data.get("num_runs", 1)
             response = prompt_for_song(prompt, num_runs)
+            # add parsing code here and return proper JSON object
             return JsonResponse({"response": response})
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
