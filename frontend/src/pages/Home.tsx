@@ -16,7 +16,7 @@ import './Home.css'
 const Home: React.FC = () => {
     const [currentTime, setCurrentTime] = useState('')
     const [currentDate, setCurrentDate] = useState('')
-    const [currentUser, setCurrentUser] = useState('')
+    const [currentUser, setCurrentUser] = useState<{ email: string }>({ email: '' })
 
     // Fetches date and time from backend on load/reload
     // useEffect(() => {
@@ -32,7 +32,7 @@ const Home: React.FC = () => {
             fetch('http://127.0.0.1:8000').then(res => res.json()).then(data => {
                 setCurrentTime(data.current_time)
                 setCurrentDate(data.current_date)
-                setCurrentUser(data.user)
+                setCurrentUser({ email: data.user.email })
             })
         }
 
@@ -47,10 +47,6 @@ const Home: React.FC = () => {
             {/* Side Menu */}
             <SideMenu />
             <div>
-                <h2>Home Page</h2>
-                <p>The date is  {currentDate} and the time is {currentTime}.</p>
-                <p>Logged in as: {currentUser.email}</p>
-
                 <div className="spotify-button-container">
                     <SpotifyButton 
                         title="Link Spotify"
@@ -65,6 +61,10 @@ const Home: React.FC = () => {
                     <HomeTile title="Add to Playlist" img="./AddtoPlaylist.png" />
                     <HomeTile title="This or That?" img="./ThisorThat.png" />
                 </div>
+
+                <p>The date is  {currentDate} and the time is {currentTime}.</p>
+                <p>Logged in as: {currentUser.email}</p>
+
             </div>
         </div>
     )

@@ -37,7 +37,7 @@ function App() {
           <Route path="/songs" element={<Songs />} />
           <Route path="/playlist" element={<Playlists />} />
         </Routes>
-        <WebPlayback token={token} />
+        {token && <WebPlayback token={token} />}
       </div>
     </Router>
   )

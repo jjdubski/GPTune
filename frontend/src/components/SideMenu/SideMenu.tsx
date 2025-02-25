@@ -31,13 +31,15 @@ const SideMenu: React.FC = () => {
                 ))}
             </div>
         </div>
-        <style>
+        <style >
             {`
                 .side-menu {
-                    overflow: hidden;
-                    display: ${isOpen ? "block" : "none"};
+                    transform: ${isOpen ? "translateX(0)" : "translateX(-300px)"};
+                    opacity: ${isOpen ? "1" : "0"};
                 }
-            
+                .hamburger {
+                    display: ${isOpen ? "none" : "flex"};
+                }
             `}
         </style>
         </>

@@ -20,8 +20,8 @@
     
     /* Positioning for upper-right corner */
     position: fixed;
-    top: 20px; /* Moves it down from the top */
-    right: 20px; /* Moves it from the right */
+    top: 50px; /* Moves it down from the top */
+    right: 50px; /* Moves it from the right */
     z-index: 1000; /* Ensures visibility above other elements */
 }
 
