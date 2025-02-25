@@ -22,7 +22,7 @@ def index(request):
     else:
         currentUser = {'id': '', 'display_name': '', 'email': '', 'image': ''}
 
-    if currentUser['images'][0]:
+    if currentUser['images'] and currentUser['images'][0]:
         profile_pic = currentUser['images'][0]['url']
     
     data = {
