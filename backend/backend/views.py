@@ -123,7 +123,11 @@ def populateSongs():
             if not Song.objects.filter(trackID=song['id']).exists():
                 release_date = datetime.strptime(song['album']['release_date'], '%Y-%m-%d').date()
                 Song.objects.create(
-	@@ -99,39 +132,31 @@ def populateSongs():
+                    trackID=song['id'],
+                    title=song['name'],
+                    artist=song['artists'][0]['name'],
+                    album=song['album']['name'],
+                    release_date=release_date,
                     genre=", ".join(song.get('genres', [])),
                     coverArt=song['album']['images'][0]['url'] if song['album']['images'] else None
                 )
