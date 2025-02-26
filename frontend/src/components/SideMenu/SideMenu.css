@@ -1,11 +1,15 @@
 .close-btn {
-    position: absolute;
+    /* position: absolute;
     top: 10px; 
-    right: 15px; 
+    right: 15px;  */
+    right: 30px;
+    top: 0px;
+    position: absolute;
     font-size: 16px; 
     font-weight: bold;
     color: white;
     cursor: pointer;
+    font-size: 1.5em;
     transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 .close-btn:hover {
@@ -15,31 +19,32 @@
 .side-menu {
     position: fixed;
     top: 0;
-    width: 200px; /* Consistent width */
+    left: 0;
+    width: 300px; /* Consistent width */
     height: 100%;
     background-color: black;
     color: white;
     display: flex;
     flex-direction: column;
     align-items: center; /* Center text horizontally */
-    justify-content: center;
+    justify-content: flex-start;
     padding: 20px;
     gap: 25px; /* More space between items */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease-in-out;
-    z-index: 1000;
-    transform: translateX(-70%);
+    opacity: 100;
+    transition: all 0.5s ease-in-out; 
+    z-index: 100; 
 }
 
 .hamburger {
     position: fixed;
-    top: 20px;
-    left: 20px;
+    top: 50px;
+    left: 50px;
     display: flex;
     flex-direction: column;
     gap: 5px;
     cursor: pointer;
-    z-index: 10; /* Ensures it’s above other elements */
+    transition: all 0.5s ease-in-out;
 }
 .hamburger span {
     width: 40px;
@@ -60,9 +65,22 @@
     transition: color 0.2s ease-in-out;
 }
 
+.menu-item:first-of-type{
+    margin-top: 50px;
+}
 
-.menu-item:hover {
-    color: gray;
+.menu-item:last-of-type {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    gap: 10px;
+    margin-bottom: 100px;
+}
+
+.logoutIcon {
+    width: 60px;
+    height: 60px;
 }
 
 @media (max-width: 768px) {
@@ -76,8 +94,6 @@
 
     .hamburger span {
             width: 35px;
-            height: 4px; }
-            
-            
+            height: 4px; } 
     }
 

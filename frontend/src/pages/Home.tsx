@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import './Home.css'
+import { Link } from 'react-router-dom'
 import HomeTile from '../components/HomeTile/HomeTile'
-import SideMenu from '../components/SideMenu/SideMenu'
+import User from '../components/User/User'
 import SpotifyButton from '../components/SpotifyButton/SpotifyButton'
 import './Home.css'
 
@@ -14,10 +14,14 @@ import './Home.css'
 
 // const Home: React.FC<HomeProps> = ({ currentDate, currentTime }) => {
 const Home: React.FC = () => {
-    const [currentTime, setCurrentTime] = useState('')
-    const [currentDate, setCurrentDate] = useState('')
-    const [currentUser, setCurrentUser] = useState('')
-
+    // const [currentTime, setCurrentTime] = useState('')
+    // const [currentDate, setCurrentDate] = useState('')
+    const [response, setResponse] = useState('');
+    const [currentUser, setCurrentUser] = 
+        useState<{email: string, username: string, image: string}>({email: '', username: '', image: ''});
+  
+    // console.log(currentUser)
+  
     // Fetches date and time from backend on load/reload
     // useEffect(() => {
     //   fetch('http://localhost:8000').then(res => res.json()).then(data => {
@@ -27,44 +31,89 @@ const Home: React.FC = () => {
     // }
 
     // Updates date and time every second
-    useEffect(() => {
-        const fetchData = () => {
-            fetch('http://127.0.0.1:8000').then(res => res.json()).then(data => {
-                setCurrentTime(data.current_time)
-                setCurrentDate(data.current_date)
-                setCurrentUser(data.user)
-            })
+    // useEffect(() => {
+    //     const fetchData = () => {
+    //         fetch('http://127.0.0.1:8000').then(res => res.json()).then(data => {
+    //             setCurrentTime(data.current_time)
+    //             setCurrentDate(data.current_date)
+    //             setCurrentUser({ email: data.user.email })
+    //         })
+    //     }
+
+    //     fetchData()
+    //     const interval = setInterval(fetchData, 1000)
+    //     return () => clearInterval(interval)
+    // }
+    // ,[])
+
+    const handleGenerateResponse = async () => {
+        const requestData = {
+            prompt: 'give me a random color',
+            num_runs: 1
+        };
+
+        try {
+            const res = await fetch('http://127.0.0.1:8000/generate_response/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                setResponse(data.response);
+            } else {
+                console.error('Error:', data.error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
         }
+    };
+    useEffect(() => {
+        fetch('http://localhost:8000').then(res => res.json()).then(data => {
+            setCurrentUser({ 
+                email: data.user.email || '', 
+                username: data.user.display_name || '', 
+                image: data.user.image || '/spotify-logo.png'
+            })
+            console.log(data)
+        })
+        handleGenerateResponse();
+    }, [])
 
-        fetchData()
-        const interval = setInterval(fetchData, 1000)
-
-        return () => clearInterval(interval)
-    }
-    ,[])
     return (
         <div className="home-container">
-            {/* Side Menu */}
-            <SideMenu />
             <div>
-                <h2>Home Page</h2>
-                <p>The date is  {currentDate} and the time is {currentTime}.</p>
-                <p>Logged in as: {currentUser.email}</p>
-
-                <div className="spotify-button-container">
-                    <SpotifyButton 
-                        title="Link Spotify"
-                        img="./SpotifyButton.png"
-                    />
-                </div>
-
-
+                {currentUser.email ? (
+                    <User username={currentUser.username} image={currentUser.image} />
+                ) : (
+                    <div className="spotify-button-container">
+                        <SpotifyButton 
+                            title="Link Spotify"
+                            img="./SpotifyButton.png"
+                        />
+                    </div>
+                )}
                 
                 <div className="music-home-container">
-                    <HomeTile title="Discover" img = "/Discover.png" />  
-                    <HomeTile title="Add to Playlist" img="./AddtoPlaylist.png" />
-                    <HomeTile title="This or That?" img="./ThisorThat.png" />
+                    <Link to="/discover">
+                        <HomeTile title="Discover" img="/Discover.png" />
+                    </Link>
+                    <Link to="/add-to-playlist">
+                        <HomeTile title="Add to Playlist" img="./AddtoPlaylist.png" />
+                    </Link>
+                    <Link to="/this-or-that">
+                        <HomeTile title="This or That?" img="./ThisorThat.png" />
+                    </Link>
                 </div>
+                <div>
+                    <h3>Generated Response:</h3>
+                    <p>{response}</p>
+                </div>
+                {/* <p>The date is  {currentDate} and the time is {currentTime}.</p> */}
+                {/* <p>Logged in as: {currentUser.email}</p> */}
             </div>
         </div>
     )

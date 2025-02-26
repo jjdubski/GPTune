@@ -9,7 +9,7 @@
 *.sln
 *.sw?
 package-lock.json
-backend/debug.log
+debug.log
 
 # All env files
 .env

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import Playlist from '../components/Playlist/Playlist'
-// import './Playlists.css'
+import './Playlist.css'
 import PlaylistList from '../components/PlaylistList/PlaylistList'
 import RefreshButton from '../components/RefreshIcon/RefreshIcon'
-import SideMenu from '../components/SideMenu/SideMenu'
 interface Playlist {
     id: number;
     name: string;
@@ -42,10 +40,41 @@ const Playlists: React.FC = () => {
             })
     }, [])
 
+    //function written using above as template
+    const fetchPlaylists = () => {
+        fetch('http://localhost:8000/playlistAPI/playlists/')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data received:', data);
+                if (data.playlists && Array.isArray(data.playlists)) {
+                    setPlaylists(data.playlists);
+                } else {
+                    setPlaylists(Array.isArray(data) ? data : []);
+                }
+                setError(null);
+            })
+            .catch(error => {
+                console.error('Error fetching Playlists:', error);
+                setError('Failed to fetch Playlists. Please try again later. ' + error);
+            });
+    };
+
+    // Function to handle refresh button click
+    const handleRefresh = () => {
+        fetchPlaylists(); // Re-fetch playlists when clicked
+    };
+
     return (
         <div>
-            <SideMenu />
-            {/* <RefreshButton /> */}
+                        {/* Refresh Button Container */}
+            <div className="refresh-button-container">
+                <RefreshButton onRefresh={handleRefresh} />
+            </div>
             <PlaylistList />
 
             <h2>Your Spotify Playlists</h2>
