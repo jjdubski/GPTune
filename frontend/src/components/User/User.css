@@ -1,0 +1,38 @@
+.user-button {
+    display: flex;
+    align-items: center;
+    background-color: var(--primary); /* Spotify's official color - placeholder */
+    color: white; /*white text*/
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    cursor: default;
+  }
+
+  .divider {
+    width: 1px;
+    height: 40px;
+    background-color: white;
+  }
+  
+  .icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+  }
+  
+  .username {
+    margin: 0 10px;
+  }
+  
+  .logout-icon {
+    width: 40px;
+    height: 40px;
+    margin-left: 5px;
+    cursor: pointer;
+  }
