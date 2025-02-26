@@ -11,6 +11,7 @@
 package-lock.json
 debug.log*
 backend/debug.log
+backend\debug.log
 debug.log
 
 
