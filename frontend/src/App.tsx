@@ -4,10 +4,11 @@ import Home from './pages/Home.tsx'
 import Songs from './pages/Songs'
 import Playlists from './pages/Playlists'
 import AddtoPlaylist from './pages/AddToPlaylist'
-import WebPlayback from './components/WebPlayback/WebPlayback'
+// import WebPlayback from './components/WebPlayback/WebPlayback'
 import { useEffect, useState } from 'react'
 import SideMenu from './components/SideMenu/SideMenu.tsx'
 import Search from './pages/Search.tsx'
+import SpotifyPlayer from 'react-spotify-web-playback';
 
 
 function App() { 
@@ -44,7 +45,8 @@ function App() {
           {/* <Route path='/discover' element={<Discover />} /> */}
           {/* <Route path='/this-or-that' element={<ThisOrThat />} /> */}
         </Routes>
-        {token && <WebPlayback token={token} />}
+        {/* {token && <WebPlayback token={token} />} */}
+        {token && <SpotifyPlayer token={token} uris={['spotify:artist:6HQYnRM4OzToCYPpVBInuU']}/>}
       </div>
     </Router>
   )
