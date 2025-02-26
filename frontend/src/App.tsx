@@ -46,7 +46,17 @@ function App() {
           {/* <Route path='/this-or-that' element={<ThisOrThat />} /> */}
         </Routes>
         {/* {token && <WebPlayback token={token} />} */}
-        {token && <SpotifyPlayer token={token} uris={['spotify:artist:6HQYnRM4OzToCYPpVBInuU']}/>}
+        <div className="player">
+          {token && <SpotifyPlayer token={token} uris={['spotify:artist:6HQYnRM4OzToCYPpVBInuU']}
+          styles={{
+            bgColor: '#333333',
+            color: 'white',
+            loaderColor: '#fff',
+            sliderColor: '#1cb954',
+            trackArtistColor: '#ccc',
+            trackNameColor: '#fff',
+          }}/>}
+        </div>
       </div>
     </Router>
   )
