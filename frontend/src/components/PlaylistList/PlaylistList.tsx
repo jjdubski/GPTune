@@ -36,6 +36,8 @@ const PlaylistList: React.FC = () => {
                 <p>Release Date: {song.releaseDate}</p> */}
                 <Playlist title={playlist.title} img='https://i.scdn.co/image/ab67616d0000b27348f98cb1e0e93226a15fb439' />
             </div>
+
+            
         ))}
     </div>
     );

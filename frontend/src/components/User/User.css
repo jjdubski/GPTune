@@ -24,6 +24,7 @@
     width: 40px;
     height: 40px;
     border-radius: 100%;
+    background-color: transparent;
   }
   
   .username {
@@ -31,6 +32,7 @@
   }
   
   .logout-icon {
+    background-color: transparent;
     width: 40px;
     height: 40px;
     margin-left: 5px;
