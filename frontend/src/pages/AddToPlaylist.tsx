@@ -4,6 +4,7 @@ import User from '../components/User/User'; // Ensure this path is correct
 import Playlist from '../components/Playlist/Playlist'; // Ensure this path is correct
 import SongList from '../components/SongList/SongList'; // Ensure this path is correct
 import SpotifyButton from '../components/SpotifyButton/SpotifyButton';
+import AddSong from '../components/AddSong/AddSong';
 
 interface Playlist {
     id: number;
@@ -91,14 +92,10 @@ const AddToPlaylist: React.FC = () => {
             <div className="recommended-songs-container">
                 <h2 className="recommended-songs-title">Recommended Songs</h2>
                 <div className="song-scroll">
-                    <SongList renderSong={(song) => (
-                        <button key={song.id} className="song-button">
-                            {song.name}
-                        </button>
-                    )} />
+                    {/* Add your song data here */}
+                    <AddSong />
                 </div>
             </div>
-            {/* </div> */}
         </div>
     );
 };
