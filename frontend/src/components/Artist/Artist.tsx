@@ -5,9 +5,11 @@ interface Artist {
     id: number;
     name: string;
     image: string;
+    genres: String[];
+    popularity: number;
 }
 
-const ArtistList: React.FC = () => {
+const Artist: React.FC = () => {
     const [artists, setArtists] = useState<Artist[]>([]);
 
     useEffect(() => {
@@ -37,4 +39,4 @@ const ArtistList: React.FC = () => {
     );
 };
 
-export default ArtistList;
+export default Artist;
