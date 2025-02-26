@@ -1,0 +1,28 @@
+.search-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    color: white;
+}
+
+.search-bar-container {
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 16px;
+}
+
+.popular-artists-title {
+    margin-bottom: 10px;
+    font-size: 24px;
+    font-weight: bold;
+}
