@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './AddToPlaylist.css';
-import { Navigate } from 'react-router-dom';
 import User from '../components/User/User'; // Ensure this path is correct
 // import Playlist from '../components/Playlist/Playlist'; // Ensure this path is correct
 // import Song from '../components/Song/Song'; // Ensure this path is correct
