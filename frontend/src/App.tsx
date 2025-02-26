@@ -2,9 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './App.css'
 import Home from './pages/Home.tsx'
 import Songs from './pages/Songs'
-import Navbar from './components/Navbar/Navbar'
 import Playlists from './pages/Playlists'
-import AddtoPlaylist from './pages/AddToPlaylist'
 import AddtoPlaylist from './pages/AddToPlaylist'
 import WebPlayback from './components/WebPlayback/WebPlayback'
 import { useEffect, useState } from 'react'
@@ -35,7 +33,7 @@ function App() {
   return (
     <Router>
       <div className='App'>
-        <Navbar />
+        <SideMenu />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/songs" element={<Songs />} />
