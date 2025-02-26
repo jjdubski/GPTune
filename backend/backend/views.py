@@ -53,11 +53,11 @@ def index(request):
     else:
         currentUser = {'id': '', 'display_name': '', 'email': '', 'image': ''}
 
-    if currentUser['images'] and currentUser['images'][0]:
-        profile_pic = currentUser['images'][0]['url']
+    if currentUser.get('images') and currentUser['images']:
+        profile_pic = currentUser['images'][0].get('url', '/spotify-logo.png')
     
     data = {
-     #   'response': prompt_for_song ('give me a random color',1),
+    #   'response': prompt_for_song ('give me a random color',1),
         'current_time': current_time,
         'current_date': current_date,
         'user': { 
