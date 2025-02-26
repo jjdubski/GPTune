@@ -86,7 +86,7 @@ def process_json(output):
         logger.error(f"Error parsing JSON response: {output}")
         return {"title": "Unknown", "artist": "Unknown", "album": "Unknown"}
     
-
+@csrf_exempt
 def generate_response(request):
     if request.method == "POST":
         try:
