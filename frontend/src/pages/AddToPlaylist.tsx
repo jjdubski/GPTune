@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './AddToPlaylist.css';
-import User from '../components/User/User'; // Ensure this path is correct
-import Playlist from '../components/Playlist/Playlist'; // Ensure this path is correct
-import SongList from '../components/SongList/SongList'; // Ensure this path is correct
+import User from '../components/User/User';
+import Playlist from '../components/Playlist/Playlist';
+import SongList from '../components/SongList/SongList';
+import SpotifyButton from '../components/SpotifyButton/SpotifyButton';
 
 interface Playlist {
     id: number;
@@ -13,6 +14,25 @@ interface Playlist {
 const AddToPlaylist: React.FC = () => {
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [error, setError] = useState<string | null>(null);
+const [currentUser, setCurrentUser] = useState({
+    email: '',
+    username: '',
+    image: '/spotify-logo.png'
+});
+const [isLoading, setIsLoading] = useState(true);
+const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(null);
+
+    useEffect(() => {
+        fetch('http://localhost:8000').then(res => res.json()).then(data => {
+            setCurrentUser({
+                email: data.user.email || '',
+                username: data.user.display_name || '',
+                image: data.user.image || '/spotify-logo.png'
+            });
+            console.log(data);
+            setIsLoading(false);
+        });
+    }, []);
 
     useEffect(() => {
         const fetchPlaylists = async () => {
@@ -32,10 +52,23 @@ const AddToPlaylist: React.FC = () => {
         fetchPlaylists();
     }, []);
 
+    const handlePlaylistClick = (playlist: Playlist) => {
+        setSelectedPlaylist(playlist);
+    };
+
     return (
         <div className="add-to-playlist-container">
             <div className="playlist-container">
-                <User username="John Doe" image="/path/to/user/image.jpg" /> {/* Adjust props as necessary */}
+                {currentUser.email ? (
+                    <User username={currentUser.username} image={currentUser.image} />
+                ) : (
+                    <div className="spotify-button-container">
+                        <SpotifyButton 
+                            title="Link Spotify"
+                            img="./SpotifyButton.png"
+                        />
+                    </div>
+                )}
 
                 <h2 className="playlist-title">PLAYLISTS</h2>
 
@@ -44,7 +77,7 @@ const AddToPlaylist: React.FC = () => {
                         <p className="error-message">{error}</p>
                     ) : playlists.length > 0 ? (
                         playlists.map((playlist) => (
-                            <div key={playlist.id} className="playlist-item">
+                            <div key={playlist.id} className="playlist-item" onClick={() => handlePlaylistClick(playlist)}>
                                 <img src={playlist.coverArt} alt={playlist.name} className="playlist-image" />
                                 <p className="playlist-name">{playlist.name}</p>
                             </div>
@@ -58,7 +91,11 @@ const AddToPlaylist: React.FC = () => {
             <div className="recommended-songs-container">
                 <h2 className="recommended-songs-title">Recommended Songs</h2>
                 <div className="song-scroll">
-                    <SongList />
+                    {selectedPlaylist ? (
+                        <SongList playlist={selectedPlaylist} />
+                    ) : (
+                        <p>Select a playlist to see recommended songs</p>
+                    )}
                 </div>
             </div>
         </div>
