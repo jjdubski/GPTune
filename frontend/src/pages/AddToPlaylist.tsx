@@ -40,6 +40,13 @@ const AddToPlaylist: React.FC = () => {
         !isLoading ? (
         <div className="add-to-playlist-container">
             <div className="playlist-container">
+                <h2 className="playlist-title">PLAYLISTS</h2>
+                <div className="playlist-scroll">
+                    <PlaylistList />
+                </div>
+            </div>
+            <div className="add-songs-container">
+                {/* <h2 className="recommended-songs-title">Recommended Songs</h2> */}
                 {currentUser.email ? (
                     <User username={currentUser.username} image={currentUser.image} />
                 ) : (
@@ -50,21 +57,12 @@ const AddToPlaylist: React.FC = () => {
                         />
                     </div>
                 )}
-
-                <h2 className="playlist-title">PLAYLISTS</h2>
-                <div className="playlist-scroll">
-                    <PlaylistList />
-                </div>
-                
-            <div className="recommended-songs-container">
-                <h2 className="recommended-songs-title">Recommended Songs</h2>
                 <div className="song-scroll">
                     {/* Add your song data here */}
                     <AddSong />
                 </div>
             </div>  
-        </div>
-    </div>) : (
+        </div>) : (
         <></>
         )
     );
