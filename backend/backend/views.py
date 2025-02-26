@@ -71,6 +71,16 @@ def index(request):
     # print(len(currentUser['images']))
     return JsonResponse(data)
 
+
+def process_json(output):
+    output = output.strip().strip("```json").strip("```")
+    try:
+        output_list = json.loads(output)
+        return output_list
+    except:
+        print(f"Error parsing JSON response: {output}")
+        return {'title': 'Unknown', 'artist': 'Unknown'}
+    
 @csrf_exempt
 def generate_response(request):
     if request.method == "POST":
@@ -80,7 +90,8 @@ def generate_response(request):
             num_runs = data.get("num_runs", 1)
             response = prompt_for_song(prompt, num_runs)
             # add parsing code here and return proper JSON object
-            return JsonResponse({"response": response})
+            output = process_json(response)
+            return JsonResponse({"response": output})
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
     return JsonResponse({"error": "Invalid request method"}, status=405)

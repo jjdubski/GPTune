@@ -7,9 +7,12 @@
 
 1. [How to run](#how-to-run)
 2. [File Structure](#file-structure)
-3. [List of Commands](#list-of-commands)3.1.  [Docker](#docker)3.2.  [PSQL](#psql)3.3.  [Git](#git--github)
-4. [How to submit pull request](#how-to-submit-pull-request)
-5. [FAQ](#faq)
+3. [List of Commands](#list-of-commands)  
+   3.1. [Docker](#docker)  
+   3.2. [PSQL](#psql)  
+   3.3. [Git](#git--github)  
+5. [How to submit pull request](#how-to-submit-pull-request)
+6. [FAQ](#faq)
 
 # How to run
 
