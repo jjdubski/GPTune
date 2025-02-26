@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import HomeTile from '../components/HomeTile/HomeTile';
 import User from '../components/User/User';
 import SpotifyButton from '../components/SpotifyButton/SpotifyButton';
 import SearchBar from '../components/SearchBar/SearchBar';
 import './Home.css';
 
+// interface HomeProps {
+//   currentDate: number
+//   currentTime: number
+// }
+
+// const Home: React.FC<HomeProps> = ({ currentDate, currentTime }) => {
 const Home: React.FC = () => {
     // const [currentTime, setCurrentTime] = useState('')
     // const [currentDate, setCurrentDate] = useState('')
