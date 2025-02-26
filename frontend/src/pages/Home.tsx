@@ -15,6 +15,7 @@ import './Home.css';
 const Home: React.FC = () => {
     // const [currentTime, setCurrentTime] = useState('')
     // const [currentDate, setCurrentDate] = useState('')
+    const [isLoading, setIsLoading] = useState(true);
     const [response, setResponse] = useState('');
     const [currentUser, setCurrentUser] = 
         useState<{email: string, username: string, image: string}>({email: '', username: '', image: ''});
@@ -46,6 +47,7 @@ const Home: React.FC = () => {
     // ,[])
 
     const handleGenerateResponse = async () => {
+        return // to stop prompting for now
         const requestData = {
             prompt: 'give me a random color',
             num_runs: 1
@@ -109,14 +111,15 @@ const Home: React.FC = () => {
                 image: data.user.image || '/spotify-logo.png'
             });
             console.log(data);
+            setIsLoading(false);
         });
         handleGenerateResponse();
     }, []);
 
     return (
+        !isLoading ?  (
         <div className="home-container">
             <SearchBar onSearch={findSongs}/>
-            <div>
                 {currentUser.email ? (
                     <User username={currentUser.username} image={currentUser.image} />
                 ) : (
@@ -144,8 +147,10 @@ const Home: React.FC = () => {
                 </div>
                 {/* <p>The date is  {currentDate} and the time is {currentTime}.</p> */}
                 {/* <p>Logged in as: {currentUser.email}</p> */}
+            </div> ) :
+            <div className="loading-container">
+                <h2>Loading...</h2>
             </div>
-        </div>
     );
 };
 

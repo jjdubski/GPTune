@@ -33,6 +33,7 @@
     max-width: 200px;
     max-height: 200px;
     object-fit: cover;
+    background-color: transparent;
     z-index: 3;
 }
 
