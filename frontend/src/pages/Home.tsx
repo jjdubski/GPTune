@@ -148,9 +148,7 @@ const Home: React.FC = () => {
                 {/* <p>The date is  {currentDate} and the time is {currentTime}.</p> */}
                 {/* <p>Logged in as: {currentUser.email}</p> */}
             </div> ) :
-            <div className="loading-container">
-                <h2>Loading...</h2>
-            </div>
+                <></>
     );
 };
 
