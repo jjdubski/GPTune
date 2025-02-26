@@ -4,8 +4,10 @@ import Home from './pages/Home.tsx'
 import Songs from './pages/Songs'
 import Navbar from './components/Navbar/Navbar'
 import Playlists from './pages/Playlists'
+import AddtoPlaylist from './pages/AddToPlaylist'
 import WebPlayback from './components/WebPlayback/WebPlayback'
 import { useEffect, useState } from 'react'
+import SideMenu from './components/SideMenu/SideMenu.tsx'
 
 
 function App() { 
@@ -31,13 +33,17 @@ function App() {
   return (
     <Router>
       <div className='App'>
-        <Navbar />
+        <SideMenu />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/songs" element={<Songs />} />
-          <Route path="/playlist" element={<Playlists />} />
+          <Route path="/playlists" element={<Playlists />} />
+          <Route path="/add-to-playlist" element={<AddtoPlaylist />} />
+          {/* <Route path="logout" element={<Logout />} /> */}
+          {/* <Route path='/discover' element={<Discover />} /> */}
+          {/* <Route path='/this-or-that' element={<ThisOrThat />} /> */}
         </Routes>
-        <WebPlayback token={token} />
+        {token && <WebPlayback token={token} />}
       </div>
     </Router>
   )

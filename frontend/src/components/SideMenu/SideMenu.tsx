@@ -1,43 +1,43 @@
 import React, { useState } from "react";
 import "./SideMenu.css";
+import { Link } from "react-router-dom";
+import logoutIcon from "/logout-icon.png";
 
 const SideMenu: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
-    
-
-    const menuItems = [
-        { title: "Discover" },
-        { title: "Playlist" },
-        { title: "This or That" },
-    ];
 
     return (
         <> 
         <div>
             {/* Hamburger Menu Button */}
             <div className="hamburger" onClick={() => setIsOpen(!isOpen)}>
-                <span className={`burger burger1 `}></span>
-                <span className={`burger burger2`}></span>
-                <span className={`burger burger3`}></span>
+                <span className="burger"></span>
+                <span className="burger"></span>
+                <span className="burger"></span>
             </div>
 
             {/* Sidebar Menu */}
             <div className={`side-menu`}>
-                <p className="menu-item" onClick={() => setIsOpen(!isOpen)}> X</p>
-                {menuItems.map((item, index) => (
-                    <div key={index} className="menu-item">
-                        {item.title}
-                    </div>
-                ))}
+                <p className="close-btn" onClick={() => setIsOpen(!isOpen)}>X</p>
+                <Link className="menu-item" to="/">Home</Link>
+                <Link className="menu-item" to="/add-to-playlist">Add to Playlist</Link>
+                <Link className="menu-item" to="/this-or-that">This Or That</Link>
+                <Link className="menu-item" to="/discover">Discover</Link>
+                <Link className="menu-item" to="http://localhost:8000/logout">Logout 
+                    <img className="logoutIcon" src={logoutIcon} alt="Logout Icon"></img>
+                </Link>
             </div>
         </div>
-        <style>
+        <style >
             {`
                 .side-menu {
-                    overflow: hidden;
-                    display: ${isOpen ? "block" : "none"};
+                    transform: ${isOpen ? "translateX(0)" : "translateX(-300px)"};
+                    opacity: ${isOpen ? "1" : "0"};
                 }
-            
+                .hamburger {
+                    transform: ${isOpen ? "translateX(-100px)" : "translateX(0)"};
+                    opacity: ${isOpen ? "0" : "1"};
+                }
             `}
         </style>
         </>
