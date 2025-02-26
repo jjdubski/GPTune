@@ -4,6 +4,7 @@ import User from '../components/User/User';
 import Playlist from '../components/Playlist/Playlist';
 import SongList from '../components/SongList/SongList';
 import SpotifyButton from '../components/SpotifyButton/SpotifyButton';
+import RecomendedSongList from '../components/RecomendedSongList/RecomendedSongList';
 
 interface Playlist {
     id: number;
@@ -92,7 +93,7 @@ const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(null);
                 <h2 className="recommended-songs-title">Recommended Songs</h2>
                 <div className="song-scroll">
                     {selectedPlaylist ? (
-                        <SongList playlist={selectedPlaylist} />
+                        <RecomendedSongList playlist={selectedPlaylist} />
                     ) : (
                         <p>Select a playlist to see recommended songs</p>
                     )}
