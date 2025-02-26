@@ -3,6 +3,7 @@ import './AddToPlaylist.css';
 import User from '../components/User/User'; // Ensure this path is correct
 import Playlist from '../components/Playlist/Playlist'; // Ensure this path is correct
 import SongList from '../components/SongList/SongList'; // Ensure this path is correct
+import SpotifyButton from '../components/SpotifyButton/SpotifyButton';
 
 interface Playlist {
     id: number;
@@ -13,6 +14,29 @@ interface Playlist {
 const AddToPlaylist: React.FC = () => {
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [error, setError] = useState<string | null>(null);
+    // const currentUser = {
+    //     username: 'Guest',
+    //     email: '',
+    //     image: 'defaultImage.png'
+    // };
+    const [currentUser, setCurrentUser] = useState({
+        email: '',
+        username: '',
+        image: '/spotify-logo.png'
+    });
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        fetch('http://localhost:8000').then(res => res.json()).then(data => {
+            setCurrentUser({
+                email: data.user.email || '',
+                username: data.user.display_name || '',
+                image: data.user.image || '/spotify-logo.png'
+            });
+            console.log(data);
+            setIsLoading(false);
+        });
+    }, []);
 
     useEffect(() => {
         const fetchPlaylists = async () => {
@@ -35,7 +59,16 @@ const AddToPlaylist: React.FC = () => {
     return (
         <div className="add-to-playlist-container">
             <div className="playlist-container">
-                <User username="John Doe" image="/path/to/user/image.jpg" /> {/* Adjust props as necessary */}
+                {currentUser.email ? (
+                    <User username={currentUser.username} image={currentUser.image} />
+                ) : (
+                    <div className="spotify-button-container">
+                        <SpotifyButton 
+                            title="Link Spotify"
+                            img="./SpotifyButton.png"
+                        />
+                    </div>
+                )}
 
                 <h2 className="playlist-title">PLAYLISTS</h2>
 
@@ -58,9 +91,14 @@ const AddToPlaylist: React.FC = () => {
             <div className="recommended-songs-container">
                 <h2 className="recommended-songs-title">Recommended Songs</h2>
                 <div className="song-scroll">
-                    <SongList />
+                    <SongList renderSong={(song) => (
+                        <button key={song.id} className="song-button">
+                            {song.name}
+                        </button>
+                    )} />
                 </div>
             </div>
+            {/* </div> */}
         </div>
     );
 };
