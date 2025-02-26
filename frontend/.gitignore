@@ -6,9 +6,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-debug.log*
-backend/debug.log
-debug.log
 
 node_modules
 .cache
