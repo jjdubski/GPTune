@@ -3,7 +3,6 @@ import Artist from '../components/Artist/Artist';
 import SpotifyButton from '../components/SpotifyButton/SpotifyButton';
 import SongList from '../components/SongList/SongList';
 import User from '../components/User/User';
-import UserButton from '../components/UserButton/UserButton';
 import './Search.css';
 
 const Search: React.FC = () => {
