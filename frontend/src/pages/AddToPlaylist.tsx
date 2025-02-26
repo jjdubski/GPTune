@@ -52,30 +52,39 @@ const AddToPlaylist: React.FC = () => {
       };
       const handleAddSong = (song: Song) => {
         if (selectedPlaylist) {
-          // Add the song to the selected playlist
-          const updatedPlaylist = { ...selectedPlaylist, songs: [...selectedPlaylist.songs, song] };
+          // Update the selected playlist by adding the new song
+          const updatedPlaylist = {
+            ...selectedPlaylist,
+            songs: [...selectedPlaylist.songs, song]
+          };
     
-          // Remove the song from recommendations and replace it with a new song
-          const remainingRecommendations = recommendations.filter(
-            (recommendation) => recommendation.title !== song.title
-          );
-    
-          // Get a new song (one that isn't already in the recommendations list)
-          setTimeout(() => {
-            // Get a new song (one that isn't already in the recommendations list)
-            const newSong = songs.find((s) => !remainingRecommendations.some((r) => r.title === s.title));
-            if (newSong) {
-              // Add the new song to recommendations after the delay
-              setRecommendations((prevRecommendations) => [...prevRecommendations, newSong]);
-            }
-          }, 500); // Wait for 500ms (0.5 seconds)
-    
-          // Update the playlists state
+          // Update the playlists state to reflect the new song in the selected playlist
           setPlaylists((prevPlaylists) =>
             prevPlaylists.map((playlist) =>
               playlist.name === selectedPlaylist.name ? updatedPlaylist : playlist
             )
           );
+    
+          // Remove the song from recommendations and add a new one
+          const remainingRecommendations = recommendations.filter(
+            (recommendation) => recommendation.title !== song.title
+          );
+    
+          // Update the recommendations immediately after the song is added
+          setRecommendations(remainingRecommendations);
+    
+          setTimeout(() => {
+            // Find a new song to add (from allSongs, excluding the ones in the remainingRecommendations)
+            const newSong = songs.find(
+              (s) => !remainingRecommendations.some((r) => r.title === s.title)
+            );
+            if (newSong) {
+              setRecommendations((prevRecommendations) => [
+                ...prevRecommendations,
+                newSong
+              ]);
+            }
+          }, 500); // Delay for 0.5 seconds before adding a new recommendation
         }
       };
           
@@ -88,59 +97,62 @@ const AddToPlaylist: React.FC = () => {
   ];
   useState(initialSongs);
     return (
-        <div className="playlist-container">
-            <User username="John Doe" image="/path/to/user/image.jpg" /> {/* Adjust props as necessary */}
-
-            <h2 className="playlist-title">PLAYLISTS</h2>
-
-            <div className="playlist-page">
-      <h2>Select a Playlist</h2>
-      <div className="playlist-list">
-        {playlists.map((playlist, index) => (
-          <button
-            key={index}
-            onClick={() => handleSelectPlaylist(playlist.name)}
-            className={selectedPlaylist?.name === playlist.name ? "selected" : ""}
-          >
-            {playlist.name}
-          </button>
-        ))}
-      </div>
-    </div> 
+        <div className="add-to-playlist-container">
+                <div className="playlist-container">
+                    <User username="John Doe" image="/path/to/user/image.jpg" /> {/* Adjust props as necessary */}
 
 
+                    <h2 className="playlist-title">PLAYLISTS</h2>
 
-            {/* Render AddSong and SongList components */}
-        {selectedPlaylist && (
-        <div className="selected-playlist">
-          <h3>Selected Playlist: {selectedPlaylist.name}</h3>
-          <div className="song-list">
-            {/* Render songs in the selected playlist */}
-            {selectedPlaylist.songs.map((song, id) => (
-              <div key={id} className="song-item">
-                <h4>{song.title}</h4>
-                <p>{song.artist} - {song.album}</p>
-                <img src={song.img} alt={song.title} />
-              </div>
+                    <div className="playlist-page">
+            <h2>Select a Playlist</h2>
+            <div className="playlist-list">
+                {playlists.map((playlist, index) => (
+                <button
+                    key={index}
+                    onClick={() => handleSelectPlaylist(playlist.name)}
+                    className={selectedPlaylist?.name === playlist.name ? "selected" : ""}
+                >
+                    {playlist.name}
+                </button>
+                ))}
+            </div>
+            </div> 
+
+
+
+                {/* Render AddSong and SongList components */}
+            {selectedPlaylist && (
+            <div className="selected-playlist">
+            <h3>Selected Playlist: {selectedPlaylist.name}</h3>
+            <div className="song-list">
+                {/* Render songs in the selected playlist */}
+                {selectedPlaylist.songs.map((song, id) => (
+                <div key={id} className="song-item">
+                    <h4>{song.title}</h4>
+                    <p>{song.artist} - {song.album}</p>
+                    <img src={song.img} alt={song.title} />
+                </div>
+                ))}
+            </div>
+            </div>
+        )}
+        
+        <h2>Add Songs:</h2>
+        <div className="add-songs-container">
+            {initialSongs.map((song, index) => (
+            <AddSong
+                key={index}
+                title={song.title}
+                artist={song.artist}
+                album={song.album}
+                img={song.img}
+                onAdd={() => handleAddSong(song)} 
+            />
             ))}
-          </div>
         </div>
-      )}
-    
-    <h2>Add Songs:</h2>
-    <div className="add-songs">
-        {initialSongs.map((song, index) => (
-          <AddSong
-            key={index}
-            title={song.title}
-            artist={song.artist}
-            album={song.album}
-            img={song.img}
-            onAdd={() => handleAddSong(song)} 
-          />
-        ))}
-      </div>
-    </div>
+        </div> 
+        </div>
     );
 };
 
