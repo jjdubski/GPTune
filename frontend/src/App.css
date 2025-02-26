@@ -51,3 +51,9 @@ img {
 .read-the-docs {
   color: #888;
 }
+.player{
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+}
