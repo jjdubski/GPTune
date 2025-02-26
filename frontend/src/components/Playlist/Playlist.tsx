@@ -12,7 +12,7 @@ const Playlist: React.FC<PlaylistProps> = ({title, img}) => {
         <div className='playlist'>
             <img src={img} alt={`${title}`} />
             <div className='playlist-info'>
-                <p>{title || 'Unknown'}</p>z``
+                <p>{title || 'Unknown'}</p>
             </div>
            
         </div>
