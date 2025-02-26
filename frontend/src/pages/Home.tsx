@@ -1,21 +1,55 @@
 import React, { useState, useEffect } from 'react';
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import HomeTile from '../components/HomeTile/HomeTile';
 import User from '../components/User/User';
 import SpotifyButton from '../components/SpotifyButton/SpotifyButton';
 import SearchBar from '../components/SearchBar/SearchBar';
 import './Home.css';
 
+// interface HomeProps {
+//   currentDate: number
+//   currentTime: number
+// }
+
+// const Home: React.FC<HomeProps> = ({ currentDate, currentTime }) => {
 const Home: React.FC = () => {
+    // const [currentTime, setCurrentTime] = useState('')
+    // const [currentDate, setCurrentDate] = useState('')
     const [response, setResponse] = useState('');
-    const [currentUser, setCurrentUser] = useState<{ email: string, username: string, image: string }>({ email: '', username: '', image: '' });
+    const [currentUser, setCurrentUser] = 
+        useState<{email: string, username: string, image: string}>({email: '', username: '', image: ''});
+
+    // console.log(currentUser)
+
+    // Fetches date and time from backend on load/reload
+    // useEffect(() => {
+    //   fetch('http://localhost:8000').then(res => res.json()).then(data => {
+    //     setCurrentTime(data.current_time)
+    //     setCurrentDate(data.current_date)
+    //   })
+    // }
+
+    // Updates date and time every second
+    // useEffect(() => {
+    //     const fetchData = () => {
+    //         fetch('http://127.0.0.1:8000').then(res => res.json()).then(data => {
+    //             setCurrentTime(data.current_time)
+    //             setCurrentDate(data.current_date)
+    //             setCurrentUser({ email: data.user.email })
+    //         })
+    //     }
+
+    //     fetchData()
+    //     const interval = setInterval(fetchData, 1000)
+    //     return () => clearInterval(interval)
+    // }
+    // ,[])
 
     const handleGenerateResponse = async () => {
         const requestData = {
             prompt: 'give me a random color',
             num_runs: 1
         };
-
         try {
             const res = await fetch('http://127.0.0.1:8000/generate_response/', {
                 method: 'POST',
@@ -38,6 +72,7 @@ const Home: React.FC = () => {
     function findSongs(query: string) {
         // console.log(query);
         window.location.href = `/search`;
+        return query
         // jake needs to fix this
         // const generateResponse = async () =>{
         //     const requestData = {
@@ -86,13 +121,12 @@ const Home: React.FC = () => {
                     <User username={currentUser.username} image={currentUser.image} />
                 ) : (
                     <div className="spotify-button-container">
-                        <SpotifyButton
+                        <SpotifyButton 
                             title="Link Spotify"
                             img="./SpotifyButton.png"
                         />
                     </div>
                 )}
-
                 <div className="music-home-container">
                     <Link to="/discover">
                         <HomeTile title="Discover" img="/Discover.png" />
@@ -108,6 +142,8 @@ const Home: React.FC = () => {
                     <h3>Generated Response:</h3>
                     <p>{response}</p>
                 </div>
+                {/* <p>The date is  {currentDate} and the time is {currentTime}.</p> */}
+                {/* <p>Logged in as: {currentUser.email}</p> */}
             </div>
         </div>
     );
