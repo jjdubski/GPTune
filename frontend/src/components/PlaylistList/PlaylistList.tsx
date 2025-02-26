@@ -13,7 +13,7 @@ const PlaylistList: React.FC = () => {
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        // Updated endpoint URL to match backend route
+        
         fetch('http://localhost:8000/playlistAPI/playlists/')
             .then(response => {
                 if (!response.ok) {

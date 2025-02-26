@@ -13,7 +13,7 @@ interface Song {
 }
 
 interface Playlist {
-    id: number;
+    id: string;
     name: string;
     coverArt: string;
 }
@@ -30,9 +30,9 @@ const SongList: React.FC<SongListProps> = ({ playlist }) => {
     useEffect(() => {
         const fetchSongs = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/songAPI/songs/?playlist=${playlist.id}`);
+                const response = await fetch(`http://localhost:8000/playlistAPI/getPlaylistSongs/${playlist.id}/`);
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Network response was not ok')
                 }
                 const data = await response.json();
                 setSongs(data);

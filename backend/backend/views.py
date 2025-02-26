@@ -178,6 +178,7 @@ def populatePlaylist():
             # Check if playlist already exists
             if not Playlist.objects.filter(name=playlist['name']).exists():
                 Playlist.objects.create(
+                    playlistID=playlist['id'],
                     name=playlist['name'],
                     description=playlist.get('description', ''),  # Use get() with default value
                     coverArt=playlist['images'][0]['url'] if playlist['images'] else None
