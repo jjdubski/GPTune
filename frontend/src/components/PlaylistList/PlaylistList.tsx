@@ -9,7 +9,7 @@ const PlaylistList: React.FC = () => {
         title: string;
         img: string;
     }
-     const [playlists, setPlaylists] = useState<Playlist[]>([])    
+    const [playlists, setPlaylists] = useState<Playlist[]>([])    
         useEffect(() => {
             fetch('http://localhost:8000/playlistAPI/playlists/?format=json') //if this isn't the right url I'll fix it
                 .then(response => {

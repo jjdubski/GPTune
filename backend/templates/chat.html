@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with OpenAI</title>
+    <script>
+        function sendMessage() {
+            let userPrompt = document.getElementById("userPrompt").value;
+            fetch("/chat/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "prompt=" + encodeURIComponent(userPrompt)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("chatResponse").innerText = "AI: " + data.response;
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Chat with OpenAI</h1>
+    <input type="text" id="userPrompt" placeholder="Ask something...">
+    <button onclick="sendMessage()">Send</button>
+    <p id="chatResponse"></p>
+</body>
+</html>

@@ -1,15 +1,46 @@
 import logging
+import os
+import json
+import spotipy
 from django.http import HttpResponse, JsonResponse
 from datetime import datetime
-
 from django.shortcuts import redirect
+from django.views.decorators.csrf import csrf_exempt
 
 from playlists.models import Playlist
 from songs.models import Song
-import spotipy
-import os
 from spotipy import SpotifyOAuth
 from utils.spotifyClient import sp
+from utils.openai_client import client, prompt_for_song
+
+logger = logging.getLogger(__name__)
+
+# @csrf_exempt
+# def recommend_songs(request):
+#     if request.method == "POST":
+#         try:
+#             data = json.loads(request.body.decode("utf-8"))
+
+#             # Safely get values, defaulting to empty list if missing
+#             top_artists = data.get("top_artists", [])
+#             top_genres = data.get("top_genres", [])
+
+#             if not top_artists:
+#                 return JsonResponse({"error": "Missing 'top_artists' field"}, status=400)
+
+#             # Call OpenAI function
+#             recommendations = openai_client.generate_recommendations({
+#                 "top_artists": top_artists,
+#                 "top_genres": top_genres
+#             })
+            
+#             return JsonResponse({"recommendations": recommendations})
+        
+#         except json.JSONDecodeError:
+#             return JsonResponse({"error": "Invalid JSON format"}, status=400)
+
+#     return JsonResponse({"error": "Invalid request method"}, status=405)
+
 
 def index(request):
     current_time = datetime.now().strftime("%H:%M:%S")
@@ -26,6 +57,7 @@ def index(request):
         profile_pic = currentUser['images'][0]['url']
     
     data = {
+     #   'response': prompt_for_song ('give me a random color',1),
         'current_time': current_time,
         'current_date': current_date,
         'user': { 
@@ -38,6 +70,21 @@ def index(request):
     # print(profile_pic)
     # print(len(currentUser['images']))
     return JsonResponse(data)
+
+@csrf_exempt
+def generate_response(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body.decode("utf-8"))
+            prompt = data.get("prompt", "")
+            num_runs = data.get("num_runs", 1)
+            response = prompt_for_song(prompt, num_runs)
+            # add parsing code here and return proper JSON object
+            return JsonResponse({"response": response})
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON format"}, status=400)
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
 
 def login(request):
     # Redirect user to Spotify authorization URL
@@ -52,7 +99,7 @@ def logout(request):
     #cleanup database
     Song.objects.all().delete()
     Playlist.objects.all().delete()
-    
+
     return redirect('http://localhost:3000/')
 
 def callback(request):
@@ -92,7 +139,7 @@ def populateSongs():
     try:
         results = sp.current_user_top_tracks()
         songs = results['items']
-        
+
         for song in songs:
             if not Song.objects.filter(trackID=song['id']).exists():
                 release_date = datetime.strptime(song['album']['release_date'], '%Y-%m-%d').date()
@@ -115,7 +162,7 @@ def populatePlaylist():
     try:
         results = sp.current_user_playlists()
         playlists = results['items']
-        
+
         for playlist in playlists:
             # Check if playlist already exists
             if not Playlist.objects.filter(name=playlist['name']).exists():
@@ -126,18 +173,16 @@ def populatePlaylist():
                 )
                 logger = logging.getLogger(__name__)
                 logger.info(playlist['images'][0]['url'])
-                
+
         return True
     except Exception as e:
         logger = logging.getLogger(__name__)
         logger.error(f"Error populating Playlist: {str(e)}")
         return False
-    
+
 def getToken(request):
     tokenInfo = sp.auth_manager.get_cached_token()
     if tokenInfo:
         return JsonResponse(tokenInfo)
     else:
         return JsonResponse({"error": "No token found"}, status=404)
-    
-    

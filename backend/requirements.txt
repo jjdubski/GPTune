@@ -4,3 +4,4 @@ django-cors-headers
 python-dotenv
 psycopg2-binary
 spotipy
+openai
