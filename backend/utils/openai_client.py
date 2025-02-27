@@ -2,12 +2,23 @@ import os
 import openai
 import logging
 import time
+import json
+
 
 # Configure OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 client = openai.OpenAI(api_key=openai.api_key)
 logger = logging.getLogger(__name__)
 
+
+def process_json(output):
+    """Cleans and parses OpenAI's JSON response."""
+    output = output.strip().strip("```json").strip("```").strip()
+    try:
+        return json.loads(output)
+    except json.JSONDecodeError:
+        print(f"Error parsing JSON response: {output}")
+        return [{"title": "Unknown", "artist": "Unknown", "album": "Unknown"}]
 
 def prompt_for_song(prompt, num_runs):
     message = f"""Give me {num_runs} song you recommend. Use this as your reference: Only {prompt},\n 
@@ -23,21 +34,13 @@ def prompt_for_song(prompt, num_runs):
                 messages=[{"role": "user", "content": message}],
                 model="gpt-4o",
                 n=1,
-                temperature=0.7,
-                logprobs=None,
-                store=False
+                temperature=0.7
             )
             output = response.choices[0].message.content
-            if not output.strip():
-                raise ValueError("Received empty response from GPT")
-            return output
+            return process_json(output)  
         except Exception as e:
             print(f"GPT Error: {e}")
-            if "rate_limit_exceeded" in str(e):
-                print("Rate limit exceeded. Waiting for 30 seconds before retrying...")
-                time.sleep(30)
-            else:
-                break
+            time.sleep(10)  
     return None
 
 

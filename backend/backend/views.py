@@ -72,49 +72,32 @@ def index(request):
     return JsonResponse(data)
 
 
-def process_json(output):
-    """Extract only the AI response and clean JSON formatting if needed."""
-    try:
-        cleaned_output = output.strip().replace("```json", "").replace("```", "").strip()
-        data = json.loads(cleaned_output)
-        return {
-            "title": data.get("title", "Unknown"),
-            "artist": data.get("artist", "Unknown"),
-            "album": data.get("album", "Unknown")
-        }
-    except json.JSONDecodeError:
-        logger.error(f"Error parsing JSON response: {output}")
-        return {"title": "Unknown", "artist": "Unknown", "album": "Unknown"}
-    
-
+@csrf_exempt
 def generate_response(request):
     if request.method == "POST":
         try:
-            data = json.loads(request.body.decode("utf-8"))
-            prompt = data.get("prompt", "")
-            num_runs = data.get("num_runs", 1)
-
-            # Get response from OpenAI API
-            response = prompt_for_song(prompt, num_runs)
-
-            # Log the raw AI response
-            logger.info(f"Raw OpenAI Response: {response}")
-
-            # Only process AI response, keep rest of output intact
-            parsed_response = process_json(response)
-
-            # Return the processed AI response inside the original structure
-            return JsonResponse({
-                "response": {
-                    "original": response,  # Keeping original AI response for debugging
-                    "parsed": parsed_response  # Cleaned-up AI response
-                }
-            })
-
+            # Automatically request recommendations for a general prompt
+            response = prompt_for_song("Top trending songs", 5)
+            
+            if response:
+                return JsonResponse({"recommendations": response})
+            else:
+                return JsonResponse({"error": "Failed to generate recommendations"}, status=500)
+        
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
-
+    
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+
+def process_json(output):
+    try:
+        output = output.strip().replace("```json", "").replace("```", "").strip()
+        return json.loads(output)
+    except json.JSONDecodeError:
+        print(f"Error parsing JSON: {output}")
+        return [{"title": "Unknown", "artist": "Unknown", "album": "Unknown"}]
 
 def login(request):
     # Redirect user to Spotify authorization URL
