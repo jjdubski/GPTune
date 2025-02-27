@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./AddSong.css";
 import Song from "../Song/Song";
+import plusIcon from "../public/plus-icon.png"
 
 interface Song {
   id: number;
@@ -13,7 +14,7 @@ interface Song {
 const AddSong: React.FC = () => {
   const [songs, setSongs] = useState<Song[]>([]);
   const [error, setError] = useState<string | null>(null);
-
+  
   useEffect(() => {
     const fetchSongs = async () => {
       try {
@@ -47,11 +48,8 @@ const AddSong: React.FC = () => {
                 album={song.album}
                 img={song.coverArt}
               />
-              <button
-                className="add-button"
-                onClick={() => console.log(`Added ${song.name} to playlist`)}
-              >
-                ➕
+              <button className="add-button" onClick={() => console.log(`Added ${song.name} to playlist`)}>
+              <img src={plusIcon} alt="Add song" className="add-icon" />
               </button>
             </div>
           ))
