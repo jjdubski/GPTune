@@ -5,7 +5,9 @@ from . import views
 router = DefaultRouter()
 router.register(r'playlists', views.PlaylistViewSet)
 
+
 urlpatterns = [
     path('', include(router.urls)),
     path('getPlaylists/', views.AddPlaylists, name='AddPlaylists'),
+    path('getPlaylistSongs/<str:playlist_id>/', views.getPlaylistSongs, name='getPlaylistSongs'),
 ]
