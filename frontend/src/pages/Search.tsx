@@ -49,7 +49,7 @@ const Search: React.FC = () => {
             .then((data) => {
                 setCurrentUser({
                     email: data.user.email || '',
-                    username: data.user.display_name || 'Guest',
+                    username: data.user.display_name || '',
                     image: data.user.image || '/default-profile.png'
                 });
             })
