@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./AddSong.css";
 import Song from "../Song/Song";
-import plusIcon from "../public/plus-icon.png"
+import plusIcon from "/plus-icon.png"
 
 interface Song {
   id: number;
