@@ -11,6 +11,34 @@ import PlaylistList from '../components/PlaylistList/PlaylistList';
 //     coverArt: string;
 // }
 
+const failSafe = [
+  {
+      id: 1,
+      name: "Chill Vibes",
+      coverArt: "https://via.placeholder.com/150"
+  },
+  {
+      id: 2,
+      name: "Workout Mix",
+      coverArt: "https://via.placeholder.com/150"
+  },
+  {
+      id: 3,
+      name: "Top Hits",
+      coverArt: "https://via.placeholder.com/150"
+  },
+  {
+      id: 4,
+      name: "Lo-Fi Beats",
+      coverArt: "https://via.placeholder.com/150"
+  },
+  {
+      id: 5,
+      name: "Indie Anthems",
+      coverArt: "https://via.placeholder.com/150"
+  }
+];
+
 const AddToPlaylist: React.FC = () => {
     // const currentUser = {
     //     username: 'Guest',
