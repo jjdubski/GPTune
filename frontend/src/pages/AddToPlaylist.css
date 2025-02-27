@@ -13,8 +13,12 @@
 
 /* LEFT: Playlist Section */
 .playlist-container {
-    width: 100%;
-    float: left;
+    width: 50%;
+    flex-grow: 0;;
+    /* float: left; */
+    position: absolute;
+    top: 0;
+    left: 0;
     background-color: #1e1e1e;
     padding: 15px;
     border-radius: 10px;
@@ -69,8 +73,6 @@
     font-size: 16px;
     font-weight: 500;
 }
-
-
 
 .song-title {
     font-size: 20px;
@@ -169,8 +171,12 @@ img {
 .add-songs-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    width: 100%;
+    justify-content: top;
+    width: 50%;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    flex-grow: 0;
     height: 100vh;
     background-color: #121212;
     padding: 20px;
