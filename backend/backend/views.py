@@ -53,7 +53,7 @@ def index(request):
     else:
         currentUser = {'id': '', 'display_name': '', 'email': '', 'image': ''}
 
-    if currentUser.get('images') and currentUser['images']:
+    if currentUser.get('images') and currentUser['images'][0]['url']:
         profile_pic = currentUser['images'][0].get('url', '/spotify-logo.png')
     
     data = {
@@ -196,5 +196,14 @@ def getToken(request):
     tokenInfo = sp.auth_manager.get_cached_token()
     if tokenInfo:
         return JsonResponse(tokenInfo)
+    else:
+        return JsonResponse({"error": "No token found"}, status=404)
+
+def getUser(request):
+    tokenInfo = sp.auth_manager.get_cached_token()
+    if tokenInfo:
+        user = sp.current_user()
+        # print(user)
+        return JsonResponse(user)
     else:
         return JsonResponse({"error": "No token found"}, status=404)

@@ -18,7 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from .views import index, login, callback, logout, getToken, generate_response
+from .views import index, login, callback, logout, getToken, generate_response, getUser
 
 
 
@@ -33,7 +33,8 @@ urlpatterns = [
     #path("recommend/", recommend_songs, name="recommend-songs"),
     path("generate_response/", generate_response, name='generate_response'),
     path('playlistAPI/', include('playlists.urls'), name='playlistAPI'),
-    path('getToken/', getToken, name='getToken')
+    path('getToken/', getToken, name='getToken'),
+    path('getUser/', getUser, name='getUser'),
 ]
 
 # if settings.DEBUG:

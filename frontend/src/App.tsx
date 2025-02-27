@@ -5,7 +5,7 @@ import Songs from './pages/Songs.tsx'
 import Playlists from './pages/Playlists.tsx'
 import AddtoPlaylist from './pages/AddToPlaylist.tsx'
 // import WebPlayback from './components/WebPlayback/WebPlayback'
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import SideMenu from './components/SideMenu/SideMenu.tsx'
 import Search from './pages/Search.tsx'
 import SpotifyPlayer from 'react-spotify-web-playback';
@@ -13,6 +13,8 @@ import SpotifyPlayer from 'react-spotify-web-playback';
 
 function App() { 
   const [token, setToken] = useState<string | null>(null)
+  const [user, setSubscription] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     fetch('http://localhost:8000/getToken')
@@ -28,35 +30,64 @@ function App() {
       }
     )
     .catch(error => console.error('Error Fetching Token: ', error))
-
+    setIsLoading(false)
   }
   ,[])
+
+  useEffect(() => {
+    if (token !== null) {
+      fetch('http://localhost:8000/getUser')
+        .then(res => res.json())
+        .then(data => {
+          if (data) {
+            console.log('User: ', data)
+            setSubscription(data.product)
+          }
+          else {
+            console.error('Failed to set user')
+          }
+        }
+      )
+      .catch(error => console.error('Error Fetching User: ', error))
+    }
+  }, [token])
+
   return (
     <Router>
       <div className='App'>
-        <SideMenu />
+      <SideMenu />
+      {isLoading ? (
+        <></>
+      ) : (
+        <>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/songs" element={<Songs />} />
           <Route path="/playlists" element={<Playlists />} />
           <Route path="/add-to-playlist" element={<AddtoPlaylist />} />
-          <Route path ="/search" element={<Search />} />
+          <Route path="/search" element={<Search />} />
           {/* <Route path="logout" element={<Logout />} /> */}
           {/* <Route path='/discover' element={<Discover />} /> */}
           {/* <Route path='/this-or-that' element={<ThisOrThat />} /> */}
         </Routes>
         {/* {token && <WebPlayback token={token} />} */}
         <div className="player">
-          {token && <SpotifyPlayer token={token} uris={['spotify:artist:6HQYnRM4OzToCYPpVBInuU']}
+          {token && (user && user == 'premium') && <SpotifyPlayer 
+          token={token} 
+          uris={['spotify:artist:6HQYnRM4OzToCYPpVBInuU']}
+          showSaveIcon={true}
           styles={{
-            bgColor: '#333333',
+            bgColor: 'black',
             color: 'white',
             loaderColor: '#fff',
             sliderColor: '#1cb954',
+            sliderHandleColor: '#fff',
             trackArtistColor: '#ccc',
             trackNameColor: '#fff',
           }}/>}
         </div>
+        </>
+      )}  
       </div>
     </Router>
   )
