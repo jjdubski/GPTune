@@ -44,13 +44,13 @@ const Search: React.FC = () => {
     };
 
     const fetchUserData = () => {
-        fetch('http://localhost:8000/user')
+        fetch('http://localhost:8000/getUser')
             .then((res) => res.json())
             .then((data) => {
                 setCurrentUser({
                     email: data.user.email || '',
                     username: data.user.display_name || '',
-                    image: data.user.image || '/default-profile.png'
+                    image: data.user.image || '/spotify-logo.png'
                 });
             })
             .catch((error) => {
