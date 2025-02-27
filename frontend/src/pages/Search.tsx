@@ -3,17 +3,24 @@ import Artist from '../components/Artist/Artist';
 import SpotifyButton from '../components/SpotifyButton/SpotifyButton';
 import SongList from '../components/SongList/SongList';
 import User from '../components/User/User';
-import RefreshButton from '../components/RefreshIcon/RefreshIcon'; // For refreshing songs
+import RefreshButton from '../components/RefreshIcon/RefreshIcon'; 
+import SearchBar from '../components/SearchBar/SearchBar';
 import './Search.css';
 
 const Search: React.FC = () => {
-    const [query, setQuery] = useState<string>(''); // User search prompt
-    const [songs, setSongs] = useState<any[]>([]); // List of recommended songs
-    const [artists, setArtists] = useState<any[]>([]); // List of suggested artists
+    const [query, setQuery] = useState<string>(''); 
+    const [songs, setSongs] = useState<any[]>([]); 
+    const [artists, setArtists] = useState<any[]>([]); 
     const [error, setError] = useState<string | null>(null);
+    const [currentUser, setCurrentUser] = useState<{ email: string; username: string; image: string }>({
+        email: '',
+        username: '',
+        image: ''
+    });
 
     useEffect(() => {
         fetchSongsAndArtists();
+        fetchUserData();
     }, []);
 
     const fetchSongsAndArtists = () => {
@@ -26,21 +33,28 @@ const Search: React.FC = () => {
             })
             .then((data) => {
                 console.log('Data received:', data);
-                if (data.songs && Array.isArray(data.songs)) {
-                    setSongs(data.songs);
-                } else {
-                    setSongs([]);
-                }
-                if (data.artists && Array.isArray(data.artists)) {
-                    setArtists(data.artists);
-                } else {
-                    setArtists([]);
-                }
+                setSongs(data.songs || []);
+                setArtists(data.artists || []);
                 setError(null);
             })
             .catch((error) => {
                 console.error('Error fetching music data:', error);
                 setError('Failed to fetch music data. Please try again later.');
+            });
+    };
+
+    const fetchUserData = () => {
+        fetch('http://localhost:8000/user')
+            .then((res) => res.json())
+            .then((data) => {
+                setCurrentUser({
+                    email: data.user.email || '',
+                    username: data.user.display_name || 'Guest',
+                    image: data.user.image || '/default-profile.png'
+                });
+            })
+            .catch((error) => {
+                console.error('Error fetching user:', error);
             });
     };
 
@@ -54,22 +68,24 @@ const Search: React.FC = () => {
 
     return (
         <div className="search-page">
-            {/* Top Bar - User and Spotify Button */}
+            {/* Top Bar - User or Spotify Button */}
             <div className="top-bar">
-                <User username="exampleUser" image="exampleImage.png" />
-                <SpotifyButton title="Link Spotify" img="/SpotifyButton.png" />
+                {currentUser.email ? (
+                    <User username={currentUser.username} image={currentUser.image} />
+                ) : (
+                    <div className="spotify-button-container">
+                        <SpotifyButton 
+                            title="Link Spotify" 
+                            img="./SpotifyButton.png" 
+                            // onClick={() => window.location.href = "http://127.0.0.1:8000/login/"} 
+                        />
+                    </div>
+                )}
             </div>
 
             {/* Search Bar */}
             <div className="search-bar-container">
-                <input
-                    type="text"
-                    placeholder="Enter a prompt..."
-                    value={query}
-                    onChange={handleInputChange}
-                    className="search-input"
-                />
-                <button className="search-button" onClick={handleSearch}>Search</button>
+                <SearchBar onSearch={handleSearch} />
             </div>
 
             {/* Main Content */}
@@ -107,9 +123,10 @@ const Search: React.FC = () => {
                             <p className="empty-text">No artists found</p>
                         ) : (
                             artists.map((artist, index) => (
-                                <Artist 
-                                // key={artist.id} alt ={artist.name} img src={artist.image}
-                                 />
+                                <div key={index} className="artist-card">
+                                    <img src={artist.image} alt={artist.name} className="artist-image" />
+                                    <p className="artist-name">{artist.name}</p>
+                                </div>
                             ))
                         )}
                     </div>
@@ -117,7 +134,6 @@ const Search: React.FC = () => {
             </div>
         </div>
     );
-};  
-
+};
 
 export default Search;
