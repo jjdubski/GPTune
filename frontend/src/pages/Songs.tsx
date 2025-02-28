@@ -4,14 +4,6 @@ import { Link } from 'react-router-dom'
 import SongList from '../components/SongList/SongList';
 
 const Songs: React.FC = () => {
-    // interface Song {
-    //     id: number;
-    //     trackID: string;
-    //     title: string;
-    //     artist: string;
-    //     album: string;
-    //     releaseDate: string;       
-    // }
     const [listIsEmpty, setListIsEmpty] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
 

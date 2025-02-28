@@ -29,3 +29,17 @@ div {
     height: 100%;
     object-fit: cover;
 }
+.song-title {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+.song-artist {
+    font-size: 1em;
+    opacity: 90%;
+    /* font-weight: bold; */
+}
+.song-album {
+    font-size: 0.9em;
+    opacity: 80%;
+    /* font-weight: bold; */
+}

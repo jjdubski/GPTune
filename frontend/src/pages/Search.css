@@ -19,25 +19,6 @@
     padding: 10px 20px;
 }
 
-/* Search Bar */
-.search-bar-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
-}
-
-.search-input {
-    width: 60%;
-    padding: 12px;
-    border-radius: 25px;
-    border: none;
-    font-size: 16px;
-    text-align: left;
-    color: black;
-    padding-left: 15px;
-}
-
 /* Main Content Layout */
 .content-container {
     display: flex;
@@ -60,7 +41,7 @@
     margin-bottom: 10px;
 }
 
-.song-list .song {
+/* .song-list .song {
     display: flex;
     align-items: center;
     padding: 12px;
@@ -69,7 +50,7 @@
     margin-bottom: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
+} */
 /* 
 .song-list .song:hover,
 .song-list .song.highlighted {

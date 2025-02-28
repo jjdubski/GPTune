@@ -8,7 +8,7 @@ class Song(models.Model):
     album = models.CharField(max_length=100)
     release_date = models.DateField()
     genre = models.CharField(max_length=50)
-    coverArt = models.URLField(max_length=200, blank=True)
+    image = models.URLField(max_length=200, blank=True)
 
     def __str__(self):
         return f"{self.title} by {self.artist}"

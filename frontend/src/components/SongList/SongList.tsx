@@ -5,15 +5,13 @@ import Song  from '../Song/Song'
 
 const SongList: React.FC = () => {
     interface Song {
-        id: number;
-        trackID: string;
+        trackID?: string;
         title: string;
         artist: string;
         album: string;
-        releaseDate: string;
-        coverArt: string;
+        image: string;
     }
-     const [songs, setSongs] = useState<Song[]>([])    
+    const [songs, setSongs] = useState<Song[]>([])    
         useEffect(() => {
             fetch('http://localhost:8000/songAPI/songs/?format=json')
                 .then(response => {
@@ -29,16 +27,16 @@ const SongList: React.FC = () => {
         }, [])
     
     return (
-        <div>
+        <div className='song-list'>
         {songs.map((song) => (
-            <div className="song" key={song.id}>
+            <div className="song-item" key={song.trackID}>
                 {/* <p>ID: {song.id}</p>
                 <p>Track ID: {song.trackID}</p>
                 <p>Title: {song.title}</p>
                 <p>Artist: {song.artist}</p>
                 <p>Album: {song.album}</p>
                 <p>Release Date: {song.releaseDate}</p> */}
-                <Song title={song.title} artist={song.artist} album={song.album} img={song.coverArt} />
+                <Song title={song.title} artist={song.artist} album={song.album} image={song.image} />
             </div>
         ))}
     </div>
