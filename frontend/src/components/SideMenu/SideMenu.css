@@ -32,8 +32,8 @@
     gap: 25px; /* More space between items */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     opacity: 100;
-    transition: all 0.5s ease-in-out; 
-    z-index: 100; 
+    transition: all 0.3s ease-in-out; 
+    z-index: 200; 
 }
 
 .hamburger {
@@ -44,7 +44,7 @@
     flex-direction: column;
     gap: 5px;
     cursor: pointer;
-    transition: all 0.5s ease-in-out;
+    transition: all 0.3s ease-in-out;
     z-index: 100;
 }
 .hamburger span {
