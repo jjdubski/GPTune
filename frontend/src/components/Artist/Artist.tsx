@@ -4,14 +4,11 @@ import './Artist.css';
 interface ArtistProps {
     name: string;
     image: string;
-    // genres: string[];
-    // popularity: number;
+    genres: string[];
+    popularity: number;
 }
 
-const Artist: React.FC<ArtistProps> = ({ name, image,
-    //  genres, popularity 
-
-}) => {
+const Artist: React.FC<ArtistProps> = ({ name, image, genres, popularity }) => {
     return (
         <div className="artist">
             <img src={image} alt={`${name} artist cover`} className="artist-image" />
