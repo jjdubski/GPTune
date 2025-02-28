@@ -8,11 +8,22 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [query, setQuery] = useState<string>("");
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onSearch?.(query);
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
-    onSearch?.(value);
   };
+
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value;
+  //   setQuery(value);
+  //   onSearch?.(value);
+  // };
 
   return (
     <div className="search-bar">
@@ -20,8 +31,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         type="text"
         placeholder="What music do you want to find?"
         value={query}
-        onChange={handleChange}
         className="search-input"
+        onKeyDown = {handleKeyPress}
+        onChange={handleChange}
       />
       <button onClick={() => onSearch?.(query)} className="search-button">
         🔍

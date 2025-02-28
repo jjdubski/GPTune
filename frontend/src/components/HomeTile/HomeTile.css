@@ -1,11 +1,3 @@
-/* .container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-    background-color: #121212;
-} */
-
 .tile {
     background-color: var(--primary);
     height: fit-content;
@@ -41,6 +33,7 @@
     max-width: 200px;
     max-height: 200px;
     object-fit: cover;
+    background-color: transparent;
     z-index: 3;
 }
 

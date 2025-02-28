@@ -1,40 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './Artist.css';
 
-interface Artist {
-    id: number;
+interface ArtistProps {
     name: string;
     image: string;
+    genres: string[];
+    popularity: number;
 }
 
-const ArtistList: React.FC = () => {
-    const [artists, setArtists] = useState<Artist[]>([]);
-
-    useEffect(() => {
-        fetch('http://localhost:8000/artistAPI/artists/?format=json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Data received:', data);
-                setArtists(data);
-            })
-            .catch(error => console.error("Error fetching artists:", error));
-    }, []);
-
+const Artist: React.FC<ArtistProps> = ({ name, image, genres, popularity }) => {
     return (
-        <div className="artist-list">
-            {artists.map((artist) => (
-                <div key={artist.id} className="artist-card">
-                    <img src={artist.image} alt={artist.name} className="artist-image" />
-                    <p className="artist-name">{artist.name}</p>
-                </div>
-            ))}
+        <div className="artist">
+            <img src={image} alt={`${name} artist cover`} className="artist-image" />
+            <div className="artist-info">
+                <p className="artist-name">Name: {name}</p>
+                <p className="artist-genres">Genres: {genres.join(', ')}</p>
+                <p className="artist-popularity">Popularity: {popularity}</p>
+            </div>
         </div>
     );
 };
 
-export default ArtistList;
+export default Artist;

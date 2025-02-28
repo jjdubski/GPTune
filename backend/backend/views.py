@@ -53,11 +53,11 @@ def index(request):
     else:
         currentUser = {'id': '', 'display_name': '', 'email': '', 'image': ''}
 
-    if currentUser['images'] and currentUser['images'][0]:
-        profile_pic = currentUser['images'][0]['url']
+    if currentUser.get('images') and currentUser['images'][0]['url']:
+        profile_pic = currentUser['images'][0].get('url', '/spotify-logo.png')
     
     data = {
-     #   'response': prompt_for_song ('give me a random color',1),
+    #   'response': prompt_for_song ('give me a random color',1),
         'current_time': current_time,
         'current_date': current_date,
         'user': { 
@@ -71,16 +71,13 @@ def index(request):
     # print(len(currentUser['images']))
     return JsonResponse(data)
 
-
 @csrf_exempt
 def generate_response(request):
      if request.method == "POST":
         try:
             data = json.loads(request.body.decode("utf-8"))
             prompt = data.get("prompt", "")
-            num_runs = data.get("num_runs", 1)
-
-            # Get response from OpenAI API
+            num_runs = data.get("num_runs", 5)
             response = prompt_for_song(prompt, num_runs)
 
             # Log the raw AI response
@@ -91,11 +88,11 @@ def generate_response(request):
 
             # Return the processed AI response inside the original structure
             return JsonResponse(output)
-
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
-
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
+#function to return list of songs
 
 def login(request):
     # Redirect user to Spotify authorization URL
@@ -177,6 +174,7 @@ def populatePlaylist():
             # Check if playlist already exists
             if not Playlist.objects.filter(name=playlist['name']).exists():
                 Playlist.objects.create(
+                    playlistID=playlist['id'],
                     name=playlist['name'],
                     description=playlist.get('description', ''),  # Use get() with default value
                     coverArt=playlist['images'][0]['url'] if playlist['images'] else None
@@ -194,5 +192,14 @@ def getToken(request):
     tokenInfo = sp.auth_manager.get_cached_token()
     if tokenInfo:
         return JsonResponse(tokenInfo)
+    else:
+        return JsonResponse({"error": "No token found"}, status=404)
+
+def getUser(request):
+    tokenInfo = sp.auth_manager.get_cached_token()
+    if tokenInfo:
+        user = sp.current_user()
+        # print(user)
+        return JsonResponse(user)
     else:
         return JsonResponse({"error": "No token found"}, status=404)
