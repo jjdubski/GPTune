@@ -192,6 +192,8 @@ def getToken(request):
     else:
         return JsonResponse({"error": "No token found"}, status=404)
 
+    
+
 def getUser(request):
     tokenInfo = sp.auth_manager.get_cached_token()
     if tokenInfo:
