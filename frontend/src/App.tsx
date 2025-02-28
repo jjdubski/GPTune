@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './App.css'
-import Home from './pages/Home.tsx'
+import Home from './pages/Home'
 import Songs from './pages/Songs'
 import Playlists from './pages/Playlists'
 import AddtoPlaylist from './pages/AddToPlaylist'
