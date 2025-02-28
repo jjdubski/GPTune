@@ -1,3 +1,4 @@
+
 .search-page {
     display: flex;
     flex-direction: column;
@@ -6,6 +7,7 @@
     color: white;
     min-height: 100vh;
     padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
 /* Top Bar */
@@ -26,13 +28,14 @@
 }
 
 .search-input {
-    width: 50%;
-    padding: 10px;
-    border-radius: 20px;
+    width: 60%;
+    padding: 12px;
+    border-radius: 25px;
     border: none;
     font-size: 16px;
-    text-align: center;
+    text-align: left;
     color: black;
+    padding-left: 15px;
 }
 
 /* Main Content Layout */
@@ -46,7 +49,7 @@
 .song-list-container {
     width: 40%;
     background-color: #1a1a1a;
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
 }
 
@@ -60,27 +63,33 @@
 .song-list .song {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 12px;
     background-color: #222;
     border-radius: 8px;
     margin-bottom: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
-
+/* 
 .song-list .song:hover,
 .song-list .song.highlighted {
     background-color: #3b945e;
     border: 2px solid #8ed081;
-}
+} */
 
-/* Right: Artists */
+/* Right: Artists Section */
 .artist-section {
-    width: 55%;
+    width: 60%;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .popular-artists-title {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .artist-grid {
@@ -88,11 +97,15 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     justify-content: center;
-    margin-top: 20px;
 }
 
 .artist-grid img {
-    width: 100px;
-    height: 100px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.artist-grid img:hover {
+    transform: scale(1.1);
 }
