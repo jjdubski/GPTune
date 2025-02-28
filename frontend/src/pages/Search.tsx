@@ -3,45 +3,55 @@ import Artist from '../components/Artist/Artist';
 import SpotifyButton from '../components/SpotifyButton/SpotifyButton';
 import SongList from '../components/SongList/SongList';
 import User from '../components/User/User';
-import RefreshButton from '../components/RefreshIcon/RefreshIcon'; 
+import RefreshButton from '../components/RefreshIcon/RefreshIcon';
 import SearchBar from '../components/SearchBar/SearchBar';
 import './Search.css';
 
+interface ArtistType {
+    id: number;
+    name: string;
+    image: string;
+    genres: string[];
+    popularity: number;
+}
+
 const Search: React.FC = () => {
-    const [query, setQuery] = useState<string>(''); 
-    const [songs, setSongs] = useState<any[]>([]); 
-    const [artists, setArtists] = useState<any[]>([]); 
+    const [query, setQuery] = useState<string>('');
+    const [songs, setSongs] = useState<any[]>([]);
+    const [artists, setArtists] = useState<ArtistType[]>([
+        {
+            id: 1,
+            name: 'Ariana Grande',
+            image: 'https://via.placeholder.com/100', // Replace with actual image URL
+            genres: ['Pop'],
+            popularity: 95,
+        },
+        {
+            id: 2,
+            name: 'Drake',
+            image: 'https://via.placeholder.com/100', // Replace with actual image URL
+            genres: ['Hip-Hop'],
+            popularity: 90,
+        },
+        {
+            id: 3,
+            name: 'Taylor Swift',
+            image: 'https://via.placeholder.com/100', // Replace with actual image URL
+            genres: ['Pop', 'Country'],
+            popularity: 98,
+        },
+    ]); // Hardcoded artist data for testing
+
     const [error, setError] = useState<string | null>(null);
     const [currentUser, setCurrentUser] = useState<{ email: string; username: string; image: string }>({
         email: '',
         username: '',
-        image: ''
+        image: '',
     });
 
     useEffect(() => {
-        fetchSongsAndArtists();
         fetchUserData();
     }, []);
-
-    const fetchSongsAndArtists = () => {
-        fetch(`http://localhost:8000/musicAPI/search?query=${query}`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then((data) => {
-                console.log('Data received:', data);
-                setSongs(data.songs || []);
-                setArtists(data.artists || []);
-                setError(null);
-            })
-            .catch((error) => {
-                console.error('Error fetching music data:', error);
-                setError('Failed to fetch music data. Please try again later.');
-            });
-    };
 
     const fetchUserData = () => {
         fetch('http://localhost:8000/getUser')
@@ -50,7 +60,7 @@ const Search: React.FC = () => {
                 setCurrentUser({
                     email: data.user.email || '',
                     username: data.user.display_name || '',
-                    image: data.user.image || '/spotify-logo.png'
+                    image: data.user.image || '/spotify-logo.png',
                 });
             })
             .catch((error) => {
@@ -58,12 +68,8 @@ const Search: React.FC = () => {
             });
     };
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setQuery(event.target.value);
-    };
-
     const handleSearch = () => {
-        fetchSongsAndArtists();
+        console.log('Search button clicked!');
     };
 
     return (
@@ -74,11 +80,7 @@ const Search: React.FC = () => {
                     <User username={currentUser.username} image={currentUser.image} />
                 ) : (
                     <div className="spotify-button-container">
-                        <SpotifyButton 
-                            title="Link Spotify" 
-                            img="./SpotifyButton.png" 
-                            // onClick={() => window.location.href = "http://127.0.0.1:8000/login/"} 
-                        />
+                        <SpotifyButton title="Link Spotify" img="./SpotifyButton.png" />
                     </div>
                 )}
             </div>
@@ -93,22 +95,18 @@ const Search: React.FC = () => {
                 {/* Left Section: Song List */}
                 <div className="song-list-container">
                     <h2 className="playlist-title">"songs for a road trip"</h2>
-                    <RefreshButton onRefresh={fetchSongsAndArtists} />
+                    <RefreshButton onRefresh={handleSearch} />
                     <div className="song-list">
-                        {error ? (
-                            <p className="error-text">{error}</p>
-                        ) : songs.length === 0 ? (
+                        {songs.length === 0 ? (
                             <p className="empty-text">No songs found</p>
                         ) : (
-                            songs.map((song, index) => (
-                                <SongList
-                                    // key={index}
-                                    // title={song.title}
-                                    // artist={song.artist}
-                                    // album={song.album}
-                                    // img={song.coverArt}
-                                />
-                            ))
+                            <div>
+                                {songs.map((song) => (
+                                    <div key={song.id}>
+                                        <SongList title={song.title} artist={song.artist} album={song.album} img={song.coverArt} />
+                                    </div>
+                                ))}
+                            </div>
                         )}
                     </div>
                 </div>
@@ -117,18 +115,11 @@ const Search: React.FC = () => {
                 <div className="artist-section">
                     <h2 className="popular-artists-title">Popular Artists <span className="small-text">* based on your prompt</span></h2>
                     <div className="artist-grid">
-                        {error ? (
-                            <p className="error-text">{error}</p>
-                        ) : artists.length === 0 ? (
-                            <p className="empty-text">No artists found</p>
-                        ) : (
-                            artists.map((artist, index) => (
-                                <div key={index} className="artist-card">
-                                    <img src={artist.image} alt={artist.name} className="artist-image" />
-                                    <p className="artist-name">{artist.name}</p>
-                                </div>
-                            ))
-                        )}
+                        {artists.map((artist) => (
+                            <div key={artist.id}>
+                                <Artist name={artist.name} image={artist.image} genres={artist.genres} popularity={artist.popularity} />
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
