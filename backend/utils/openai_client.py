@@ -34,13 +34,21 @@ def prompt_for_song(prompt, num_runs):
                 messages=[{"role": "user", "content": message}],
                 model="gpt-4o",
                 n=1,
-                temperature=0.7
+                temperature=0.7,
+                logprobs=None,
+                store=False
             )
             output = response.choices[0].message.content
+            if not output.strip():
+                raise ValueError("Received empty response from GPT")
             return process_json(output)  
         except Exception as e:
             print(f"GPT Error: {e}")
-            time.sleep(10)  
+            if "rate_limit_exceeded" in str(e):
+                print("Rate limit exceeded. Waiting for 30 seconds before retrying...")
+                time.sleep(30)
+            else:
+                break
     return None
 
 
