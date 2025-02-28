@@ -52,6 +52,19 @@ function App() {
     }
   }, [token])
 
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      // Perform any cleanup or save state here
+      console.log('User is about to leave the page');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   return (
     <Router>
       <div className='App'>

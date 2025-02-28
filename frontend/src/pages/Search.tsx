@@ -13,16 +13,12 @@ const Search: React.FC = () => {
     const [songs, setSongs] = useState<any[]>([]); 
     const [artists, setArtists] = useState<any[]>([]); 
     const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState<{ email: string; username: string; image: string }>({
         email: '',
         username: '',
         image: ''
     });
-
-    useEffect(() => {
-        // fetchSongsAndArtists();
-        fetchUserData();
-    }, []);
 
     const fetchSongsAndArtists = () => {
         return 
@@ -51,20 +47,21 @@ const Search: React.FC = () => {
         // break this down to two different fetch calls, one for each
     // };
 
-    const fetchUserData = () => {
-        fetch('http://localhost:8000/getUser')
-            .then((res) => res.json())
-            .then((data) => {
+    // useEffect will fetch user data on page load
+    useEffect(() => {
+            fetch('http://localhost:8000/getUser')
+                .then(res => res.json())
+                .then(data => {   
+                console.log(data);
                 setCurrentUser({
-                    email: data.user.email || '',
-                    username: data.user.display_name || '',
-                    image: data.user.image || '/spotify-logo.png'
+                    email: data.email || '',
+                    username: data.display_name || '',
+                    image: data.image || '/spotify-logo.png'
                 });
+                setIsLoading(false);
+                  // console.log("Email:", data.email);
             })
-            .catch((error) => {
-                console.error('Error fetching user:', error);
-            });
-    };
+    }, []);
 
     // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //     setQuery(event.target.value);

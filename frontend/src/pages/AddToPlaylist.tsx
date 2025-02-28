@@ -5,6 +5,7 @@ import SpotifyButton from '../components/SpotifyButton/SpotifyButton';
 import AddSong from '../components/AddSong/AddSong';
 import PlaylistList from '../components/PlaylistList/PlaylistList';
 import RecommendedSongList from '../components/RecommendedSongList/RecommendedSongList';
+import Song from '../components/Song/Song';
 
 // interface Playlist {
 //     id: number;
@@ -44,6 +45,7 @@ interface Song {
     title: string;
     artist: string;
     album: string;
+    image: string;
 }
 
 // const AddToPlaylist = () => {
@@ -77,23 +79,37 @@ const AddToPlaylist: React.FC = () => {
     //     email: '',
     //     image: 'defaultImage.png'
     // };
-    const [currentUser, setCurrentUser] = useState({
+    const [currentUser, setCurrentUser] = useState<{ email: string; username: string; image: string }>({
         email: '',
         username: '',
         image: '/spotify-logo.png'
     });
     const [isLoading, setIsLoading] = useState(true);
+    const [song, setSong] = useState<Song>({
+        title: '',
+        artist: '',
+        album: '',
+        img: ''
+    });
 
     useEffect(() => {
-        fetch('http://localhost:8000').then(res => res.json()).then(data => {
-            setCurrentUser({
-                email: data.user.email || '',
-                username: data.user.display_name || '',
-                image: data.user.image || '/spotify-logo.png'
-            });
+        fetch('http://localhost:8000/getUser')
+            .then(res => res.json())
+            .then(data => {   
             console.log(data);
+            if (data.email === '') {
+                console.error('User email not found');
+                window.location.href = 'http://localhost:8000/login';
+                return;
+            }
+            setCurrentUser({
+                email: data.email || '',
+                username: data.display_name || '',
+                image: data.image || '/spotify-logo.png'
+            });
             setIsLoading(false);
-        });
+              // console.log("Email:", data.email);
+        })
     }, []);
 
     return (
@@ -122,29 +138,16 @@ const AddToPlaylist: React.FC = () => {
           <></>
         ) : (
         <div className="add-to-playlist-container">
-            <div className="playlist-container">
-                <h2 className="playlist-title">PLAYLISTS</h2>
-                <div className="playlist-scroll">
+            <div className="playlist-section">
+                <h1 className="section-title">Select Playlist</h1>
+                <div className="scroll">
                     <PlaylistList />
                 </div>
             </div>
             <div className="add-songs-container">
-                {/* <h2 className="recommended-songs-title">Recommended Songs</h2> */}
-                {currentUser.email ? (
-                    <User username={currentUser.username} image={currentUser.image} />
-                ) : (
-                    <div className="spotify-button-container">
-                        <SpotifyButton 
-                            title="Link Spotify"
-                            img="./SpotifyButton.png"
-                        />
-                    </div>
-                )}
-                <div className="song-scroll">
-                    {/* Add your song data here */}
-                    <AddSong />
-                    {/* <RecommendedSongList  />  */}
-                </div>
+                {/* Add your song data here */}
+                <AddSong song={song}/>
+                {/* <RecommendedSongList  />  */}
             </div>
         </div>
         )

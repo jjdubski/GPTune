@@ -31,7 +31,7 @@ const SongList: React.FC = () => {
     return (
         <div>
         {songs.map((song) => (
-            <div key={song.id}>
+            <div className="song" key={song.id}>
                 {/* <p>ID: {song.id}</p>
                 <p>Track ID: {song.trackID}</p>
                 <p>Title: {song.title}</p>

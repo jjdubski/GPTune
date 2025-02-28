@@ -1,0 +1,9 @@
+.playlist-list{
+    width: 90%;
+}
+.playlist-item{
+    width: 100%;
+}
+.playlist:last-of-type{
+    margin-bottom: 0;
+}

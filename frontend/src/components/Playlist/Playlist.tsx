@@ -14,7 +14,6 @@ const Playlist: React.FC<PlaylistProps> = ({title, img}) => {
             <div className='playlist-info'>
                 <p>{title || 'Unknown'}</p>
             </div>
-           
         </div>
     );
 };
