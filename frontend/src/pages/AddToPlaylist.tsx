@@ -40,6 +40,37 @@ const failSafe = [
   }
 ];
 
+interface Song {
+    title: string;
+    artist: string;
+    album: string;
+}
+
+// const AddToPlaylist = () => {
+//     const [songs, setSongs] = useState([]);
+//     const [loading, setLoading] = useState(true);
+
+//     useEffect(() => {
+//         fetch("http://127.0.0.1:8000/generate_response/", {
+//             method: "POST",
+//             headers: { "Content-Type": "application/json" },
+//         })
+//             .then((res) => res.json())
+//             .then((data) => {
+//                 console.log("API Response:", data);  // Debugging line
+//                 if (data.recommendations) {
+//                     setSongs(data.recommendations);
+//                 } else {
+//                     setSongs([]);
+//                 }
+//                 setLoading(false);
+//             })
+//             .catch((error) => {
+//                 console.error("Error fetching recommendations:", error);
+//                 setLoading(false);
+//             });
+//     }, []);
+
 const AddToPlaylist: React.FC = () => {
     // const currentUser = {
     //     username: 'Guest',
@@ -66,7 +97,30 @@ const AddToPlaylist: React.FC = () => {
     }, []);
 
     return (
-        !isLoading ? (
+//         <div>
+//             <h2>Recommended Songs</h2>
+//             {loading ? (
+//                 <p>Loading recommendations...</p>
+//             ) : (
+//                 <ul>
+//                     {songs.length > 0 ? (
+//                         songs.map((song, index) => (
+//                             <li key={index}>
+//                                 <strong>Title:</strong> {song.title} <br />
+//                                 <strong>Artist:</strong> {song.artist} <br />
+//                                 <strong>Album:</strong> {song.album}
+//                             </li>
+//                         ))
+//                     ) : (
+//                         <p>No recommendations available.</p>
+//                     )}
+//                 </ul>
+//             )}
+//         </div>
+        
+        isLoading ? (
+          <></>
+        ) : (
         <div className="add-to-playlist-container">
             <div className="playlist-container">
                 <h2 className="playlist-title">PLAYLISTS</h2>
@@ -89,11 +143,10 @@ const AddToPlaylist: React.FC = () => {
                 <div className="song-scroll">
                     {/* Add your song data here */}
                     <AddSong />
-                    <RecommendedSongList  /> 
+                    {/* <RecommendedSongList  />  */}
                 </div>
             </div>
-        </div>) : (
-        <></>
+        </div>
         )
     );
 };

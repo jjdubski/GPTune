@@ -71,16 +71,6 @@ def index(request):
     # print(len(currentUser['images']))
     return JsonResponse(data)
 
-
-def process_json(output):
-    output = output.strip().strip("```json").strip("```")
-    try:
-        output_list = json.loads(output)
-        return output_list
-    except:
-        print(f"Error parsing JSON response: {output}")
-        return {'title': 'Unknown', 'artist': 'Unknown'}
-    
 @csrf_exempt
 def generate_response(request):
     if request.method == "POST":
@@ -89,10 +79,12 @@ def generate_response(request):
             prompt = data.get("prompt", "")
             num_runs = data.get("num_runs", 5)
             response = prompt_for_song(prompt, num_runs)
-            # add parsing code here and return proper JSON object
-            output = process_json(response)
-            print(output)
-            return JsonResponse({"response": output})
+
+            # Log the raw AI response
+            logger.info(f"Raw OpenAI Response: {response}")
+
+            # Return the processed AI response inside the original structure
+            return JsonResponse(response)
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
     return JsonResponse({"error": "Invalid request method"}, status=405)
@@ -103,7 +95,6 @@ def login(request):
     # Redirect user to Spotify authorization URL
     auth_url = sp.auth_manager.get_authorize_url()
     return redirect(auth_url)
-
 
 def logout(request):
     request.session.flush()

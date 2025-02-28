@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './App.css'
-import Home from './pages/Home.tsx'
-import Songs from './pages/Songs.tsx'
-import Playlists from './pages/Playlists.tsx'
-import AddtoPlaylist from './pages/AddToPlaylist.tsx'
+import Home from './pages/Home'
+import Songs from './pages/Songs'
+import Playlists from './pages/Playlists'
+import AddtoPlaylist from './pages/AddToPlaylist'
 // import WebPlayback from './components/WebPlayback/WebPlayback'
 import { use, useEffect, useState } from 'react'
 import SideMenu from './components/SideMenu/SideMenu.tsx'
@@ -74,7 +74,7 @@ function App() {
         <div className="player">
           {token && (user && user == 'premium') && <SpotifyPlayer 
           token={token} 
-          uris={['spotify:artist:6HQYnRM4OzToCYPpVBInuU']}
+          uris={[]}
           showSaveIcon={true}
           styles={{
             bgColor: 'black',
