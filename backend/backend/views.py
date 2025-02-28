@@ -90,9 +90,7 @@ def generate_response(request):
             output = process_json(response)
 
             # Return the processed AI response inside the original structure
-            return JsonResponse({
-                "response": output
-            })
+            return JsonResponse(output)
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
