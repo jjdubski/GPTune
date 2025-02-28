@@ -36,15 +36,15 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ onSelectPlaylist }) => {
     }, []);
 
     return (
-        <div>
+        <>
             {error ? (
                 <p style={{ color: 'red' }}>{error}</p>
             ) : playlists.length === 0 ? (
                 <p>No playlists available</p>
             ) : (
-                <div className="playlists-grid">
+                <div className="playlist-list">
                     {playlists.map(playlist => (
-                        <div key={playlist.id} onClick={() => onSelectPlaylist(playlist)}>
+                        <div className='playlist-container' key={playlist.id} onClick={() => onSelectPlaylist(playlist)}>
                             <Playlist
                                 title={playlist.name}
                                 img={playlist.coverArt}
@@ -53,7 +53,7 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ onSelectPlaylist }) => {
                     ))}
                 </div>
             )}
-        </div>
+        </>
     );
 };
 

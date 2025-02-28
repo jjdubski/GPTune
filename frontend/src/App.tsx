@@ -52,6 +52,19 @@ function App() {
     }
   }, [token])
 
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      // Perform any cleanup or save state here
+      console.log('User is about to leave the page');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   return (
     <Router>
       <div className='App'>
@@ -71,20 +84,24 @@ function App() {
           {/* <Route path='/this-or-that' element={<ThisOrThat />} /> */}
         </Routes>
         {/* {token && <WebPlayback token={token} />} */}
-        <div className="player">
-          {token && (user && user == 'premium') && <SpotifyPlayer 
-          token={token} 
-          uris={[]}
-          showSaveIcon={true}
-          styles={{
-            bgColor: 'black',
-            color: 'white',
-            loaderColor: '#fff',
-            sliderColor: '#1cb954',
-            sliderHandleColor: '#fff',
-            trackArtistColor: '#ccc',
-            trackNameColor: '#fff',
-          }}/>}
+        <div className="player-container">
+          <div className="player">
+            {token && (user && user == 'premium') && <SpotifyPlayer 
+            token={token} 
+            uris={[]}
+            // persistDeviceSelection={true}
+            showSaveIcon={true}
+            // syncExternalDevice={true}
+            styles={{
+              bgColor: 'black',
+              color: 'white',
+              loaderColor: '#fff',
+              sliderColor: '#1cb954',
+              sliderHandleColor: '#fff',
+              trackArtistColor: '#ccc',
+              trackNameColor: '#fff',
+            }}/>}
+          </div>
         </div>
         </>
       )}  

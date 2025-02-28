@@ -1,51 +1,55 @@
 /* Main container - Playlists on the left, Recommended Songs on the right */
 .add-to-playlist-container {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 100%;
-    height: 100vh;
-    background-color: #121212;
-    padding: 20px;
-    gap: 20px; /* Space between sections */
-}
-
-/* LEFT: Playlist Section */
-.playlist-container {
-    width: 50%;
-    flex-grow: 0;;
-    /* float: left; */
     position: absolute;
     top: 0;
     left: 0;
-    background-color: #1e1e1e;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100vw;
+    height: 100vh;
+    background-color: #121212;
+    /* padding: 20px; */
+    /* z-index: -1; */
+}
+
+/* LEFT: Playlist Section */
+.playlist-section {
+    width: 50%;
+    overflow: clip;
+    /* flex-grow: 0;; */
+    /* float: left; */
+    /* position: absolute;
+    top: 0;
+    left: 0; */
+    background-color: #3ACC7C50;
     padding: 15px;
-    border-radius: 10px;
-    align-items: flex-start;
+    align-items: center;
     display: flex;
     flex-direction: column;
     margin-left: 0;
 }
 
-.playlist-title {
+.section-title {
     font-size: 20px;
     font-weight: bold;
     color: white;
-    padding-bottom: 10px;
-    text-align: left;
+    margin-top: 35px;
 }
 
 /* Playlist Scroll */
-.playlist-scroll {
+.scroll {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    max-height: 80vh; /* Adjusted height for better spacing */
-    padding-right: 10px;
+    align-items: center;
+    margin-top: 20px;
+    max-height: 72vh; /* Adjusted height for better spacing */
+    /* padding-right: 10px; */
+    width: 100%;
 }
 
-.playlist-item {
+/* .playlist-item {
     display: flex;
     align-items: center;
     padding: 12px;
@@ -72,7 +76,7 @@
     color: white;
     font-size: 16px;
     font-weight: 500;
-}
+} */
 
 .song-title {
     font-size: 20px;
@@ -86,10 +90,8 @@
 .song-scroll {
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
-    max-height: 80vh; /* Adjusted height */
     padding-right: 10px;
-}
+} 
 
 /* Song Item */
 .song-item {
@@ -135,32 +137,6 @@
     color: #aaa;
 }
 
-/* Add Song Button */
-.add-song-button {
-    background-color: #4CAF50;
-    color: white;
-    font-size: 8px;
-    border: none;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 50%;
-    transition: background 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-}
-.add-song-button:hover {
-    background-color: #3e8e41;
-}
-
-/* Fixing broken image placeholder */
-img {
-    display: block;
-    object-fit: cover;
-    background-color: #222;
-}
-
 /* Error Message */
 .error-message {
     color: #ff6b6b;
@@ -173,13 +149,14 @@ img {
     flex-direction: column;
     justify-content: top;
     width: 50%;
-    position: absolute;
-    right: 0;
-    bottom: 0;
+    /* position: absolute; */
+    /* right: 0;
+    bottom: 0; */
     flex-grow: 0;
     height: 100vh;
-    background-color: #121212;
+    background-color: var(--background);
     padding: 20px;
     margin-bottom: 5px;
-    float: right;
+    align-items: flex-start;
+    /* float: right; */
 }

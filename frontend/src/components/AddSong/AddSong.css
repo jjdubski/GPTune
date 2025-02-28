@@ -3,21 +3,32 @@
     align-items: center;
     gap: 10px;
     padding: 10px;
-    background-color: white;
+    background-color: transparent;
   }
   
-  .add-button {
-    background-color: #1db954;
+  /* Add Song Button */
+  .add-song-button {
+    background-color: #4CAF50;
     color: white;
+    font-size: 8px;
     border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 24px;
     cursor: pointer;
-    transition: background 0.3s;
+    padding: 8px 12px;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
   }
   
-  .add-button:hover {
-    background-color: #169c46;
+  .add-song-button:hover {
+    background-color: #3e8e41;
+  }
+
+  .add-icon{
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+    margin-right: 5px;
   }
