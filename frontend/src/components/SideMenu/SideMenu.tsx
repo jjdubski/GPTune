@@ -19,11 +19,11 @@ const SideMenu: React.FC = () => {
             {/* Sidebar Menu */}
             <div className={`side-menu`}>
                 <p className="close-btn" onClick={() => setIsOpen(!isOpen)}>X</p>
-                <Link className="menu-item" to="/">Home</Link>
-                <Link className="menu-item" to="/add-to-playlist">Add to Playlist</Link>
-                <Link className="menu-item" to="/this-or-that">This Or That</Link>
-                <Link className="menu-item" to="/discover">Discover</Link>
-                <Link className="menu-item" to="http://localhost:8000/logout">Logout 
+                <Link className="menu-item" to="/" onClick={() => setIsOpen(false)}>Home</Link>
+                <Link className="menu-item" to="/add-to-playlist" onClick={() => setIsOpen(false)}>Add to Playlist</Link>
+                <Link className="menu-item" to="/this-or-that" onClick={() => setIsOpen(false)}>This Or That</Link>
+                <Link className="menu-item" to="/discover" onClick={() => setIsOpen(false)}>Discover</Link>
+                <Link className="menu-item" to="http://localhost:8000/logout" onClick={() => setIsOpen(false)}>Logout 
                     <img className="logoutIcon" src={logoutIcon} alt="Logout Icon"></img>
                 </Link>
             </div>
