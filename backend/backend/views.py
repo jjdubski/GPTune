@@ -74,16 +74,29 @@ def index(request):
 
 @csrf_exempt
 def generate_response(request):
-    if request.method == "POST":
+     if request.method == "POST":
         try:
-            # Automatically request recommendations for a general prompt
-            response = prompt_for_song("Top trending songs", 5)
-            if response:
-                return JsonResponse({"recommendations": response})
-            else:
-                return JsonResponse({"error": "Failed to generate recommendations"}, status=500)
+            data = json.loads(request.body.decode("utf-8"))
+            prompt = data.get("prompt", "")
+            num_runs = data.get("num_runs", 1)
+
+            # Get response from OpenAI API
+            response = prompt_for_song(prompt, num_runs)
+
+            # Log the raw AI response
+            logger.info(f"Raw OpenAI Response: {response}")
+
+            # Only process AI response, keep rest of output intact
+            output = process_json(response)
+
+            # Return the processed AI response inside the original structure
+            return JsonResponse({
+                "response": output
+            })
+
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
+
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 def login(request):
