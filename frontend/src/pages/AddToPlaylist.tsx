@@ -24,7 +24,7 @@ const failSafe = [
       coverArt: "https://via.placeholder.com/150"
   },
   {
-      id: 3,
+      id: 3, 
       name: "Top Hits",
       coverArt: "https://via.placeholder.com/150"
   },
