@@ -22,7 +22,8 @@
     left: 0;
     width: 300px; /* Consistent width */
     height: 100%;
-    background-color: black;
+    /* background-color: black; */
+    background-color: #467255;
     color: white;
     display: flex;
     flex-direction: column;
