@@ -78,32 +78,18 @@ def generate_response(request):
         try:
             # Automatically request recommendations for a general prompt
             response = prompt_for_song("Top trending songs", 5)
-            
             if response:
                 return JsonResponse({"recommendations": response})
             else:
                 return JsonResponse({"error": "Failed to generate recommendations"}, status=500)
-        
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
-    
     return JsonResponse({"error": "Invalid request method"}, status=405)
-
-
-
-def process_json(output):
-    try:
-        output = output.strip().replace("```json", "").replace("```", "").strip()
-        return json.loads(output)
-    except json.JSONDecodeError:
-        print(f"Error parsing JSON: {output}")
-        return [{"title": "Unknown", "artist": "Unknown", "album": "Unknown"}]
 
 def login(request):
     # Redirect user to Spotify authorization URL
     auth_url = sp.auth_manager.get_authorize_url()
     return redirect(auth_url)
-
 
 def logout(request):
     request.session.flush()
