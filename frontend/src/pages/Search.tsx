@@ -6,9 +6,10 @@ import User from '../components/User/User';
 import RefreshButton from '../components/RefreshIcon/RefreshIcon'; 
 import SearchBar from '../components/SearchBar/SearchBar';
 import './Search.css';
+import Song from '../components/Song/Song';
 
 const Search: React.FC = () => {
-    const [query, setQuery] = useState<string>(''); 
+    // const [query, setQuery] = useState<string>(''); 
     const [songs, setSongs] = useState<any[]>([]); 
     const [artists, setArtists] = useState<any[]>([]); 
     const [error, setError] = useState<string | null>(null);
@@ -19,29 +20,36 @@ const Search: React.FC = () => {
     });
 
     useEffect(() => {
-        fetchSongsAndArtists();
+        // fetchSongsAndArtists();
         fetchUserData();
     }, []);
 
     const fetchSongsAndArtists = () => {
-        fetch(`http://localhost:8000/musicAPI/search?query=${query}`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then((data) => {
-                console.log('Data received:', data);
-                setSongs(data.songs || []);
-                setArtists(data.artists || []);
-                setError(null);
-            })
-            .catch((error) => {
-                console.error('Error fetching music data:', error);
-                setError('Failed to fetch music data. Please try again later.');
-            });
-    };
+        return 
+    }
+
+    // const fetchSongsAndArtists = () => {
+        // fetch(`http://localhost:8000/musicAPI/search?query=${query}`)
+        //     .then((response) => {
+        //         if (!response.ok) {
+        //             throw new Error('Network response was not ok');
+        //         }
+        //         return response.json();
+        //     })
+        //     .then((data) => {
+        //         console.log('Data received:', data);
+        //         setSongs(data.songs || []);
+        //         setArtists(data.artists || []);
+        //         setError(null);
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error fetching music data:', error);
+        //         setError('Failed to fetch music data. Please try again later.');
+        //     });
+
+        // work with John to add route that returns an array of songs and artists (seperately)
+        // break this down to two different fetch calls, one for each
+    // };
 
     const fetchUserData = () => {
         fetch('http://localhost:8000/getUser')
@@ -58,13 +66,13 @@ const Search: React.FC = () => {
             });
     };
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setQuery(event.target.value);
-    };
+    // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setQuery(event.target.value);
+    // };
 
-    const handleSearch = () => {
-        fetchSongsAndArtists();
-    };
+    // const handleSearch = () => {
+    //     fetchSongsAndArtists();
+    // };
 
     return (
         <div className="search-page">
@@ -94,23 +102,9 @@ const Search: React.FC = () => {
                 <div className="song-list-container">
                     <h2 className="playlist-title">"songs for a road trip"</h2>
                     <RefreshButton onRefresh={fetchSongsAndArtists} />
-                    <div className="song-list">
-                        {error ? (
-                            <p className="error-text">{error}</p>
-                        ) : songs.length === 0 ? (
-                            <p className="empty-text">No songs found</p>
-                        ) : (
-                            songs.map((song, index) => (
-                                <SongList
-                                    // key={index}
-                                    // title={song.title}
-                                    // artist={song.artist}
-                                    // album={song.album}
-                                    // img={song.coverArt}
-                                />
-                            ))
-                        )}
-                    </div>
+                    {/* make it work with the list of songs */}
+                    {/* <SongList songs={songs}/> */}
+                    <SongList />
                 </div>
 
                 {/* Right Section: Popular Artists */}
