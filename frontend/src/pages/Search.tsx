@@ -117,10 +117,13 @@ const Search: React.FC = () => {
                             <p className="empty-text">No artists found</p>
                         ) : (
                             artists.map((artist, index) => (
-                                <div key={index} className="artist-card">
-                                    <img src={artist.image} alt={artist.name} className="artist-image" />
-                                    <p className="artist-name">{artist.name}</p>
-                                </div>
+                                <Artist
+                                    key={index}
+                                    name={artist.name}
+                                    image={artist.image}
+                                    genres={artist.genres}
+                                    popularity={artist.popularity}
+                                />
                             ))
                         )}
                     </div>
