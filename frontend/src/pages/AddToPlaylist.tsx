@@ -143,10 +143,10 @@ const AddToPlaylist: React.FC = () => {
                 <div className="song-scroll">
                     {/* Add your song data here */}
                     <AddSong />
-                    <RecommendedSongList  /> 
+                    {/* <RecommendedSongList  />  */}
                 </div>
             </div>
-        </div>)
+        </div>
         )
     );
 };

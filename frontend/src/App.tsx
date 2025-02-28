@@ -74,7 +74,7 @@ function App() {
         <div className="player">
           {token && (user && user == 'premium') && <SpotifyPlayer 
           token={token} 
-          uris={['spotify:artist:6HQYnRM4OzToCYPpVBInuU']}
+          uris={[]}
           showSaveIcon={true}
           styles={{
             bgColor: 'black',

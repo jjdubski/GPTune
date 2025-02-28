@@ -73,7 +73,7 @@ def index(request):
 
 @csrf_exempt
 def generate_response(request):
-     if request.method == "POST":
+    if request.method == "POST":
         try:
             data = json.loads(request.body.decode("utf-8"))
             prompt = data.get("prompt", "")
@@ -83,11 +83,8 @@ def generate_response(request):
             # Log the raw AI response
             logger.info(f"Raw OpenAI Response: {response}")
 
-            # Only process AI response, keep rest of output intact
-            output = process_json(response)
-
             # Return the processed AI response inside the original structure
-            return JsonResponse(output)
+            return JsonResponse(response)
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
     return JsonResponse({"error": "Invalid request method"}, status=405)
