@@ -134,6 +134,7 @@ def getSavedSongs(_):
 
 @api_view(['GET'])  
 def getPlaylistSongs(request, playlist_id):
+    print(playlist_id)
     try:
         results = sp.playlist_items(playlist_id)
         songs = results['items']
