@@ -13,7 +13,11 @@ interface Artist {
     name: string;
     image: string;
     genres?: string[];
+<<<<<<< HEAD
     popularity: number;
+=======
+    popularity?: number;
+>>>>>>> e7b0b1f0cdfad81cafcc69e90e2aaf929c1c45b6
 }
 
 const Search: React.FC = () => {
@@ -135,28 +139,45 @@ const Search: React.FC = () => {
                         <SpotifyButton title="Link Spotify" img="./SpotifyButton.png" />
                     </div>
                 )}
+<<<<<<< HEAD
                      <h2 className="above-prompt">"Not what you are looking for? Enter a new prompt."</h2>
 
                  <SearchBar onSearch={() => console.log('Search button clicked!')} />
 
             {/* Search Bar */}
                
+=======
+>>>>>>> e7b0b1f0cdfad81cafcc69e90e2aaf929c1c45b6
 
             {/* Main Content */}
             
             <div className="search-page-container">
                 {/* Left Section: Song List */}
                 <div className="song-list-section">
+<<<<<<< HEAD
                     <h2 className="playlist-title">"songs for a road trip"</h2>
                     <RefreshButton onRefresh={fetchSongsAndArtists} />
                     {/* make it work with the list of songs */}
                     {/* <SongList songs={songs}/> */}
                     <SongList />
+=======
+                    <div className="song-list-section-top">
+                        <RefreshButton onRefresh={fetchSongsAndArtists} />
+                        <h2 className="song-list-section-title">"songs for a road trip"</h2>
+                        <RefreshButton onRefresh={fetchSongsAndArtists} />
+                    </div>
+                    {/* make it work with the list of songs */}
+                    {/* <SongList songs={songs}/> */}
+                    <div className="scroll">
+                        <SongList />
+                    </div>
+>>>>>>> e7b0b1f0cdfad81cafcc69e90e2aaf929c1c45b6
                 </div>
 
 
                 {/* Right Section: Popular Artists */}
                 <div className="artist-section">
+                    <SearchBar onSearch={() => console.log('Search button clicked!')} />
                     <h2 className="popular-artists-title">Popular Artists <span className="small-text">* based on your prompt</span></h2>
                     <div className="artist-grid">
                         {error ? (
