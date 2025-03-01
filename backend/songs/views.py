@@ -55,7 +55,7 @@ def AddSongs(request):
                     album = song['album']['name'],
                     release_date =song['album'].get('release_date', None),
                     genre = ", ".join(song.get('genres', [])),
-                    coverArt = song['album']['images'][0]['url'] if song['album']['images'] else None
+                    image = song['album']['images'][0]['url'] if song['album']['images'] else None
                 )
     return Response({"message": "Data successfully added!"}, status=201)
 

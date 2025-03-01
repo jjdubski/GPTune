@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './AddToPlaylist.css';
-import User from '../components/User/User'; // Ensure this path is correct
-import SpotifyButton from '../components/SpotifyButton/SpotifyButton';
 import AddSong from '../components/AddSong/AddSong';
 import PlaylistList from '../components/PlaylistList/PlaylistList';
-import RecommendedSongList from '../components/RecommendedSongList/RecommendedSongList';
+// import RecommendedSongList from '../components/RecommendedSongList/RecommendedSongList';
 import Song from '../components/Song/Song';
 
 // interface Playlist {
@@ -89,8 +87,19 @@ const AddToPlaylist: React.FC = () => {
         title: '',
         artist: '',
         album: '',
-        img: ''
+        image: ''
     });
+    const [songs, setSongs] = useState<Song[]>([])
+
+    //for testing
+    useEffect(() => {
+        setSong({
+            title: 'Free Bird',
+            artist: 'Lynyrd Skynyrd',
+            album: "(Pronounced 'Lĕh-'nérd 'Skin-'nérd)",
+            image: "https://i.scdn.co/image/ab67616d0000b273128450651c9f0442780d8eb8"
+        })
+    }, []);
 
     useEffect(() => {
         fetch('http://localhost:8000/getUser')
@@ -107,10 +116,12 @@ const AddToPlaylist: React.FC = () => {
                 username: data.display_name || '',
                 image: data.image || '/spotify-logo.png'
             });
+            // hard coded below line for now
+            setSongs(data.recommendations || [song, song, song]);
             setIsLoading(false);
               // console.log("Email:", data.email);
         })
-    }, []);
+    }, [song]);
 
     return (
 //         <div>
@@ -139,15 +150,16 @@ const AddToPlaylist: React.FC = () => {
         ) : (
         <div className="add-to-playlist-container">
             <div className="playlist-section">
-                <h1 className="section-title">Select Playlist</h1>
+                <h1 className="playlist-section-title">Select Playlist</h1>
                 <div className="scroll">
                     <PlaylistList />
                 </div>
             </div>
             <div className="add-songs-container">
-                {/* Add your song data here */}
-                <AddSong song={song}/>
-                {/* <RecommendedSongList  />  */}
+                <h1 className='add-songs-title'>Recommended Songs</h1>
+                {songs.map((song, index) => (
+                    <AddSong key={index} song={song} />
+                ))}
             </div>
         </div>
         )

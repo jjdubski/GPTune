@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Playlist.css';
-import { useNavigate } from 'react-router-dom';
 
 
 interface PlaylistProps {
     id: number;
     title: string;
-    img : string;
+    image : string;
 }
 
 const Playlist: React.FC<PlaylistProps> = ({id, title, img}) => {
@@ -21,7 +20,7 @@ const Playlist: React.FC<PlaylistProps> = ({id, title, img}) => {
 
     return (
         <div className='playlist' onClick={handleClick}>
-            <img src={img} alt={`${title}`} />
+            <img src={image} alt={`${title}`} />
             <div className='playlist-info'>
                 <p>{title || 'Unknown'}</p>
             </div>

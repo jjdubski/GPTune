@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import './SongList.css'
 import Song  from '../Song/Song'
 
-
 interface Song {
     id: number;
     trackID: string;
@@ -10,15 +9,14 @@ interface Song {
     artist: string;
     album: string;
     releaseDate: string;
-    coverArt: string;
+    image: string;
 }
 
 interface SongListProps {
     id?: number;
 }
 
-const SongList: React.FC = () => {
-
+const SongList: React.FC<SongListProps> = ({ playlistID }) => {
     const [songs, setSongs] = useState<Song[]>([])  
     const [error, setError] = useState<string | null>(null)
 
@@ -51,21 +49,19 @@ const SongList: React.FC = () => {
             ) : songs.length === 0 ? (
                 <p>No Songs available</p>
             ) : (
-                <PlaylistSongList playlist={songs} />
+                songs.map((song) => (
+                    <div className="song" key={song.id}>
+                        {/* <p>ID: {song.id}</p>
+                        <p>Track ID: {song.trackID}</p>
+                        <p>Title: {song.title}</p>
+                        <p>Artist: {song.artist}</p>
+                        <p>Album: {song.album}</p>
+                        <p>Release Date: {song.releaseDate}</p> */}
+                        <Song title={song.title} artist={song.artist} album={song.album} img={song.image} />
+                    </div>
+                ))
             )}
         </div>
-    );
-};
-
-const PlaylistSongList: React.FC<{ playlist: Song[] }> = ({ playlist }) => {
-    return (
-        <div>
-        {playlist.map((song) => (
-            <div className="song" key={song.id}>
-                <Song title={song.title} artist={song.artist} album={song.album} img={song.coverArt} />
-            </div>
-        ))}
-    </div>
     );
 };
 

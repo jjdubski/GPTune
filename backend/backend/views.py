@@ -121,6 +121,7 @@ def callback(request):
                     request.session["token_info"] = token_info
                     populatePlaylist()
                     populateSongs()
+                    getLikedSongs()
                     return redirect("http://localhost:3000/")
                     # return HttpResponse("Authentication successful")
                 else:
@@ -154,7 +155,7 @@ def populateSongs():
                     album=song['album']['name'],
                     release_date=release_date,
                     genre=", ".join(song.get('genres', [])),
-                    coverArt=song['album']['images'][0]['url'] if song['album']['images'] else None
+                    image=song['album']['images'][0]['url'] if song['album']['images'] else None
                 )
         return True
     except Exception as e:
@@ -174,11 +175,10 @@ def populatePlaylist():
                     playlistID=playlist['id'],
                     name=playlist['name'],
                     description=playlist.get('description', ''),  # Use get() with default value
-                    coverArt=playlist['images'][0]['url'] if playlist['images'] else None
+                    image=playlist['images'][0]['url'] if playlist['images'] else None
                 )
                 logger = logging.getLogger(__name__)
                 logger.info(playlist['images'][0]['url'])
-
         return True
     except Exception as e:
         logger = logging.getLogger(__name__)
@@ -202,3 +202,81 @@ def getUser(request):
         return JsonResponse(user)
     else:
         return JsonResponse({"error": "No token found"}, status=404)
+
+def getLikedSongs():
+    # if "spotify_token" not in request.session:
+    #     return JsonResponse({"error": "User must be logged in to Spotify"}, status=401)
+    
+    raw_liked_songs = []
+    liked_songs = []
+    limit = 100 # you can change this to any number
+    offset = 0
+    try:
+        while limit > 0:
+            fetch_limit = min(limit, 50)
+            results = sp.current_user_saved_tracks(limit=fetch_limit, offset=offset)
+            raw_liked_songs.extend(results['items'])
+            offset += fetch_limit
+            limit -= fetch_limit
+            if len(results['items']) < fetch_limit:
+                break
+    except Exception as e:
+        return JsonResponse({"error": f"Failed to get saved songs: {str(e)}"}, status=500)
+    
+    for song in raw_liked_songs:
+        release_date = song['track']['album']['release_date']
+        if release_date:
+            release_date_parts = release_date.split('-')
+            if len(release_date_parts) == 3:
+                release_date = f"{release_date_parts[0]}-{release_date_parts[1]}-{release_date_parts[2]}"
+            elif len(release_date_parts) ==  1:
+                release_date = f"{release_date_parts[0]}-01-01"
+            else:
+                release_date = None
+
+        track = song['track']
+        track_id = track['id']
+        track_name = track['name']
+        album_data = track['album']
+        # album_id = album_data['id']
+        album_name = album_data['name']
+        artist_data = track['artists'][0]
+        # artist_id = artist_data['id']
+        artist_name = artist_data['name']
+
+        # Check if the song already exists
+        if not Song.objects.filter(trackID=track_id).exists():
+            # Create a new song
+            song = Song.objects.create(
+                trackID=track_id,
+                title=track_name,
+                artist=artist_name,
+                album=album_name,
+                release_date=release_date,
+                genre=", ".join(album_data.get('genres', [])),
+                image=album_data['images'][0]['url'] if album_data['images'] else ''
+            )
+            liked_songs.append(song)
+        else:
+            # If the song already exists, retrieve it
+            song = Song.objects.get(trackID=track_id)
+            liked_songs.append(song)
+
+    # Create or update the playlist
+    # Check if the playlist already exists
+    if Playlist.objects.filter(playlistID="liked_songs").exists():
+        playlist = Playlist.objects.get(playlistID="liked_songs")
+    else:
+        # Create a new playlist
+        playlist = Playlist.objects.create(
+            playlistID="liked_songs",
+            name="Liked Songs",
+            description="Your saved songs from Spotify",
+            image="https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da8470d229cb865e8d81cdce0889",
+        )
+
+    if liked_songs:
+        playlist.songs.set(liked_songs)
+        playlist.save()
+    
+    return JsonResponse({"message": "Saved songs imported successfully"}, status=201)

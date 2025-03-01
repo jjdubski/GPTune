@@ -1,34 +1,37 @@
 .add-song {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-direction: row;
+    width: 90%;
+    align-items: flex-start;
     padding: 10px;
     background-color: transparent;
+    border: 1px solid var(--secondary);
   }
-  
-  /* Add Song Button */
-  .add-song-button {
-    background-color: #4CAF50;
-    color: white;
-    font-size: 8px;
-    border: none;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 50%;
-    transition: background 0.3s ease;
+  /* .song{
     display: flex;
+    justify-content: space-around;
     align-items: center;
-    justify-content: center;
-    margin-left: auto;
-  }
-  
-  .add-song-button:hover {
-    background-color: #3e8e41;
+    padding: 1rem;
+    border: 1px solid black;
+    border-radius: 10px; 
+    height : 150px;
+    margin-bottom: 20px;
+} */
+
+  .add-song:hover{
+    background-color: var(--primary);
   }
 
   .add-icon{
     width: 20px;
     height: 20px;
     object-fit: cover;
-    margin-right: 5px;
+    margin: auto 5px auto auto;
+  }
+
+  .song-image{
+    width: 100px;
+    height: auto; 
+    object-fit: cover;
+    /* border-radius: 10px; */
   }
