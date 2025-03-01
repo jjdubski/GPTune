@@ -10,5 +10,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('getPlaylists/', views.AddPlaylists, name='AddPlaylists'),
     path('getPlaylistSongs/<int:id>/', views.getPlaylistSongs, name='getPlaylistSongs'),
-    path('getSavedSongs/', views.getSavedSongs, name='getSavedSongs'),
+    # path('getSavedSongs/', views.getSavedSongs, name='getSavedSongs'),
 ]

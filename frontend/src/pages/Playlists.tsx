@@ -90,7 +90,7 @@ const Playlists: React.FC = () => {
                             key={playlist.id}
                             id = {playlist.id}
                             title={playlist.name}
-                            img={playlist.coverArt}
+                            image={playlist.coverArt}
                         />
                     ))}
                 </div>

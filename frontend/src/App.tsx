@@ -66,6 +66,13 @@ function App() {
     };
   }, []);
 
+  const handlePlaySong = (songURL: string) => {
+    setUris([songURL]);
+  };
+
+
+
+
   return (
     <Router>
       <div className='App'>
@@ -76,7 +83,7 @@ function App() {
         <>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/songs" element={<Songs />} />
+          <Route path="/songs" element={<Songs onPlaySong = {handlePlaySong}/>} />
           <Route path="/playlists" element={<Playlists />} />
           <Route path="/add-to-playlist" element={<AddtoPlaylist />} />
           <Route path="/search" element={<Search />} />
