@@ -50,14 +50,14 @@ const SongList: React.FC<SongListProps> = ({ playlistID }) => {
                 <p>No Songs available</p>
             ) : (
                 songs.map((song) => (
-                    <div className="song" key={song.id}>
+                    <div className="song-item" key={song.id}>
                         {/* <p>ID: {song.id}</p>
                         <p>Track ID: {song.trackID}</p>
                         <p>Title: {song.title}</p>
                         <p>Artist: {song.artist}</p>
                         <p>Album: {song.album}</p>
                         <p>Release Date: {song.releaseDate}</p> */}
-                        <Song title={song.title} artist={song.artist} album={song.album} img={song.image} />
+                        <Song title={song.title} artist={song.artist} album={song.album} image={song.image} />
                     </div>
                 ))
             )}

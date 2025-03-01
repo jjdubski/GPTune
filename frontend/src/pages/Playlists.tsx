@@ -4,10 +4,10 @@ import './Playlist.css'
 import PlaylistList from '../components/PlaylistList/PlaylistList'
 import RefreshButton from '../components/RefreshIcon/RefreshIcon'
 interface Playlist {
-    id: number;
+    playlistID: number;
     name: string;
     description: string;
-    coverArt: string;
+    image: string;
 }
 
 const Playlists: React.FC = () => {
@@ -87,10 +87,9 @@ const Playlists: React.FC = () => {
                 <div className="playlists-grid">
                     {playlists.map(playlist => (
                         <Playlist
-                            key={playlist.id}
                             playlistID = {playlist.playlistID}
                             title={playlist.name}
-                            img={playlist.coverArt}
+                            image={playlist.image}
                         />
                     ))}
                 </div>

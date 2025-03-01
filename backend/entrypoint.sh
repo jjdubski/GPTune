@@ -12,6 +12,8 @@ if [ "$DATABASE" = "postgres" ]; then
 fi
 
 # Make migrations 
+python manage.py makemigrations songs
+python manage.py makemigrations playlists
 python manage.py makemigrations --noinput
 
 python manage.py migrate

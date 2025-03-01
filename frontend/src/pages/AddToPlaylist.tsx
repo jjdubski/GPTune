@@ -77,11 +77,6 @@ const AddToPlaylist: React.FC = () => {
     //     email: '',
     //     image: 'defaultImage.png'
     // };
-    const [currentUser, setCurrentUser] = useState<{ email: string; username: string; image: string }>({
-        email: '',
-        username: '',
-        image: '/spotify-logo.png'
-    });
     const [isLoading, setIsLoading] = useState(true);
     const [song, setSong] = useState<Song>({
         title: '',
@@ -111,11 +106,6 @@ const AddToPlaylist: React.FC = () => {
                 window.location.href = 'http://localhost:8000/login';
                 return;
             }
-            setCurrentUser({
-                email: data.email || '',
-                username: data.display_name || '',
-                image: data.image || '/spotify-logo.png'
-            });
             // hard coded below line for now
             setSongs(data.recommendations || [song, song, song]);
             setIsLoading(false);
@@ -146,8 +136,8 @@ const AddToPlaylist: React.FC = () => {
 //         </div>
         
         isLoading ? (
-          <></>
-        ) : (
+            <></>
+        ) : 
         <div className="add-to-playlist-container">
             <div className="playlist-section">
                 <h1 className="playlist-section-title">Select Playlist</h1>
@@ -162,7 +152,6 @@ const AddToPlaylist: React.FC = () => {
                 ))}
             </div>
         </div>
-        )
     );
 };
 

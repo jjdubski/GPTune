@@ -17,6 +17,7 @@ const PlaylistDetails: React.FC = () => {
     const { playlistID } = useParams<{ playlistID: string }>();
     const [playlist, setPlaylist] = useState<Song[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         fetch(`http://localhost:8000/playlistAPI/getPlaylistSongs/${playlistID}/`)
@@ -35,6 +36,7 @@ const PlaylistDetails: React.FC = () => {
                     setPlaylist(Array.isArray(data) ? data : []);
                 }
                 setError(null);
+                setIsLoading(false);
             })
             .catch(error => {
                 console.error('Error fetching Playlist:', error);
@@ -43,6 +45,9 @@ const PlaylistDetails: React.FC = () => {
     }, [playlistID]);
 
     return (
+        isLoading ? (
+            <></>
+        ) :
         <>
             {error ? (
                 <p style={{ color: 'red' }}>{error}</p>
@@ -51,7 +56,7 @@ const PlaylistDetails: React.FC = () => {
             ) : (
                 <div>
                     {playlist.map((song) => (
-                        <div className="song" key={song.id}>
+                        <div className="song-item" key={song.id}>
                             <Song title={song.title} artist={song.artist} album={song.album} image={song.image} />
                         </div>
                     ))}

@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./AddSong.css";
 import Song from "../Song/Song";
 import plusIcon from "/plus-icon.png"
 
 interface Song {
-  trackID: string;
   title: string;
   artist: string;
   album: string;
@@ -12,7 +11,19 @@ interface Song {
 }
 
 const AddSong: React.FC<{ song: Song }> = ({ song }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    const img = new Image();
+    img.src = song.image;
+    img.onload = () => setIsLoading(false);
+  }
+  , [song]);
+  
   return (
+    isLoading ? (
+      <></>
+    ) :
     <div className="add-song">
       <img className="song-image" src={song.image} alt="cover_art"/>
       <div className="song-info">

@@ -15,6 +15,7 @@ interface PlaylistListProps {
 const PlaylistList: React.FC<PlaylistListProps> = ({ onSelectPlaylist }) => {
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         fetch('http://localhost:8000/playlistAPI/playlists/')
@@ -28,6 +29,7 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ onSelectPlaylist }) => {
                 console.log('Data received:', data);
                 setPlaylists(Array.isArray(data) ? data : []);
                 setError(null);
+                setIsLoading(false);
             })
             .catch(error => {
                 console.error('Error fetching Playlists:', error);
@@ -36,6 +38,9 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ onSelectPlaylist }) => {
     }, []);
 
     return (
+        isLoading ? (
+            <></>
+        ) :
         <>
             {error ? (
                 <p style={{ color: 'red' }}>{error}</p>
