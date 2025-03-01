@@ -60,7 +60,7 @@ def getSavedSongs(_):
         name="Saved Songs",
         defaults={
             'description': 'Your saved songs from Spotify',
-            'coverArt': None
+            'coverArt': "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da8470d229cb865e8d81cdce0889"
         }
     )
     

@@ -45,5 +45,34 @@ const SongList: React.FC = () => {
     );
 };
 
+interface Song {
+    id: number;
+    trackID: string;
+    title: string;
+    artist: string;
+    album: string;
+    releaseDate: string;
+    coverArt: string;
+}
+
+interface Playlist {
+    id: number;
+    name: string;
+    songs: Song[];
+}
+
+const SongList: React.FC<{ playlist: Playlist }> = ({ playlist }) => {
+    return (
+        <div>
+            <h2>{playlist.name}</h2>
+            {playlist.songs.map((song) => (
+                <div className="song" key={song.id}>
+                    <Song title={song.title} artist={song.artist} album={song.album} img={song.coverArt} />
+                </div>
+            ))}
+        </div>
+    );
+};
+
 export default SongList;
 
