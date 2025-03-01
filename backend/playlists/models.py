@@ -6,8 +6,8 @@ class Playlist(models.Model):
     playlistID = models.CharField(max_length=100, null=True, blank=True)
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    coverArt = models.URLField(null=True, blank=True)
-    songs = models.ManyToManyField(Song, related_name="playlists" )
+    image = models.URLField(null=True, blank=True)
+    songs = models.ManyToManyField(Song, related_name="playlists")
     
     
     def __str__(self):

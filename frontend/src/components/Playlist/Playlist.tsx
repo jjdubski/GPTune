@@ -1,23 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Playlist.css';
-import { useNavigate } from 'react-router-dom';
 
 
 interface PlaylistProps {
     playlistID: string;
     title: string;
-    img : string;
+    image : string;
 }
 
-const Playlist: React.FC<PlaylistProps> = ({playlistID, title, img}) => {
-    const navigate = useNavigate();
+const Playlist: React.FC<PlaylistProps> = ({ playlistID, title, image}) => {
+
     const handleClick = () => {
-        navigate(`/playlist/${playlistID}`);
+        window.location.href = `/playlist/${playlistID}`;
     };
 
     return (
         <div className='playlist' onClick={handleClick}>
-            <img src={img} alt={`${title}`} />
+            <img src={image} alt={`${title}`} />
             <div className='playlist-info'>
                 <p>{title || 'Unknown'}</p>
             </div>

@@ -154,7 +154,7 @@ def populateSongs():
                     album=song['album']['name'],
                     release_date=release_date,
                     genre=", ".join(song.get('genres', [])),
-                    coverArt=song['album']['images'][0]['url'] if song['album']['images'] else None
+                    image=song['album']['images'][0]['url'] if song['album']['images'] else None
                 )
         return True
     except Exception as e:
@@ -174,7 +174,7 @@ def populatePlaylist():
                     playlistID=playlist['id'],
                     name=playlist['name'],
                     description=playlist.get('description', ''),  # Use get() with default value
-                    coverArt=playlist['images'][0]['url'] if playlist['images'] else None
+                    image=playlist['images'][0]['url'] if playlist['images'] else None
                 )
                 logger = logging.getLogger(__name__)
                 logger.info(playlist['images'][0]['url'])

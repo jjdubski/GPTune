@@ -12,7 +12,7 @@ if [ "$DATABASE" = "postgres" ]; then
 fi
 
 # Make migrations 
-python manage.py makemigrations
+python manage.py makemigrations --noinput
 
 python manage.py migrate
 

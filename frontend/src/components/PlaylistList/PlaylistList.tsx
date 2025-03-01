@@ -3,9 +3,9 @@ import './PlaylistList.css';
 import Playlist from '../Playlist/Playlist';
 
 interface Playlist {
-    id: string;
+    playlistID: string;
     name: string;
-    coverArt: string;
+    image: string;
 }
 
 interface PlaylistListProps {
@@ -46,8 +46,9 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ onSelectPlaylist }) => {
                     {playlists.map(playlist => (
                         <div className='playlist-container' key={playlist.id} onClick={() => onSelectPlaylist(playlist)}>
                             <Playlist
+                                playlistID={playlist.playlistID}
                                 title={playlist.name}
-                                img={playlist.coverArt}
+                                image={playlist.image}
                             />
                         </div>
                     ))}

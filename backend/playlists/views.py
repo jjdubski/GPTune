@@ -30,7 +30,7 @@ def AddPlaylists(request):
                 playlistID=playlist['id'],
                 name=playlist['name'],
                 description=playlist.get('description', ''),  # Use get() with default value
-                coverArt=playlist['images'][0]['url'] if playlist['images'] else None
+                image=playlist['images'][0]['url'] if playlist['images'] else None
             )
             logger = logging.getLogger(__name__)
             logger.info(playlist['images'][0]['url'])
@@ -44,27 +44,20 @@ def getSavedSongs(_):
     # if "spotify_token" not in request.session:
     #     return JsonResponse({"error": "User must be logged in to Spotify"}, status=401)
     
-    songs = []
+    liked_songs = []
     limit = 50
     offset = 0
     try:
         while True:
             results = sp.current_user_saved_tracks(limit=limit, offset=offset)
-            songs.extend(results['items'])
+            liked_songs.extend(results['items'])
             if len(results['items']) < limit:
                 break
             offset += limit
     except Exception as e:
         return JsonResponse({"error": f"Failed to get saved songs: {str(e)}"}, status=500)
-    playlist, _ = Playlist.objects.get_or_create(
-        name="Saved Songs",
-        defaults={
-            'description': 'Your saved songs from Spotify',
-            'coverArt': "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da8470d229cb865e8d81cdce0889"
-        }
-    )
     
-    for song in songs:
+    for song in liked_songs:
         track = song['track']
         release_date = track['album']['release_date']
         if release_date:
@@ -75,19 +68,26 @@ def getSavedSongs(_):
                 release_date = f"{release_date_parts[0]}-01-01"
             else:
                 release_date = None
+
+        song['track']['album']['release_date'] = release_date
                 
-        playlist.songs.create(
-            trackID=track['id'],
-            title=track['name'],
-            artist=track['artists'][0]['name'],
-            album=track['album']['name'],
-            release_date=release_date,
-            genre=", ".join(track.get('genres', [])),
-            coverArt=track['album']['images'][0]['url'] if track['album']['images'] else None
-        )
+        # trackID=track['id'],
+        # title=track['name'],
+        # artist=track['artists'][0]['name'],
+        # album=track['album']['name'],
+        # release_date=release_date,
+        # genre=", ".join(track.get('genres', [])),
+        # image=track['album']['images'][0]['url'] if track['album']['images'] else None
+    Playlist.objects.create(
+        playlistID="liked_songs",
+        name="Liked Songs",
+        description="Your saved songs from Spotify",
+        image="https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da8470d229cb865e8d81cdce0889",
+        songs = liked_songs
+    )
     
     return JsonResponse({"message": "Saved songs imported successfully"}, status=201)
-  
+
 #Not used  
 # @api_view(['GET'])
 # def getPlaylist(request):
@@ -102,7 +102,7 @@ def getSavedSongs(_):
 #         playlistList.append({
 #             'name': playlist['name'],
 #             'description': playlist.get('description', ''),
-#             'coverArt': playlist['images'][0]['url'] if playlist['images'] else None
+#             'image': playlist['images'][0]['url'] if playlist['images'] else None
 #         })
     
 #     return JsonResponse(playlistList, safe=False)
@@ -123,7 +123,7 @@ def getSavedSongs(_):
 #                     album=song['album']['name'],
 #                     release_date=song['album']['release_date'],
 #                     genre=", ".join(song.get('genres', [])),
-#                     coverArt=song['album']['images'][0]['url'] if song['album']['images'] else None
+#                     image=song['album']['images'][0]['url'] if song['album']['images'] else None
 #                 )
 #         return True
 #     except Exception as e:
@@ -146,7 +146,7 @@ def getPlaylistSongs(request, playlist_id):
                 'name': track['name'],
                 'artist': track['artists'][0]['name'],
                 'album': track['album']['name'],
-                'img': track['album']['images'][0]['url'] if track['album']['images'] else None,
+                'image': track['album']['images'][0]['url'] if track['album']['images'] else None,
                 'previewURL': track['preview_url']
             })
         return JsonResponse(songList, safe=False)
