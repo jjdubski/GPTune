@@ -149,7 +149,7 @@ const Search: React.FC = () => {
                     {/* make it work with the list of songs */}
                     {/* <SongList songs={songs}/> */}
                     <SongList />
-                </div>
+                </div>s
 
 
                 {/* Right Section: Popular Artists */}

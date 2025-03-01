@@ -1,4 +1,3 @@
-
 .search-page {
     display: flex;
     flex-direction: column;
@@ -9,7 +8,6 @@
     padding: 20px;
     font-family: Arial, sans-serif;
 }
-
 /* Top Bar */
 .top-bar {
     width: 100%;
@@ -42,24 +40,8 @@
     margin-bottom: 10px;
 }
 
-/* .song-list .song {
-    display: flex;
-    align-items: center;
-    padding: 12px;
-    background-color: #222;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-} */
-/* 
-.song-list .song:hover,
-.song-list .song.highlighted {
-    background-color: #3b945e;
-    border: 2px solid #8ed081;
-} */
 
-/* Right: Artists Section */
+
 .artist-section {
     width: 60%;
     text-align: center;
