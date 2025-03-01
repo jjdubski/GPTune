@@ -9,6 +9,7 @@ import { use, useEffect, useState } from 'react'
 import SideMenu from './components/SideMenu/SideMenu.tsx'
 import Search from './pages/Search.tsx'
 import SpotifyPlayer from 'react-spotify-web-playback';
+import PlaylistDetails from './pages/PlaylistDetails.tsx'
 
 
 function App() { 
@@ -79,6 +80,9 @@ function App() {
           <Route path="/playlists" element={<Playlists />} />
           <Route path="/add-to-playlist" element={<AddtoPlaylist />} />
           <Route path="/search" element={<Search />} />
+          
+          <Route path="/playlist/:playlistID" element={<PlaylistDetails />} />
+          
           {/* <Route path="logout" element={<Logout />} /> */}
           {/* <Route path='/discover' element={<Discover />} /> */}
           {/* <Route path='/this-or-that' element={<ThisOrThat />} /> */}

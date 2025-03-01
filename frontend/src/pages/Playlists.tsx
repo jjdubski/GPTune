@@ -75,7 +75,7 @@ const Playlists: React.FC = () => {
             <div className="refresh-button-container">
                 <RefreshButton onRefresh={handleRefresh} />
             </div>
-            <PlaylistList />
+            
 
             <h2>Your Spotify Playlists</h2>
             
@@ -88,6 +88,7 @@ const Playlists: React.FC = () => {
                     {playlists.map(playlist => (
                         <Playlist
                             key={playlist.id}
+                            playlistID = {playlist.playlistID}
                             title={playlist.name}
                             img={playlist.coverArt}
                         />
