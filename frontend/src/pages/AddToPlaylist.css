@@ -37,18 +37,6 @@
     margin-top: 35px;
 }
 
-/* Playlist Scroll */
-.scroll {
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    align-items: center;
-    margin-top: 20px;
-    max-height: 72vh; /* Adjusted height for better spacing */
-    /* padding-right: 10px; */
-    width: 100%;
-}
-
 /* .playlist-item {
     display: flex;
     align-items: center;
