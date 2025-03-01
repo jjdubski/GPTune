@@ -4,8 +4,8 @@ import './Artist.css';
 interface ArtistProps {
     name: string;
     image: string;
-    genres: string[];
-    popularity: number;
+    genres?: string[];
+    popularity?: number;
 }
 
 const Artist: React.FC<ArtistProps> = ({ name, image, genres, popularity }) => {

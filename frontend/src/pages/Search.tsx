@@ -12,7 +12,7 @@ interface Artist {
     id: number;
     name: string;
     image: string;
-    genres: string[];
+    genres?: string[];
     popularity: number;
 }
 
@@ -135,21 +135,24 @@ const Search: React.FC = () => {
                         <SpotifyButton title="Link Spotify" img="./SpotifyButton.png" />
                     </div>
                 )}
+                     <h2 className="above-prompt">"Not what you are looking for? Enter a new prompt."</h2>
+
                  <SearchBar onSearch={() => console.log('Search button clicked!')} />
 
             {/* Search Bar */}
                
 
             {/* Main Content */}
+            
             <div className="search-page-container">
                 {/* Left Section: Song List */}
-                <div className="-song-list-section">
+                <div className="song-list-section">
                     <h2 className="playlist-title">"songs for a road trip"</h2>
                     <RefreshButton onRefresh={fetchSongsAndArtists} />
                     {/* make it work with the list of songs */}
                     {/* <SongList songs={songs}/> */}
                     <SongList />
-                </div>s
+                </div>
 
 
                 {/* Right Section: Popular Artists */}

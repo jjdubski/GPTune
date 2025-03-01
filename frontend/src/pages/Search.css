@@ -21,6 +21,7 @@
     display: flex;
     width: 100%;
     flex-direction: row;
+    margin-top: auto;
 }
 
 /* Left: Song List */
@@ -74,3 +75,9 @@
     transform: scale(1.1);
 }
 
+.above-prompt {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
