@@ -1,7 +1,7 @@
 /* Main container - Playlists on the left, Recommended Songs on the right */
 .add-to-playlist-container {
     display: flex;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     flex-direction: row;
@@ -30,7 +30,7 @@
     margin-left: 0;
 }
 
-.section-title {
+.playlist-section-title {
     font-size: 20px;
     font-weight: bold;
     color: white;
@@ -78,65 +78,6 @@
     font-weight: 500;
 } */
 
-.song-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-    padding-bottom: 10px;
-    text-align: left;
-}
-
-/* Scrollable Song Section */
-.song-scroll {
-    display: flex;
-    flex-direction: column;
-    padding-right: 10px;
-} 
-
-/* Song Item */
-.song-item {
-    display: flex;
-    align-items: right;
-    justify-content: space-between;
-    padding: 12px;
-    margin: 5px 0;
-    border-radius: 10px;
-    background: linear-gradient(to right, #2a2a2a, #1c1c1c);
-    transition: background 0.3s ease-in-out, transform 0.2s;
-    width: 100%;
-}
-
-.song-item:hover {
-    background: #3a3a3a;
-    transform: scale(1.02);
-}
-
-/* Song Image */
-.song-image {
-    width: 60px;
-    height: 60px;
-    border-radius: 5px;
-    margin-right: 15px;
-}
-
-/* Song Details */
-.song-details {
-    flex-grow: 1;
-    color: white;
-    display: flex;
-    flex-direction: column;
-}
-
-.song-name {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.song-artist {
-    font-size: 14px;
-    color: #aaa;
-}
-
 /* Error Message */
 .error-message {
     color: #ff6b6b;
@@ -152,11 +93,21 @@
     /* position: absolute; */
     /* right: 0;
     bottom: 0; */
-    flex-grow: 0;
+    /* flex-grow: 0; */
     height: 100vh;
     background-color: var(--background);
     padding: 20px;
     margin-bottom: 5px;
-    align-items: flex-start;
+    align-items: center;
+    gap: 20px;
     /* float: right; */
+}
+
+.add-songs-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    margin: 35px 0 0 30px;
+    text-align: left;
+    align-self: flex-start;
 }

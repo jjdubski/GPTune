@@ -11,16 +11,14 @@ interface SongProps {
 const Song: React.FC<SongProps> = ({title, artist, album, image}) => {
     return (
         <div className='song'>
-            <img src={image} alt={`${title} album cover`} />
+            <img className="song-image" src={image} alt={`${title} album cover`} />
             <div className='song-info'>
-                <p>Title: {title}</p>
-                <p>Artist: {artist}</p>
-                <p>Album: {album}</p>
+                <p className='song-title'>{title}</p>
+                <p className='song-artist'>{artist}</p>
+                <p className='song-album'>{album}</p>
             </div>
-           
         </div>
     );
 };
-   
 
 export default Song;
