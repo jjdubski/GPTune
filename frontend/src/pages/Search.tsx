@@ -127,31 +127,30 @@ const Search: React.FC = () => {
     return (
         <div className="search-page">
             {/* Top Bar - User or Spotify Button */}
-            <div className="top-bar">
                 {currentUser.email ? (
+        
                     <User username={currentUser.username} image={currentUser.image} />
                 ) : (
                     <div className="spotify-button-container">
                         <SpotifyButton title="Link Spotify" img="./SpotifyButton.png" />
                     </div>
                 )}
-            </div>
+                 <SearchBar onSearch={() => console.log('Search button clicked!')} />
 
             {/* Search Bar */}
-            <div className="search-bar-container">
-                <SearchBar onSearch={() => console.log('Search button clicked!')} />
-            </div>
+               
 
             {/* Main Content */}
-            <div className="content-container">
+            <div className="search-page-container">
                 {/* Left Section: Song List */}
-                <div className="song-list-container">
+                <div className="-song-list-section">
                     <h2 className="playlist-title">"songs for a road trip"</h2>
                     <RefreshButton onRefresh={fetchSongsAndArtists} />
                     {/* make it work with the list of songs */}
                     {/* <SongList songs={songs}/> */}
                     <SongList />
                 </div>
+
 
                 {/* Right Section: Popular Artists */}
                 <div className="artist-section">
