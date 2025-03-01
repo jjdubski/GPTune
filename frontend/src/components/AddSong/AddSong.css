@@ -6,6 +6,7 @@
     padding: 10px;
     background-color: transparent;
     border: 1px solid var(--secondary);
+    background-color: #3a6b3e; 
   }
   /* .song{
     display: flex;

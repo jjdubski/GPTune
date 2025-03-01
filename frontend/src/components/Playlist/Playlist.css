@@ -21,7 +21,8 @@ div {
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: var(--background); /* close to the color we chose in wireframe */
+    /* background-color: var(--background); close to the color we chose in wireframe */
+    background-color: #4c8a50; /* close to the color we chose in wireframe */
     padding: 1rem;
     border: 1px solid black;
     border-radius: 10px; 

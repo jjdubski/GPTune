@@ -19,6 +19,7 @@ div {
     justify-content: space-around;
     align-items: center;
     padding: 1rem;
+    background-color: #4c8a50;
     border: 1px solid black;
     border-radius: 10px; 
     height : 150px;
