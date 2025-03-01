@@ -88,7 +88,7 @@ const Playlists: React.FC = () => {
                     {playlists.map(playlist => (
                         <Playlist
                             key={playlist.id}
-                            playlistID = {playlist.playlistID}
+                            id = {playlist.id}
                             title={playlist.name}
                             img={playlist.coverArt}
                         />

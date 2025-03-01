@@ -4,15 +4,19 @@ import { useNavigate } from 'react-router-dom';
 
 
 interface PlaylistProps {
-    playlistID: string;
+    id: number;
     title: string;
     img : string;
 }
 
-const Playlist: React.FC<PlaylistProps> = ({playlistID, title, img}) => {
+const Playlist: React.FC<PlaylistProps> = ({id, title, img}) => {
     const navigate = useNavigate();
-    const handleClick = () => {
-        navigate(`/playlist/${playlistID}`);
+    const handleClick: React.MouseEventHandler<HTMLDivElement> = () => {
+        if (id !== undefined) {
+            navigate(`/playlist/${id}`);
+        } else {
+            console.error('Playlist id is undefined');
+        }
     };
 
     return (

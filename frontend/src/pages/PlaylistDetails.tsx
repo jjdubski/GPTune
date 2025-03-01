@@ -14,12 +14,12 @@ interface Song {
 }   
 
 const PlaylistDetails: React.FC = () => {
-    const { playlistID } = useParams<{ playlistID: string }>();
+    const { id } = useParams<{ id: string }>();
     const [playlist, setPlaylist] = useState<Song[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch(`http://localhost:8000/playlistAPI/getPlaylistSongs/${playlistID}/`)
+        fetch(`http://localhost:8000/playlistAPI/getPlaylistSongs/${id}/`)
             .then(response => {
                 console.log(response);
                 if (!response) {
@@ -40,7 +40,7 @@ const PlaylistDetails: React.FC = () => {
                 console.error('Error fetching Playlist:', error);
                 setError('Failed to fetch Playlist. Please try again later.' + error);
             });
-    }, [playlistID]);
+    }, [id]);
 
     return (
         <>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './PlaylistList.css';
 import Playlist from '../Playlist/Playlist';
 
 interface Playlist {
-    id: string;
+    id: number;
     name: string;
     coverArt: string;
 }
@@ -15,6 +16,7 @@ interface PlaylistListProps {
 const PlaylistList: React.FC<PlaylistListProps> = ({ onSelectPlaylist }) => {
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch('http://localhost:8000/playlistAPI/playlists/')
@@ -35,6 +37,11 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ onSelectPlaylist }) => {
             });
     }, []);
 
+    const handlePlaylistClick = (playlist: Playlist) => {
+        console.log('Playlist clicked:', playlist);
+        navigate(`/playlist/${playlist.id}`);
+    }
+
     return (
         <>
             {error ? (
@@ -44,8 +51,9 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ onSelectPlaylist }) => {
             ) : (
                 <div className="playlist-list">
                     {playlists.map(playlist => (
-                        <div className='playlist-container' key={playlist.id} onClick={() => onSelectPlaylist(playlist)}>
+                        <div className='playlist-container' key={playlist.id} onClick={() => handlePlaylistClick(playlist)}>
                             <Playlist
+                                id={playlist.id}
                                 title={playlist.name}
                                 img={playlist.coverArt}
                             />
