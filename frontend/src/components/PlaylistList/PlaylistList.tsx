@@ -43,15 +43,17 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ onSelectPlaylist }) => {
                 <p>No playlists available</p>
             ) : (
                 <div className="playlist-list">
-                    {playlists.map(playlist => (
-                        <div className='playlist-container' key={playlist.id} onClick={() => onSelectPlaylist(playlist)}>
-                            <Playlist
-                                playlistID={playlist.playlistID}
-                                title={playlist.name}
-                                image={playlist.image}
-                            />
-                        </div>
-                    ))}
+                    {playlists
+                        .sort((a, b) => (a.playlistID === 'liked_songs' ? -1 : b.playlistID === 'liked_songs' ? 1 : 0))
+                        .map(playlist => (
+                            <div className='playlist-container' key={playlist.playlistID} onClick={() => onSelectPlaylist(playlist)}>
+                                <Playlist
+                                    playlistID={playlist.playlistID}
+                                    title={playlist.name}
+                                    image={playlist.image}
+                                />
+                            </div>
+                        ))}
                 </div>
             )}
         </>
