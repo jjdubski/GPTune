@@ -174,7 +174,7 @@ def getPlaylistSongs(request, playlist_id):
             songList = []
             for song in songs:
                 songList.append({
-                    'name': song.title,
+                    'title': song.title,
                     'artist': song.artist,
                     'album': song.album,
                     'image': song.image,
@@ -188,7 +188,7 @@ def getPlaylistSongs(request, playlist_id):
             for song in songs:
                 track = song['track']
                 songList.append({
-                    'name': track['name'],
+                    'title': track['name'],
                     'artist': track['artists'][0]['name'],
                     'album': track['album']['name'],
                     'image': track['album']['images'][0]['url'] if track['album']['images'] else None,

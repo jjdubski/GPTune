@@ -55,8 +55,8 @@ const PlaylistDetails: React.FC = () => {
                 <p>No songs available</p>
             ) : (
                 <div>
-                    {playlist.map((song) => (
-                        <div className="song-item" key={song.id}>
+                    {playlist.map((song, index) => (
+                        <div className="song-item" key={`${index}`}>
                             <Song title={song.title} artist={song.artist} album={song.album} image={song.image} />
                         </div>
                     ))}

@@ -110,7 +110,7 @@ const Home: React.FC = () => {
                 username: data.user.display_name || '',
                 image: data.user.image || '/spotify-logo.png'
             });
-            console.log(data);
+            console.log("User:", data);
             setIsLoading(false);
         });
         handleGenerateResponse();
