@@ -25,15 +25,15 @@
     display: flex;
     width: 100%;
     flex-direction: row;
-<<<<<<< HEAD
-    margin-top: auto;
-=======
     position: fixed;
     top: 0;
     left: 0;
->>>>>>> e7b0b1f0cdfad81cafcc69e90e2aaf929c1c45b6
+    
 }
-
+.search-page .search-bar {
+ 
+    margin-top: 0px;
+}
 /* Left: Song List */
 .song-list-section {
     width: 40%;
@@ -105,18 +105,16 @@
     transform: scale(1.1);
 }  */
 
-<<<<<<< HEAD
-.above-prompt {
-    margin-top: 20px;
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 0;
-}
-=======
 .small-text {
     font-size: 14px;
     color: white;
     opacity: 0.8;
     margin-top: 5px;
 }
->>>>>>> e7b0b1f0cdfad81cafcc69e90e2aaf929c1c45b6
+.above-prompt {
+    margin-top: 20px;
+    font-size: 18px;
+    color: white;
+    opacity: 0.8;
+    margin-bottom: 0%;
+}
