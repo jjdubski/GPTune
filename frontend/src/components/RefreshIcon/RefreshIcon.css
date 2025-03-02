@@ -3,9 +3,28 @@
     border: none;
     cursor: pointer;
     padding: 0;
+    background-color: transparent;
+    
   }
-  
-  .refresh-icon {
+
+  .refresh-icon { 
     width: 40px;
     height: 40px;
+    display: inline-block;
+    /* animation: spin 2s none; */
   }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+/* 
+  .refresh-button:active .refresh-icon {
+    animation: spin 2s linear;
+  } */
+

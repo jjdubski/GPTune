@@ -12,8 +12,8 @@ interface Artist {
     id: number;
     name: string;
     image: string;
-    genres: string[];
-    popularity: number;
+    genres?: string[];
+    popularity?: number;
 }
 
 const Search: React.FC = () => {
@@ -74,7 +74,7 @@ const Search: React.FC = () => {
     });
 
     const fetchSongsAndArtists = () => {
-        return 
+        
     }
 
     // const fetchSongsAndArtists = () => {
@@ -127,52 +127,52 @@ const Search: React.FC = () => {
     return (
         <div className="search-page">
             {/* Top Bar - User or Spotify Button */}
-            <div className="top-bar">
                 {currentUser.email ? (
+        
                     <User username={currentUser.username} image={currentUser.image} />
                 ) : (
                     <div className="spotify-button-container">
                         <SpotifyButton title="Link Spotify" img="./SpotifyButton.png" />
                     </div>
                 )}
-            </div>
-
-            {/* Search Bar */}
-            <div className="search-bar-container">
-                <SearchBar onSearch={() => console.log('Search button clicked!')} />
-            </div>
 
             {/* Main Content */}
-            <div className="content-container">
+            <div className="search-page-container">
                 {/* Left Section: Song List */}
-                <div className="song-list-container">
-                    <h2 className="playlist-title">"songs for a road trip"</h2>
-                    <RefreshButton onRefresh={fetchSongsAndArtists} />
+                <div className="song-list-section">
+                    <div className="song-list-section-top">
+                        <RefreshButton />
+                        <h2 className="song-list-section-title">"songs for a road trip"</h2>
+                        <RefreshButton />
+                    </div>
                     {/* make it work with the list of songs */}
                     {/* <SongList songs={songs}/> */}
-                    <SongList />
+                    <div className="scroll">
+                        <SongList />
+                    </div>
                 </div>
-
                 {/* Right Section: Popular Artists */}
                 <div className="artist-section">
-                    <h2 className="popular-artists-title">Popular Artists <span className="small-text">* based on your prompt</span></h2>
-                    <div className="artist-grid">
-                        {error ? (
-                            <p className="error-text">{error}</p>
-                        ) : artists.length === 0 ? (
-                            <p className="empty-text">No artists found</p>
-                        ) : (
-                            artists.map((artist, index) => (
-                                <Artist
-                                    key={index}
-                                    name={artist.name}
-                                    image={artist.image}
-                                    genres={artist.genres}
-                                    popularity={artist.popularity}
-                                />
-                            ))
-                        )}
-                    </div>
+                    <h2 className="above-prompt">Not what you are looking for? Enter a new prompt.</h2>
+                    <SearchBar onSearch={() => console.log('Search button clicked!')} />
+                        <h2 className="popular-artists-title">Popular Artists <span className="small-text">* based on your prompt</span></h2>
+                        <div className="artist-grid">
+                            {error ? (
+                                <p className="error-text">{error}</p>
+                            ) : artists.length === 0 ? (
+                                <p className="empty-text">No artists found</p>
+                            ) : (
+                                artists.map((artist, index) => (
+                                    <Artist
+                                        key={index}
+                                        name={artist.name}
+                                        image={artist.image}
+                                        genres={artist.genres}
+                                        popularity={artist.popularity}
+                                    />
+                                ))
+                            )}
+                        </div>
                 </div>
             </div>
         </div>

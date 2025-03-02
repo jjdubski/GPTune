@@ -29,7 +29,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     <div className="search-bar">
       <input
         type="text"
-        placeholder="What music do you want to find?"
+        placeholder="Enter a prompt..."
         value={query}
         className="search-input"
         onKeyDown = {handleKeyPress}
