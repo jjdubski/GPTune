@@ -10,6 +10,7 @@ interface Song {
     album: string;
     releaseDate: string;
     image: string;
+    uri: string;
 }
 
 interface SongListProps {
@@ -57,7 +58,7 @@ const SongList: React.FC<SongListProps> = ({ playlistID }) => {
                         <p>Artist: {song.artist}</p>
                         <p>Album: {song.album}</p>
                         <p>Release Date: {song.releaseDate}</p> */}
-                        <Song title={song.title} artist={song.artist} album={song.album} image={song.image} />
+                        <Song title={song.title} artist={song.artist} album={song.album} image={song.image} uri= {song.uri} />
                     </div>
                 ))
             )}

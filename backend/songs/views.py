@@ -1,3 +1,4 @@
+import json
 from urllib import response
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -7,6 +8,7 @@ from songs.serializers import SongSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.views.decorators.csrf import csrf_exempt
 
 
 from utils.spotifyClient import sp
@@ -59,3 +61,27 @@ def AddSongs(request):
                 )
     return Response({"message": "Data successfully added!"}, status=201)
 
+
+#https://spotipy.readthedocs.io/en/2.25.1/#spotipy.client.Spotify.start_playback
+@csrf_exempt
+def playSong(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            uri = data.get('uri',"")
+            sp.start_playback(uris=[f"spotify:track:{uri}"])
+            
+            return JsonResponse({"message": "Song is playing"}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON format"}, status=400)
+    return JsonResponse({"error": "Invalid request method"}, status=405)           
+            
+        
+        
+        
+    #     return JsonResponse({"message": "Song is playing"}, status=200)
+    # else:
+    #     return JsonResponse({"error": "Invalid request"}, status=400)
+    
+        
+            

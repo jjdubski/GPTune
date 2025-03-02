@@ -97,13 +97,26 @@ def login(request):
     return redirect(auth_url)
 
 def logout(request):
-    request.session.flush()
+    try:
+        request.session.flush()
+    except Exception as e:
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error logging out: {str(e)}")
+        #return JsonResponse({"error": "Failed to log out"}, status=500)
     # log user out of Spotify
     sp.auth_manager.cache_handler.delete_cached_token()
     #cleanup database
-    Song.objects.all().delete()
-    Playlist.objects.all().delete()
-
+    try:
+        Song.objects.all().delete()
+        Playlist.objects.all().delete()
+    except Exception as e:
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error cleaning up database: {str(e)}")
+    try:
+        Playlist.objects.all().delete()
+    except Exception as e:
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error cleaning up database: {str(e)}")
     return redirect('http://localhost:3000/')
 
 def callback(request):
@@ -155,7 +168,8 @@ def populateSongs():
                     album=song['album']['name'],
                     release_date=release_date,
                     genre=", ".join(song.get('genres', [])),
-                    image=song['album']['images'][0]['url'] if song['album']['images'] else None
+                    image=song['album']['images'][0]['url'] if song['album']['images'] else None,
+                    uri = song['uri']
                 )
         return True
     except Exception as e:
