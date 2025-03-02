@@ -11,14 +11,14 @@ client = openai.OpenAI(api_key=openai.api_key)
 logger = logging.getLogger(__name__)
 
 
-def process_json(output):
-    """Cleans and parses OpenAI's JSON response."""
-    output = output.strip().strip("```json").strip("```").strip()
-    try:
-        return json.loads(output)
-    except json.JSONDecodeError:
-        print(f"Error parsing JSON response: {output}")
-        return [{"title": "Unknown", "artist": "Unknown", "album": "Unknown"}]
+# def process_json(output):
+#     """Cleans and parses OpenAI's JSON response."""
+#     output = output.strip().strip("```json").strip("```").strip()
+#     try:
+#         return json.loads(output)
+#     except json.JSONDecodeError:
+#         print(f"Error parsing JSON response: {output}")
+#         return [{"title": "Unknown", "artist": "Unknown", "album": "Unknown"}]
 
 def prompt_for_song(prompt, num_runs):
     message = f"""Give me {num_runs} songs you recommend. Use this as your reference: Only {prompt},\n 
@@ -41,7 +41,7 @@ def prompt_for_song(prompt, num_runs):
             output = response.choices[0].message.content
             if not output.strip():
                 raise ValueError("Received empty response from GPT")
-            return process_json(output)  
+            return output  
         except Exception as e:
             print(f"GPT Error: {e}")
             if "rate_limit_exceeded" in str(e):

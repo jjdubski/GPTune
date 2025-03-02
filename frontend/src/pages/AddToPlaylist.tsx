@@ -85,7 +85,36 @@ const AddToPlaylist: React.FC = () => {
         image: ''
     });
     const [songs, setSongs] = useState<Song[]>([])
+    const handleGenerateResponse = async () => {
+        // return // to stop prompting for now
+        const requestData = {
+            prompt: 'give me a song to listen on a long drive',
+            num_runs: 5
+        };
+        try {
+            const res = await fetch('http://127.0.0.1:8000/getRecommendations/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
 
+            const data = await res.json();
+            if (res.ok) {
+                // var output = "";
+                // output+= data.response.title 
+                // output+= data.response.artist
+                // output+= data.response.album
+                // response.forEach(function )
+                setSongs(data.response);
+            } else {
+                console.error('Error:', data.error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
     //for testing
     useEffect(() => {
         setSong({
@@ -94,6 +123,7 @@ const AddToPlaylist: React.FC = () => {
             album: "(Pronounced 'Lĕh-'nérd 'Skin-'nérd)",
             image: "https://i.scdn.co/image/ab67616d0000b273128450651c9f0442780d8eb8"
         })
+        handleGenerateResponse();
     }, []);
 
     useEffect(() => {
