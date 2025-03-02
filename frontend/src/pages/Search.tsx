@@ -74,7 +74,7 @@ const Search: React.FC = () => {
     });
 
     const fetchSongsAndArtists = () => {
-        return 
+        
     }
 
     // const fetchSongsAndArtists = () => {
@@ -135,47 +135,44 @@ const Search: React.FC = () => {
                         <SpotifyButton title="Link Spotify" img="./SpotifyButton.png" />
                     </div>
                 )}
-                 <h2 className="above-prompt">"Not what you are looking for? Enter a new prompt."</h2>
-                 <SearchBar onSearch={() => console.log('Search button clicked!')} />
-
-            {/* Search Bar */}
-               
 
             {/* Main Content */}
-            
             <div className="search-page-container">
                 {/* Left Section: Song List */}
-                <div className="song-list-section-top">
-                        <RefreshButton onRefresh={fetchSongsAndArtists} />
+                <div className="song-list-section">
+                    <div className="song-list-section-top">
+                        <RefreshButton />
                         <h2 className="song-list-section-title">"songs for a road trip"</h2>
-                        <RefreshButton onRefresh={fetchSongsAndArtists} />
+                        <RefreshButton />
                     </div>
                     {/* make it work with the list of songs */}
                     {/* <SongList songs={songs}/> */}
                     <div className="scroll">
                         <SongList />
                     </div>
+                </div>
                 {/* Right Section: Popular Artists */}
                 <div className="artist-section">
-                <SearchBar onSearch={() => console.log('Search button clicked!')} />
-                    <h2 className="popular-artists-title">Popular Artists <span className="small-text">* based on your prompt</span></h2>
-                    <div className="artist-grid">
-                        {error ? (
-                            <p className="error-text">{error}</p>
-                        ) : artists.length === 0 ? (
-                            <p className="empty-text">No artists found</p>
-                        ) : (
-                            artists.map((artist, index) => (
-                                <Artist
-                                    key={index}
-                                    name={artist.name}
-                                    image={artist.image}
-                                    genres={artist.genres}
-                                    popularity={artist.popularity}
-                                />
-                            ))
-                        )}
-                    </div>
+                    <h2 className="above-prompt">Not what you are looking for? Enter a new prompt.</h2>
+                    <SearchBar onSearch={() => console.log('Search button clicked!')} />
+                        <h2 className="popular-artists-title">Popular Artists <span className="small-text">* based on your prompt</span></h2>
+                        <div className="artist-grid">
+                            {error ? (
+                                <p className="error-text">{error}</p>
+                            ) : artists.length === 0 ? (
+                                <p className="empty-text">No artists found</p>
+                            ) : (
+                                artists.map((artist, index) => (
+                                    <Artist
+                                        key={index}
+                                        name={artist.name}
+                                        image={artist.image}
+                                        genres={artist.genres}
+                                        popularity={artist.popularity}
+                                    />
+                                ))
+                            )}
+                        </div>
                 </div>
             </div>
         </div>

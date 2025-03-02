@@ -28,11 +28,6 @@
     position: fixed;
     top: 0;
     left: 0;
-    
-}
-.search-page .search-bar {
- 
-    margin-top: 0px;
 }
 /* Left: Song List */
 .song-list-section {
@@ -58,6 +53,7 @@
 
 .song-list-section-top .refresh-button{
     margin: 0 20px 0 auto;
+    /* animation: spin 2s linear; */
 }
 
 .song-list-section-title {
@@ -76,6 +72,7 @@
 }
 
 .artist-section .search-bar{
+    margin-top: 15px;
     width: 60%;
     height: 50px;
 }
@@ -106,15 +103,14 @@
 }  */
 
 .small-text {
-    font-size: 14px;
+    font-size: 0.5em;
     color: white;
     opacity: 0.8;
     margin-top: 5px;
 }
 .above-prompt {
-    margin-top: 20px;
-    font-size: 18px;
+    margin: 30px 0 0 10px;
+    font-size: 0.9em;
     color: white;
     opacity: 0.8;
-    margin-bottom: 0%;
 }
