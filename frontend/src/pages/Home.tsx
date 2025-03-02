@@ -47,7 +47,7 @@ const Home: React.FC = () => {
     // ,[])
 
     const handleGenerateResponse = async () => {
-        return // to stop prompting for now
+        // return // to stop prompting for now
         const requestData = {
             prompt: 'give me a random color',
             num_runs: 1
@@ -63,7 +63,11 @@ const Home: React.FC = () => {
 
             const data = await res.json();
             if (res.ok) {
-                setResponse(data.response);
+                var output = "";
+                output+= data.response.title 
+                output+= data.response.artist
+                output+= data.response.album
+                setResponse(output);
             } else {
                 console.error('Error:', data.error);
             }
@@ -141,10 +145,10 @@ const Home: React.FC = () => {
                         <HomeTile title="This or That?" img="./ThisorThat.png" />
                     </Link>
                 </div>
-                {/* <div>
+                <div>
                     <h3>Generated Response:</h3>
                     <p>{response}</p>
-                </div> */}
+                </div>
                 {/* <p>The date is  {currentDate} and the time is {currentTime}.</p> */}
                 {/* <p>Logged in as: {currentUser.email}</p> */}
             </div> ) :

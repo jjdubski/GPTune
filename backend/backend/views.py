@@ -84,7 +84,7 @@ def generate_response(request):
             logger.info(f"Raw OpenAI Response: {response}")
 
             # Return the processed AI response inside the original structure
-            return JsonResponse(response)
+            return JsonResponse({"response": response})
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
     return JsonResponse({"error": "Invalid request method"}, status=405)
