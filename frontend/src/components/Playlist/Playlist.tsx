@@ -8,10 +8,12 @@ interface PlaylistProps {
     image : string;
 }
 
+
+
 const Playlist: React.FC<PlaylistProps> = ({ playlistID, title, image}) => {
 
     const handleClick = () => {
-        window.location.href = `/playlist/${playlistID}`;
+        //window.location.href = `/playlist/${playlistID}`;
     };
 
     return (

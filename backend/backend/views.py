@@ -17,10 +17,7 @@ logger = logging.getLogger(__name__)
 
 unknown_songs = set()
 song_cache = {}
-top_ten_tracks = {}
-top_ten_artists = {}
-saved_tracks = {}
-country = ""
+
 # @csrf_exempt
 # def recommend_songs(request):
 #     if request.method == "POST":
@@ -84,7 +81,12 @@ def getRecommendations(request):
             data = json.loads(request.body.decode("utf-8"))
             prompt = data.get("prompt", "")
             num_runs = data.get("num_runs", 5)
-            user_info = get_user_info()
+            userInfo = data.get("userInfo", "False")
+            if userInfo == "True":
+                user_info = get_user_info()
+            else:
+                user_info = None
+            # print("\n\nuser_info:",user_info)
             response = run_prompt (prompt, num_runs, user_info)
             
             # Log the raw AI response
@@ -98,18 +100,13 @@ def getRecommendations(request):
                     "artist": trackInfo['artists'][0]['name'],
                     "album": trackInfo['album']['name'],
                     "image": trackInfo['album']['images'][0]['url']
-
                 }
-            print (songs)
+            # print (songs)
             # Return the processed AI response inside the original structure
-            return JsonResponse({"response": response})
+            return JsonResponse({"songs": songs})
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
     return JsonResponse({"error": "Invalid request method"}, status=405)
-
-
-
-
 
 def generate_response(prompt, num_runs=10):
     # global response_index 
@@ -162,7 +159,9 @@ def generate_response(prompt, num_runs=10):
 
 
 def run_prompt(prompt, num_runs, user_info):
-   
+    if user_info is None or user_info != "True":
+        return generate_response(prompt, num_runs)
+    
     top_ten_tracks = [track['name'] for track in user_info['top_ten_tracks']['items']]
     prompt += f"\nTop 10 Songs: {top_ten_tracks},"
 
@@ -192,16 +191,12 @@ def get_user_info():
         user = sp.current_user()
         top_ten_tracks = sp.current_user_top_tracks(limit=10)
         top_ten_artists = sp.current_user_top_artists(limit=10)
-        followed_artists = sp.current_user_followed_artists(limit=10)
-        saved_albums = sp.current_user_saved_albums(limit=50)
         saved_tracks = sp.current_user_saved_tracks(limit=50)
         country = sp.current_user()['country']
         userInfo = {
             "user": user,
             "top_ten_tracks": top_ten_tracks,
             "top_ten_artists": top_ten_artists,
-            "followed_artists": followed_artists,
-            "saved_albums": saved_albums,
             "saved_tracks": saved_tracks,
             "country": country
         }
@@ -327,8 +322,8 @@ def populatePlaylist():
                     description=playlist.get('description', ''),  # Use get() with default value
                     image=playlist['images'][0]['url'] if playlist['images'] else None
                 )
-                logger = logging.getLogger(__name__)
-                logger.info(playlist['images'][0]['url'])
+                # logger = logging.getLogger(__name__)
+                # logger.info(playlist['images'][0]['url'])
         return True
     except Exception as e:
         logger = logging.getLogger(__name__)
