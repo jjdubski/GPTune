@@ -87,8 +87,12 @@
     padding: 20px;
     margin-bottom: 5px;
     align-items: center;
-    gap: 20px;
+    /* gap: 10px; */
     /* float: right; */
+}
+
+.add-songs-container .scroll{
+    gap: 1vh;
 }
 
 .add-songs-title {

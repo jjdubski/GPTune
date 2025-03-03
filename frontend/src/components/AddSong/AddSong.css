@@ -2,11 +2,17 @@
     display: flex;
     flex-direction: row;
     width: 90%;
+    height: fit-content;
     align-items: flex-start;
     padding: 10px;
     background-color: transparent;
     border: 1px solid var(--secondary);
   }
+
+  .add-song .song-title{ 
+    font-size: clamp(0.8em, 1.5vw, 1.2em);
+  }
+
   /* .song{
     display: flex;
     justify-content: space-around;
@@ -30,8 +36,10 @@
   }
 
   .song-image{
-    width: 100px;
-    height: auto; 
+    width: clamp(50px, 10vh, 100px);
+    height: fit-content;
+    /* height: clamp(50px, 10vh, 100px); */
+    aspect-ratio: 1/1;
     object-fit: cover;
     /* border-radius: 10px; */
   }
