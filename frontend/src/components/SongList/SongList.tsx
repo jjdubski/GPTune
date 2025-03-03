@@ -33,7 +33,7 @@ const SongList: React.FC<SongListProps> = ({ playlistID }) => {
                 return response.json()
             })
             .then(data => {
-                console.log('Data received:', data)
+                // console.log('Data received:', data)
                 setSongs(data)
                 setError(null)
             })
