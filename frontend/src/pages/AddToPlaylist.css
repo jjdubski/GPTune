@@ -91,6 +91,17 @@
     /* float: right; */
 }
 
+.add-songs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Pushes button to the right */
+  width: 100%;
+}
+
+.add-songs-title {
+  margin: 0;
+}
+
 .add-songs-title {
     font-size: 20px;
     font-weight: bold;

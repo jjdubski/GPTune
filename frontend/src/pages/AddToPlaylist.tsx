@@ -4,6 +4,7 @@ import AddSong from '../components/AddSong/AddSong';
 import PlaylistList from '../components/PlaylistList/PlaylistList';
 // import RecommendedSongList from '../components/RecommendedSongList/RecommendedSongList';
 import Song from '../components/Song/Song';
+import RefreshButton from '../components/RefreshIcon/RefreshIcon';
 
 // interface Playlist {
 //     id: number;
@@ -146,7 +147,10 @@ const AddToPlaylist: React.FC = () => {
                 </div>
             </div>
             <div className="add-songs-container">
-                <h1 className='add-songs-title'>Recommended Songs</h1>
+            <div className="add-songs-header">
+                    <h1 className="add-songs-title">Recommended Songs</h1>
+                    <RefreshButton styles={{ width: "30px", height: "30px" }} />
+            </div>
                 {songs.map((song, index) => (
                     <AddSong key={index} song={song} />
                 ))}

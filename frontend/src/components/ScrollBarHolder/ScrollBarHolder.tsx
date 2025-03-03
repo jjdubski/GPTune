@@ -1,25 +1,31 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import ScrollBar from "./ScrollBar"; 
 import "./ScrollBarHolder.css";
+
 interface ScrollBarHolderProps {
   children: React.ReactNode;
 }
 
 const ScrollBarHolder: React.FC<ScrollBarHolderProps> = ({ children }) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const [scrollHeight, setScrollHeight] = useState(0); //height of bar, should scale with page?
-  const [visibleHeight, setVisibleHeight] = useState(0); //visible height of scrollbar
-  const [scrollTop, setScrollTop] = useState(0); //is NOT the height of the scrollbar - is the HEIGHT OF THE SCROLLTHUMB itself!!!!
+  const [scrollHeight, setScrollHeight] = useState(0);
+  const [visibleHeight, setVisibleHeight] = useState(0);
+  const [scrollTop, setScrollTop] = useState(0);
 
-  useEffect(() => {
-    const content = contentRef.current;
-    if (content) {
-      setScrollHeight(content.scrollHeight);
-      setVisibleHeight(content.clientHeight);
+  const updateScrollMetrics = useCallback(() => {
+    if (contentRef.current) {
+      setScrollHeight(contentRef.current.scrollHeight);
+      setVisibleHeight(contentRef.current.clientHeight);
     }
   }, []);
 
-  const handleScroll = () => { //update SB pos
+  useEffect(() => {
+    updateScrollMetrics();
+    window.addEventListener("resize", updateScrollMetrics);
+    return () => window.removeEventListener("resize", updateScrollMetrics);
+  }, [updateScrollMetrics]);
+
+  const handleScroll = () => {
     if (contentRef.current) {
       setScrollTop(contentRef.current.scrollTop);
     }
@@ -31,13 +37,9 @@ const ScrollBarHolder: React.FC<ScrollBarHolderProps> = ({ children }) => {
     }
   };
 
-  return ( //see ScrollBar documentation for info on these flags - https://www.npmjs.com/package/react-scrollbars-custom
-    <div className="relative w-full h-64 overflow-hidden"> 
-      <div
-        ref={contentRef}
-        className="w-full h-full overflow-y-scroll scrollbar-hide"
-        onScroll={handleScroll}
-      >
+  return (
+    <div className="scrollbar-container">
+      <div ref={contentRef} className="scroll-content" onScroll={handleScroll}>
         {children}
       </div>
       <ScrollBar
