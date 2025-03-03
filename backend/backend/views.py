@@ -253,7 +253,6 @@ def logout(request):
     #cleanup database
     try:
         Song.objects.all().delete()
-        Playlist.objects.all().delete()
     except Exception as e:
         logger = logging.getLogger(__name__)
         logger.error(f"Error cleaning up database: {str(e)}")
