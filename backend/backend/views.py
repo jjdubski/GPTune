@@ -15,6 +15,9 @@ from utils.openai_client import client, prompt_for_song
 
 logger = logging.getLogger(__name__)
 
+unknown_songs = set()
+song_cache = {}
+
 # @csrf_exempt
 # def recommend_songs(request):
 #     if request.method == "POST":
@@ -72,22 +75,164 @@ def index(request):
     return JsonResponse(data)
 
 @csrf_exempt
-def generate_response(request):
+def getRecommendations(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body.decode("utf-8"))
             prompt = data.get("prompt", "")
             num_runs = data.get("num_runs", 5)
-            response = prompt_for_song(prompt, num_runs)
-
+            userInfo = data.get("userInfo", "False")
+            if userInfo == "True":
+                user_info = get_user_info()
+            else:
+                user_info = None
+            # print("\n\nuser_info:",user_info)
+            response = run_prompt (prompt, num_runs, user_info)
+            
             # Log the raw AI response
             logger.info(f"Raw OpenAI Response: {response}")
-
+            songs = {}
+            for trackID in response:
+                trackInfo = sp.track(trackID)
+                # print(trackInfo,"\n\n")
+                songs[trackID] = {
+                    "title": trackInfo['name'],
+                    "artist": trackInfo['artists'][0]['name'],
+                    "album": trackInfo['album']['name'],
+                    "image": trackInfo['album']['images'][0]['url']
+                }
+            # print (songs)
             # Return the processed AI response inside the original structure
-            return JsonResponse(response)
+            return JsonResponse({"songs": songs})
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
+def generate_response(prompt, num_runs=10):
+    # global response_index 
+    # print(f"Response {response_index}: ")
+    output = prompt_for_song(prompt, num_runs)
+    # Clean the output by removing triple backticks and the json keyword
+    # Parse the JSON string into a list of dictionaries
+    output_list = process_json(output)
+    track_ids = []
+    ban_list = set()
+    # print(output_list)
+    while len(track_ids) < num_runs:
+        for song in output_list:
+            if len(track_ids) >= num_runs:
+                break
+            artist = song["artist"].strip()
+            title = song["title"].strip()
+            # Determine if song is valid and return track ID
+            track_id = find_new_song(title, artist, track_ids)
+            if track_id:
+                ban_list.add(title+"-"+artist)
+            else:
+                unknown_songs.add(title+"-"+artist)
+            # print(ban_list) # Debug
+            while not track_id:
+                # add ban list to end of prompt
+                # if unknown_songs gets too large reset it
+                if len(unknown_songs) > 50:
+                    unknown_songs.clear()
+                if len(ban_list) > 30:
+                    ban_list.clear()
+                prompt += f"\n\nThe following songs are already in the list or do not exist: {ban_list}, {unknown_songs}. Do not recommend them."
+                print(f"\t\tRe-prompting for song: ")
+                track = prompt_for_song(prompt, 1)
+                track_info = process_json(track)
+                try:
+                    track_title = track_info['title']
+                    track_artist = track_info['artist']
+                except:
+                    print(f"Error parsing track info: {track_info}")
+                    continue
+                track_id = find_new_song(track_title, track_artist, track_ids)
+                if track_id:
+                    ban_list.add(track_title+"-"+track_artist)
+                else:
+                    unknown_songs.add(track_title+"-"+track_artist)
+            track_ids.append(track_id)
+        # response_index += 1
+    return track_ids
+
+
+def run_prompt(prompt, num_runs, user_info):
+    if user_info is None or user_info != "True":
+        return generate_response(prompt, num_runs)
+    
+    top_ten_tracks = [track['name'] for track in user_info['top_ten_tracks']['items']]
+    prompt += f"\nTop 10 Songs: {top_ten_tracks},"
+
+    top_ten_artists = [artist['name'] for artist in user_info['top_ten_artists']['items']]
+    prompt += f"\nTop 10 Artists: {top_ten_artists},"
+
+    saved_tracks = [track['track']['name'] for track in user_info['saved_tracks']['items']]
+    prompt += f"\nTop 50 Saved Songs: {saved_tracks},"
+
+    prompt += f"\nCountry: {user_info ['country']},"
+
+    return generate_response(prompt, num_runs)
+
+def process_json(output):
+    """Cleans and parses OpenAI's JSON response."""
+    output = output.strip().strip("```json").strip("```").strip()
+    try:
+        return json.loads(output)
+    except json.JSONDecodeError:
+        print(f"Error parsing JSON response: {output}")
+        return [{"title": "Unknown", "artist": "Unknown", "album": "Unknown"}]
+    
+
+def get_user_info():
+    tokenInfo = sp.auth_manager.get_cached_token()
+    if tokenInfo:
+        user = sp.current_user()
+        top_ten_tracks = sp.current_user_top_tracks(limit=10)
+        top_ten_artists = sp.current_user_top_artists(limit=10)
+        saved_tracks = sp.current_user_saved_tracks(limit=50)
+        country = sp.current_user()['country']
+        userInfo = {
+            "user": user,
+            "top_ten_tracks": top_ten_tracks,
+            "top_ten_artists": top_ten_artists,
+            "saved_tracks": saved_tracks,
+            "country": country
+        }
+        # print(userInfo) # Debug
+        return userInfo
+    else:
+        return None
+    
+# Function to validate Song 
+def check_song_exists(title, artist, verbose=True):
+    if f"{title}-{artist}" in unknown_songs:
+        if(verbose):
+            print(f"\t\tUnknown track, skipping.")
+        return None
+    search_result = sp.search(q=f'artist:{artist} track:{title}', type='track')
+    if search_result['tracks']['items']:
+        track_id = search_result['tracks']['items'][0]['id']
+        song_cache[track_id] = search_result['tracks']['items'][0]
+        if(verbose):
+            print(f"\t\tTrack ID: {track_id}")
+        return track_id
+    else:
+        if(verbose):
+            print(f"\t\tTrack not found")
+            unknown_songs.add(f"{title}-{artist}")
+        return None
+
+# find new song is song doesnt exist
+def find_new_song(title, artist, tracks=[]):
+    print(f"\tSearching track ID for: {title} by {artist}")
+    track_id = check_song_exists(title, artist)
+    if track_id in tracks:
+            print(f"\t\tTrack already recommended, skipping.")
+            track_id = None
+    return track_id
+
 
 #function to return list of songs
 
@@ -177,8 +322,8 @@ def populatePlaylist():
                     description=playlist.get('description', ''),  # Use get() with default value
                     image=playlist['images'][0]['url'] if playlist['images'] else None
                 )
-                logger = logging.getLogger(__name__)
-                logger.info(playlist['images'][0]['url'])
+                # logger = logging.getLogger(__name__)
+                # logger.info(playlist['images'][0]['url'])
         return True
     except Exception as e:
         logger = logging.getLogger(__name__)

@@ -16,12 +16,27 @@
 .scroll {
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow-y: scroll; /* Changed from auto to scroll */
   align-items: center;
   margin-top: 20px;
   max-height: 72vh; /* Adjusted height for better spacing */
-  /* padding-right: 10px; */
   width: 100%;
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: var(--secondary) var(--primary); /* For Firefox */
+}
+
+.scroll::-webkit-scrollbar {
+  width: 12px; /* For Chrome, Safari, and Opera */
+}
+
+.scroll::-webkit-scrollbar-track {
+  background: var(--primary); /* For Chrome, Safari, and Opera */
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background-color: var(--secondary); /* For Chrome, Safari, and Opera */
+  border-radius: 10px;
+  border: 3px solid var(--primary); /* Adjust the border to match the track */
 }
 
 /* .logo {
