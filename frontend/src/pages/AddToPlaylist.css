@@ -87,6 +87,7 @@
     padding: 20px;
     margin-bottom: 5px;
     align-items: center;
+    overflow: auto;
     /* gap: 10px; */
     /* float: right; */
 }

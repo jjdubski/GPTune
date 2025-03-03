@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./RefreshIcon.css";
+import "./RefreshButton.css";
 
 interface RefreshButtonProps {
   onRefresh: () => void; // Function to call when the button is clicked
@@ -13,7 +13,7 @@ const RefreshButton: React.FC<RefreshButtonProps> = ({ styles }) => {
     setIsClicked(true);
     setTimeout(() => {
       setIsClicked(false);
-    }, 1500); // Spin for 2 seconds
+    }, 2000); // Spin for 2 seconds
   };
 
   return (
