@@ -27,11 +27,13 @@ const AddSong: React.FC<{ song: Song }> = ({ song }) => {
     <div className="add-song">
       <img className="song-image" src={song.image} alt="cover_art"/>
       <div className="song-info">
-        <p className="song-title">{song.title}</p>
-        <p className="song-artist">{song.artist}</p>
-        <p className="song-album">{song.album}</p>
+      <p className="song-title">{song.title}</p>
+      <p className="song-artist">{song.artist}</p>
+      <p className="song-album">{song.album}</p>
       </div>
+      <button className="add-icon-button" onClick={() => console.log("Add song clicked")}>
       <img src={plusIcon} alt="plus-icon" className="add-icon" />
+      </button>
     </div>
   );
 };
