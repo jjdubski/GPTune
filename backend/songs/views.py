@@ -38,7 +38,7 @@ def AddSongs(request):
     results = sp.current_user_top_tracks()
     songs = results['items']
     
-    songList = []
+    
     
     # for song in songs:
     #     songList.append({
@@ -57,7 +57,8 @@ def AddSongs(request):
                     album = song['album']['name'],
                     release_date =song['album'].get('release_date', None),
                     genre = ", ".join(song.get('genres', [])),
-                    image = song['album']['images'][0]['url'] if song['album']['images'] else None
+                    image = song['album']['images'][0]['url'] if song['album']['images'] else None,
+                    uri = song['uri']
                 )
     return Response({"message": "Data successfully added!"}, status=201)
 
@@ -68,7 +69,12 @@ def playSong(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
-            uri = data.get('uri',"")
+            uri = data.get('uri',"").strip()
+            print(uri)
+            
+            if not uri:
+                return JsonResponse({"error":"Missing URI"}, status = 400)
+            
             sp.start_playback(uris=[f"spotify:track:{uri}"])
             
             return JsonResponse({"message": "Song is playing"}, status=200)

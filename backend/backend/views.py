@@ -402,6 +402,7 @@ def getLikedSongs():
         artist_data = track['artists'][0]
         # artist_id = artist_data['id']
         artist_name = artist_data['name']
+        
 
         # Check if the song already exists
         if not Song.objects.filter(trackID=track_id).exists():
@@ -439,3 +440,6 @@ def getLikedSongs():
         playlist.save()
     
     return JsonResponse({"message": "Saved songs imported successfully"}, status=201)
+
+def getUris(request):
+    return JsonResponse({'message': 'testing'}, status = 404)
