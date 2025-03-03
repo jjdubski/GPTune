@@ -10,6 +10,7 @@ interface Song {
     album: string;
     releaseDate: string;
     image: string;
+    uri: string;
 }
 
 interface SongListProps {

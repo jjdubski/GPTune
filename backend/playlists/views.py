@@ -178,7 +178,7 @@ def getPlaylistSongs(request, playlist_id):
                     'artist': song.artist,
                     'album': song.album,
                     'image': song.image,
-                    'previewURL': None  # Assuming you don't have a preview URL for liked songs
+                    'uri': song.uri
                 })
         else:
             results = sp.playlist_items(playlist_id)
@@ -192,7 +192,7 @@ def getPlaylistSongs(request, playlist_id):
                     'artist': track['artists'][0]['name'],
                     'album': track['album']['name'],
                     'image': track['album']['images'][0]['url'] if track['album']['images'] else None,
-                    'previewURL': track['preview_url']
+                    'uri' : track['uri']
                 })
         return JsonResponse(songList, safe=False)
     except Exception as e:
