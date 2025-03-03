@@ -314,7 +314,7 @@ def populateSongs():
                     release_date=release_date,
                     genre=", ".join(song.get('genres', [])),
                     image=song['album']['images'][0]['url'] if song['album']['images'] else None,
-                    uri = song['uri']
+                    uri = song.get('uri')
                 )
         return True
     except Exception as e:
@@ -383,6 +383,7 @@ def getLikedSongs():
         return JsonResponse({"error": f"Failed to get saved songs: {str(e)}"}, status=500)
     
     for song in raw_liked_songs:
+        print(song)
         release_date = song['track']['album']['release_date']
         if release_date:
             release_date_parts = release_date.split('-')
@@ -402,6 +403,7 @@ def getLikedSongs():
         artist_data = track['artists'][0]
         # artist_id = artist_data['id']
         artist_name = artist_data['name']
+        uri = track.get('uri','')
         
 
         # Check if the song already exists
@@ -415,7 +417,7 @@ def getLikedSongs():
                 release_date=release_date,
                 genre=", ".join(album_data.get('genres', [])),
                 image=album_data['images'][0]['url'] if album_data['images'] else '',
-                uri = song['uri']
+                uri = uri
             )
             liked_songs.append(song)
         else:

@@ -69,13 +69,16 @@ def playSong(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
-            uri = data.get('uri',"").strip()
+            uri = data.get('uri',"").strip().split(',')
+            #uri = ["spotify:track:4DRVBIISdoxJAb7Syh3gSt"]
+            # https://open.spotify.com/track/1n9gX9HJTDeCLRCFt2M5Ca?si=364a446db318456c
+            # spotify:track:1n9gX9HJTDeCLRCFt2M5Ca
             print(uri)
             
             if not uri:
                 return JsonResponse({"error":"Missing URI"}, status = 400)
             
-            sp.start_playback(uris=[f"spotify:track:{uri}"])
+            sp.start_playback(uris=uri)
             
             return JsonResponse({"message": "Song is playing"}, status=200)
         except json.JSONDecodeError:
