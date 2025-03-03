@@ -145,10 +145,10 @@ const Home: React.FC = () => {
                         <HomeTile title="This or That?" img="./ThisorThat.png" />
                     </Link>
                 </div>
-                <div>
-                    {/* <h3>Generated Response:</h3>
-                    <p>{response}</p> */}
-                </div>
+                {/* <div>
+                    <h3>Generated Response:</h3>
+                    <p>{response}</p>
+                </div> */}
                 {/* <p>The date is  {currentDate} and the time is {currentTime}.</p> */}
                 {/* <p>Logged in as: {currentUser.email}</p> */}
             </div> ) :
