@@ -414,7 +414,8 @@ def getLikedSongs():
                 album=album_name,
                 release_date=release_date,
                 genre=", ".join(album_data.get('genres', [])),
-                image=album_data['images'][0]['url'] if album_data['images'] else ''
+                image=album_data['images'][0]['url'] if album_data['images'] else '',
+                uri = song['uri']
             )
             liked_songs.append(song)
         else:
