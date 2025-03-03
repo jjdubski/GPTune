@@ -43,3 +43,24 @@
     object-fit: cover;
     /* border-radius: 10px; */
   }
+  .arrow-right {
+    position: absolute;
+    top : 50%;
+    right: 50%;
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 20px solid white;
+    display: none; /* Hide initially */
+    z-index: 10;
+}
+
+.song-image-container:hover .song-image {
+  opacity: 0.5; 
+}
+
+
+.song-image-container:hover .arrow-right {
+  display: inline-block;
+}
