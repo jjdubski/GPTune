@@ -8,6 +8,7 @@ interface Song {
   artist: string;
   album: string;
   image: string;
+  uri: string;
 }
 
 const AddSong: React.FC<{ song: Song }> = ({ song }) => {
@@ -19,13 +20,31 @@ const AddSong: React.FC<{ song: Song }> = ({ song }) => {
     img.onload = () => setIsLoading(false);
   }
   , [song]);
+  const changeSong = async () => {
+    const requestData = {
+        uri: uri
+    }
+     console.log('Changing song to:', uri);
+    try{
+        await fetch ('http://localhost:8000/songAPI/playSong/',{ 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        });
+    }
+    catch (error){  
+        console.error('Error changing song:', error);
+    }
+  }
   
   return (
     isLoading ? (
       <></>
     ) :
-    <div className="add-song">
-      <img className="song-image" src={song.image} alt="cover_art"/>
+    <div className="add-song" onClick={changeSong}>
+      <img className="song-image" src={song.image} alt="cover_art" />
       <div className="song-info">
         <p className="song-title">{song.title}</p>
         <p className="song-artist">{song.artist}</p>

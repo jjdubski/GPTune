@@ -10,6 +10,7 @@ interface Song {
     album: string;
     releaseDate: string;
     coverArt: string;
+    uri: string;
 }
 
 interface Playlist {
@@ -27,6 +28,23 @@ const RecommendedSongList: React.FC<SongListProps> = ({ playlist }) => {
     const [songs, setSongs] = useState<Song[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [response, setResponse] = useState('');
+
+    const changeSong = async (uri: string) => {
+        const requestData = { uri };
+        console.log('Changing song to:', uri);
+    
+        try {
+            await fetch('http://localhost:8000/songAPI/playSong/', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
+        } catch (error) {  
+            console.error('Error changing song:', error);
+        }
+    };
     
 
     useEffect(() => {
@@ -81,7 +99,7 @@ const RecommendedSongList: React.FC<SongListProps> = ({ playlist }) => {
             ) : (
                 songs.map((song) => (
                     <div key={song.id}>
-                        <Song title={song.title} artist={song.artist} album={song.album} img={song.coverArt} />
+                        <Song title={song.title} artist={song.artist} album={song.album} image={song.coverArt} uri = {song.uri}/>
                     </div>
                 ))
             )}
