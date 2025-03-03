@@ -382,7 +382,7 @@ def getLikedSongs():
         return JsonResponse({"error": f"Failed to get saved songs: {str(e)}"}, status=500)
     
     for song in raw_liked_songs:
-        print(song)
+        # print(song)
         release_date = song['track']['album']['release_date']
         if release_date:
             release_date_parts = release_date.split('-')
