@@ -7,6 +7,8 @@
     padding: 10px;
     background-color: transparent;
     border: 1px solid var(--secondary);
+    align-items: center; /* Align the items vertically in the center */
+    justify-content: space-between; /* Push the plus icon to the right */
   }
 
   .add-song .song-title{ 
@@ -33,6 +35,7 @@
     height: 20px;
     object-fit: cover;
     margin: auto 5px auto auto;
+    border-radius: 5px;
   }
 
   .song-image{
@@ -42,4 +45,30 @@
     aspect-ratio: 1/1;
     object-fit: cover;
     /* border-radius: 10px; */
+  }
+
+  .add-button {
+    border: none;
+    padding: 5px;
+    padding-right: 1px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+  }
+  
+  .add-button:hover {
+    background-color: #4c8a50;
+  }
+  
+  .add-icon {
+    width: 20px; /* Adjust icon size */
+    height: 20px;
+    /* margin-top: 50px; */
+  }
+
+  .add-button:hover .add-icon {
+    color: #4c8a50; /* Change icon color on hover */
   }

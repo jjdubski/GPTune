@@ -3,6 +3,7 @@ import './AddToPlaylist.css';
 import AddSong from '../components/AddSong/AddSong';
 import PlaylistList from '../components/PlaylistList/PlaylistList';
 import Song from '../components/Song/Song';
+import RefreshButton from '../components/RefreshIcon/RefreshIcon';
 
 interface Song {
     title: string;
@@ -25,7 +26,9 @@ const AddToPlaylist: React.FC = () => {
     const hasFetchedSongs = useRef(false);
 
     const generateSongs = useCallback(async () => {
-        if (hasFetchedSongs.current) return;
+        // if (hasFetchedSongs.current) return;
+        hasFetchedSongs.current = false; // Allow refetching
+        setRecommendedSongs([]);
         const requestData = {
             prompt: `give me songs similar to ${playlistSongs.map(song => song.title).join(", ")}`,
             num_runs: 5,
@@ -108,7 +111,10 @@ const AddToPlaylist: React.FC = () => {
                     </div>
                 </div>
                 <div className="add-songs-container">
-                    <h1 className='add-songs-title'>Recommended Songs</h1>
+                    <div className="add-songs-header">
+                        <h1 className="add-songs-title">Recommended Songs</h1>
+                        <RefreshButton onRefresh={generateSongs} />
+                    </div>
                     <div className="scroll">
                         {recommendedSongs.length > 0 ? (
                             recommendedSongs.map((song, index) => (
