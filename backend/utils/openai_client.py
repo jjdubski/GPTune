@@ -50,11 +50,20 @@ def prompt_for_song(prompt, num_runs):
             else:
                 break
     return None
+#below is function to user search on search 
+def generate_song_suggestions(prompt):
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": "You are an expert music recommendation assistant."},
+            {"role": "user", "content": f"Recommend some songs based on the theme: {prompt}"}
+        ],
+        temperature=0.7,
+        max_tokens=50
+    )
 
-
-
-
-
+    suggestions = response['choices'][0]['message']['content'].split("\n")
+    return [s.strip() for s in suggestions if s.strip()]
 
 
 # def generate_recommendations(user_data):

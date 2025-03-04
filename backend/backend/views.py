@@ -12,6 +12,7 @@ from songs.models import Song
 from spotipy import SpotifyOAuth
 from utils.spotifyClient import sp
 from utils.openai_client import client, prompt_for_song
+from backend.utils.openai_client import generate_song_suggestions
 
 logger = logging.getLogger(__name__)
 
@@ -107,7 +108,31 @@ def getRecommendations(request):
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
     return JsonResponse({"error": "Invalid request method"}, status=405)
+#below is the function to search page user 
+def getAISongRecommendations(request):
+    search_query = request.GET.get('query', '')
 
+    if not search_query:
+        return JsonResponse({'error': 'No search query provided'}, status=400)
+
+    # Get AI-generated song recommendations
+    ai_suggestions = generate_song_suggestions(search_query)
+
+    recommendations = []
+    for suggestion in ai_suggestions:
+        # Search for songs in Spotify based on AI suggestions
+        results = sp.search(q=suggestion, type="track", limit=3)
+        
+        for track in results['tracks']['items']:
+            recommendations.append({
+                'name': track['name'],
+                'artist': track['artists'][0]['name'],
+                'album': track['album']['name'],
+                'spotify_url': track['external_urls']['spotify'],
+                'preview_url': track.get('preview_url', None),
+            })
+
+    return JsonResponse({'recommendations': recommendations})
 def generate_response(prompt, num_runs=10):
     # global response_index 
     # print(f"Response {response_index}: ")
