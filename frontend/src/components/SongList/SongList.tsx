@@ -43,7 +43,7 @@ const SongList: React.FC<SongListProps> = ({ playlistID }) => {
                 setError('Failed to fetch Songs. Please try again later.' + error)
             })
     }, [playlistID])
-    const handlePlay = (trackURL: string) => {
+    const handlePlay = (trackURI: string) => {
         console.log("Playing song with URL:", trackURI);
     };
     
@@ -62,7 +62,7 @@ const SongList: React.FC<SongListProps> = ({ playlistID }) => {
                         <p>Artist: {song.artist}</p>
                         <p>Album: {song.album}</p>
                         <p>Release Date: {song.releaseDate}</p> */}
-                        <Song title={song.title} artist={song.artist} album={song.album} image={song.image} trackURL={song.url}
+                        <Song title={song.title} artist={song.artist} album={song.album} image={song.image} trackURI={song.url}
                             onPlay={handlePlay}/>
                     </div>
                 ))
