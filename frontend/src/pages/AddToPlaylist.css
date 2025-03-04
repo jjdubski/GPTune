@@ -87,8 +87,16 @@
     padding: 20px;
     margin-bottom: 5px;
     align-items: center;
+    overflow: auto;
     /* gap: 10px; */
     /* float: right; */
+}
+
+.add-songs-header {
+    display: flex;
+    justify-content: space-between; /* Space between the title and button */
+    width: 100%; /* Take up the full width */
+    align-items: center; /* Vertically align the items */
 }
 
 .add-songs-container .scroll{
