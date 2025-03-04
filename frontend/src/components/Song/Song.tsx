@@ -6,7 +6,7 @@ interface SongProps {
     artist: string;
     album: string;
     image: string;
-    trackURL: string; 
+    trackURI: string; 
     onPlay: (trackURI: string) => void;
 }
 
@@ -22,7 +22,7 @@ const Song: React.FC<SongProps> = ({title, artist, album, image, trackURI, onPla
                 <p className='song-album'>{album}</p>
 
             </div>
-            <button className="play-button" onClick={() => onPlay(trackURL)}></button> {/* Play button */}
+            <button className="play-button" onClick={() => onPlay(trackURI)}></button> {/* Play button */}
         </div>
     );
 };
