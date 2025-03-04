@@ -44,7 +44,7 @@ const SongList: React.FC<SongListProps> = ({ playlistID }) => {
             })
     }, [playlistID])
     const handlePlay = (trackURL: string) => {
-        console.log("Playing song with URL:", trackURL);
+        console.log("Playing song with URL:", trackURI);
     };
     
     return (
