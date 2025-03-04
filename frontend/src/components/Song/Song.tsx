@@ -10,24 +10,21 @@ interface SongProps {
 }
 
 const Song: React.FC<SongProps> = ({title, artist, album, image, uri}) => {
-    const changeSong = async () => {
-        const requestData = {
-            uri: uri
-        }
-         console.log('Changing song to:', uri);
-        try{
-            await fetch ('http://localhost:8000/songAPI/playSong/',{ 
+    const changeSong = async (uri: string) => {
+        const requestData = { uri: uri };
+        console.log('Changing song to:', uri);
+        try {
+            await fetch('http://localhost:8000/songAPI/playSong/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(requestData)
             });
-        }
-        catch (error){  
+        } catch (error) {
             console.error('Error changing song:', error);
         }
-    }
+    };
             
             // const data = await res.json();
             // if (res.ok) {
@@ -55,8 +52,9 @@ const Song: React.FC<SongProps> = ({title, artist, album, image, uri}) => {
     //     }
     // }
     return (
-        <div className='song' onClick={changeSong}>
-            <img className="song-image" src={image} alt={`${title} album cover`} />
+        <div className='song'>
+            <img className="song-image" src={song.image} alt="cover_art" onClick={changeSong(song.uri)} />
+
             <div className='song-info'>
                 <p className='song-title'>{title}</p>
                 <p className='song-artist'>{artist}</p>

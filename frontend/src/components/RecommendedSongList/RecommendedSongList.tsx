@@ -29,22 +29,7 @@ const RecommendedSongList: React.FC<SongListProps> = ({ playlist }) => {
     const [error, setError] = useState<string | null>(null);
     const [response, setResponse] = useState('');
 
-    const changeSong = async (uri: string) => {
-        const requestData = { uri };
-        console.log('Changing song to:', uri);
-    
-        try {
-            await fetch('http://localhost:8000/songAPI/playSong/', { 
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
-            });
-        } catch (error) {  
-            console.error('Error changing song:', error);
-        }
-    };
+
     
 
     useEffect(() => {

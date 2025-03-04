@@ -99,8 +99,8 @@ def getRecommendations(request):
                     "title": trackInfo['name'],
                     "artist": trackInfo['artists'][0]['name'],
                     "album": trackInfo['album']['name'],
-                    "image": trackInfo['album']['images'][0]['url']
-                    
+                    "image": trackInfo['album']['images'][0]['url'],
+                    "uri": trackInfo['uri']
                 }
             # print (songs)
             # Return the processed AI response inside the original structure

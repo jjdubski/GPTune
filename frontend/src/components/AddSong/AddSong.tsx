@@ -45,9 +45,9 @@ const AddSong: React.FC<{ song: Song }> = ({ song }) => {
   , [song]);
   const changeSong = async () => {
     const requestData = {
-        uri: uri
+        uri: song.uri
     }
-     console.log('Changing song to:', uri);
+    console.log('Changing song to:', song.uri);
     try{
         await fetch ('http://localhost:8000/songAPI/playSong/',{ 
             method: 'POST',

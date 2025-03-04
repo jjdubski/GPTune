@@ -10,6 +10,7 @@ interface Song {
     artist: string;
     album: string;
     image: string;
+    uri: string
 }
 
 interface Playlist {
@@ -44,12 +45,14 @@ const AddToPlaylist: React.FC = () => {
     
             const data = await res.json();
             if (res.ok) {
-                const songList: Song[] = Object.values(data.songs as { title: string; artist: string; album: string; image: string }[]).map((item) => ({
+                const songList: Song[] = Object.values(data.songs as { title: string; artist: string; album: string; image: string; uri:string }[]).map((item) => ({
                     title: item.title,
                     artist: item.artist,
                     album: item.album,
-                    image: item.image
+                    image: item.image,
+                    uri: item.uri
                 }));
+                
                 setRecommendedSongs(songList);
             } else {
                 console.error('Error:', data);
@@ -123,6 +126,7 @@ const AddToPlaylist: React.FC = () => {
                             recommendedSongs.map((song, index) => (
                                 <AddSong key={index} song={song} />
                             ))
+                            
                         ) : selectedPlaylistID ? (
                             <p>Loading recommendations...</p>
                         ) : (
