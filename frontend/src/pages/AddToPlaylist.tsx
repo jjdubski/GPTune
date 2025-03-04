@@ -3,7 +3,7 @@ import './AddToPlaylist.css';
 import AddSong from '../components/AddSong/AddSong';
 import PlaylistList from '../components/PlaylistList/PlaylistList';
 import Song from '../components/Song/Song';
-import RefreshButton from '../components/RefreshIcon/RefreshIcon';
+import RefreshButton from '../components/RefreshButton/RefreshButton';
 
 interface Song {
     title: string;
