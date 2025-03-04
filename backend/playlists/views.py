@@ -203,16 +203,17 @@ def getPlaylistSongs(request, playlist_id):
 
 @api_view(['POST'])  
 def addSongToPlaylist(request):
+    
     if request.method != "POST":
         return JsonResponse({'error': 'Invalid request method'}, status=400)
     try:
         data = json.loads(request.body)
         playlist_id = data.get('playlist').get('playlistID')
         track_uri = data.get('song', {}).get('uri')
-
+        print("Playlist: ", playlist_id)
+        print("track: ", track_uri)
         if not playlist_id or not track_uri:
-            print("Playlist: ", playlist_id)
-            print("track: ", track_uri)
+            
             return JsonResponse({'error': 'Missing playlistID or song URI'}, status=400)
 
         # Add the track to the playlist

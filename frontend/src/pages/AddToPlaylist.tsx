@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, use } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './AddToPlaylist.css';
 import AddSong from '../components/AddSong/AddSong';
 import PlaylistList from '../components/PlaylistList/PlaylistList';
@@ -86,16 +86,28 @@ const AddToPlaylist: React.FC = () => {
     }, [selectedPlaylistID]);
 
     useEffect(() => {
+        fetch('http://127.0.0.1:8000/getUser')
+            .then(res => res.json())
+            .then(data => {
+            console.log(data);
+            if (data.error) {
+                console.error('User email not found');
+                window.location.href = 'http://127.0.0.1:8000/login';
+                return;
+            }
+            
+            setIsLoading(false);
+              // console.log("Email:", data.email);
+        })
+    }, []);
+
+    useEffect(() => {
         if (playlistSongs.length > 0) {
             generateSongs();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [playlistSongs]);
 
-    useEffect(() => {
-        setIsLoading(false);
-    }
-    , []);  
 
     const handleSelectPlaylist = (playlistID: string) => {
         setSelectedPlaylistID(playlistID);

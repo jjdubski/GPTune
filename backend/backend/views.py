@@ -95,7 +95,7 @@ def getRecommendations(request):
             songs = {}
             for trackID in response:
                 trackInfo = sp.track(trackID)
-                print(trackInfo,"\n\n")
+                #print(trackInfo,"\n\n")
                 songs[trackID] = {
                     "title": trackInfo['name'],
                     "artist": trackInfo['artists'][0]['name'],
@@ -385,7 +385,7 @@ def getUser(request):
         # print(user)
         return JsonResponse(user)
     else:
-        return JsonResponse({"error": "No token found"}, status=404)
+        return JsonResponse({"error": "No token found"})
     
 
 

@@ -37,11 +37,13 @@ function App() {
 
   useEffect(() => {
     if (token !== null) {
-      fetch('http://localhost:8000/getUser')
+      fetch('http://127.0.0.1:8000/getUser')
         .then(res => res.json())
         .then(data => {
           if (data) {
             // console.log('User: ', data)
+            
+          
             setSubscription(data.product)
           }
           else {
