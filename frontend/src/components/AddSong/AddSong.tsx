@@ -39,10 +39,10 @@ const AddSong: React.FC<{ song: Song }> = ({ song }) => {
         <p className="song-album">{song.album}</p>
       </div>
 
-      {/* Add to Playlist Button */}
       <img src={plusIcon} alt="plus-icon" className="add-icon" />
     </div>
   );
 };
 
 export default AddSong;
+

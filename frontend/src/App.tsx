@@ -52,7 +52,7 @@ function App() {
       .catch(error => console.error('Error Fetching User: ', error))
 
       // needs implementation on backend for pulling and setting URI
-      fetch('http://localhost:8000/getUris')
+      fetch('http://localhost:8000/getUrls')
         .then(res => {
           if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
@@ -106,6 +106,8 @@ function App() {
           <Route path="/add-to-playlist" element={<AddtoPlaylist />} />
           <Route path="/search" element={<Search />} />
           <Route path="/playlist/:playlistID" element={<PlaylistDetails />} />
+          <Route path="/add-to-playlist" element={<AddtoPlaylist />} />
+
           
           {/* <Route path="logout" element={<Logout />} /> */}
           {/* <Route path='/discover' element={<Discover />} /> */}

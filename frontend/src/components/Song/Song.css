@@ -24,6 +24,7 @@ div {
     /* border: 1px solid black; */
     height : 150px;
     margin-bottom: 20px;
+    
 }
 
 .song:hover {
@@ -50,4 +51,34 @@ div {
     font-size: 0.9em;
     opacity: 80%;
     /* font-weight: bold; */
+}
+.play-button {
+ width: 10;
+  height: 10;
+  /* display: inline-block; */
+  transform: rotate(360deg);
+  align-self: right;
+    z-index: 10;
+    visibility: hidden;
+}
+.play-button::after {
+    content: "";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 10px solid white; 
+
+}
+.song:hover .play-button  {
+    visibility: visible;
+    opacity: 1.0;
+}
+.song-image-container:hover .song-image {
+    opacity: 0.5; 
+}
+
+.song-image-container:hover .play-button {
+    display: inline-block;
 }

@@ -5,18 +5,24 @@ interface SongProps {
     title: string;
     artist: string;
     album: string;
-    image : string;
+    image: string;
+    trackURL: string; 
+    onPlay: (trackURL: string) => void;
 }
 
-const Song: React.FC<SongProps> = ({title, artist, album, image}) => {
+const Song: React.FC<SongProps> = ({title, artist, album, image, trackURL, onPlay}) => {
     return (
         <div className='song'>
+
             <img className="song-image" src={image} alt={`${title} album cover`} />
+
             <div className='song-info'>
                 <p className='song-title'>{title}</p>
                 <p className='song-artist'>{artist}</p>
                 <p className='song-album'>{album}</p>
+
             </div>
+            <button className="play-button" onClick={() => onPlay(trackURL)}></button> {/* Play button */}
         </div>
     );
 };
