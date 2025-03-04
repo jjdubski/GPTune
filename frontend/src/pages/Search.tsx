@@ -21,6 +21,7 @@ const Search: React.FC = () => {
     const [songs, setSongs] = useState<any[]>([]); 
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [artists, setArtists] = useState<Artist[]>([])
 
     const [currentUser, setCurrentUser] = useState<{ email: string; username: string; image: string }>({
         email: '',
