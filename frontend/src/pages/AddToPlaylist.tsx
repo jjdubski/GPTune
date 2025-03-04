@@ -26,7 +26,7 @@ const AddToPlaylist: React.FC = () => {
     const hasFetchedSongs = useRef(false);
 
     const generateSongs = useCallback(async () => {
-        if (hasFetchedSongs.current) return;
+        if (hasFetchedSongs.current) return; //should be good
         const requestData = {
             prompt: `give me songs similar to ${playlistSongs.map(song => song.title).join(", ")}`,
             num_runs: 5,
