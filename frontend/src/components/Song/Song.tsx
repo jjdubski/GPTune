@@ -7,10 +7,10 @@ interface SongProps {
     album: string;
     image: string;
     trackURL: string; 
-    onPlay: (trackURL: string) => void;
+    onPlay: (trackURI: string) => void;
 }
 
-const Song: React.FC<SongProps> = ({title, artist, album, image, trackURL, onPlay}) => {
+const Song: React.FC<SongProps> = ({title, artist, album, image, trackURI, onPlay}) => {
     return (
         <div className='song'>
 
