@@ -3,7 +3,7 @@ import Artist from '../components/Artist/Artist';
 import SpotifyButton from '../components/SpotifyButton/SpotifyButton';
 import SongList from '../components/SongList/SongList';
 import User from '../components/User/User';
-import RefreshButton from '../components/RefreshIcon/RefreshIcon';
+import RefreshButton from '../components/RefreshButton/RefreshButton';
 import SearchBar from '../components/SearchBar/SearchBar';
 import './Search.css';
 import Song from '../components/Song/Song';
