@@ -4,6 +4,7 @@ import AddSong from '../components/AddSong/AddSong';
 import PlaylistList from '../components/PlaylistList/PlaylistList';
 import Song from '../components/Song/Song';
 import RefreshButton from '../components/RefreshButton/RefreshButton';
+import Playlist from '../components/Playlist/Playlist';
 
 interface Song {
     title: string;
@@ -124,7 +125,7 @@ const AddToPlaylist: React.FC = () => {
                     <div className="scroll">
                         {recommendedSongs.length > 0 ? (
                             recommendedSongs.map((song, index) => (
-                                <AddSong key={index} song={song} />
+                                <AddSong key={index} song={song} selectedPlaylist={Playlist}/>
                             ))
                             
                         ) : selectedPlaylistID ? (

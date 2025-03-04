@@ -1,3 +1,4 @@
+import json
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import viewsets
@@ -199,4 +200,25 @@ def getPlaylistSongs(request, playlist_id):
         logger = logging.getLogger(__name__)
         logger.error(f"Error populating songs: {str(e)}")
         return JsonResponse({"error": "Failed to get songs"}, status=500)
+
+@api_view(['POST'])  
+def addSongToPlaylist(request):
+    if request.method != "POST":
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+    try:
+        data = json.loads(request.body)
+        playlist_id = data.get('playlist').get('playlistID')
+        track_uri = data.get('song', {}).get('uri')
+
+        if not playlist_id or not track_uri:
+            print("Playlist: ", playlist_id)
+            print("track: ", track_uri)
+            return JsonResponse({'error': 'Missing playlistID or song URI'}, status=400)
+
+        # Add the track to the playlist
+        sp.playlist_add_items(playlist_id, [track_uri])
+
+        return JsonResponse({'message': 'Song added successfully'}, status=200)
     
+    except Exception as e:
+        return JsonResponse({'error': f"Failed to add song: {str(e)}"}, status=500)

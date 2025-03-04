@@ -11,4 +11,5 @@ urlpatterns = [
     path('getPlaylists/', views.AddPlaylists, name='AddPlaylists'),
     path('getPlaylistSongs/<str:playlist_id>/', views.getPlaylistSongs, name='getPlaylistSongs'),
     # path('getLikedSongs/', views.getLikedSongs, name='getLikedSongs'),
+    path('addSongToPlaylist', views.addSongToPlaylist, name = "addSongToPlaylist"),
 ]
