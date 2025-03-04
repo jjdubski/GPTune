@@ -12,7 +12,7 @@ from songs.models import Song
 from spotipy import SpotifyOAuth
 from utils.spotifyClient import sp
 from utils.openai_client import client, prompt_for_song
-from backend.utils.openai_client import generate_song_suggestions
+from utils.openai_client import generate_song_suggestions
 
 logger = logging.getLogger(__name__)
 
