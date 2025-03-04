@@ -18,25 +18,23 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from .views import index, login, callback, logout, getToken, getRecommendations,getAISongRecommendations, getUser, getUris
-
-
-
+from .views import index, login, callback, logout, getToken, getRecommendations, getAISongRecommendations, getUser, get_uris
+from . import views 
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
-    path('', index, name='index'), # Default view
+    path('', index, name='index'),  # Default view
     path("login/", login, name='login'),
     path("callback/", callback, name='callback'),
     path('songAPI/', include('songs.urls'), name='songAPI'),
     path('logout/', logout, name='logout'),
     path("getAISongRecommendations/", getAISongRecommendations, name='getAISongRecommendations'),
-    #path("recommend/", recommend_songs, name="recommend-songs"),
     path("getRecommendations/", getRecommendations, name='getRecommendations'),
     path('playlistAPI/', include('playlists.urls'), name='playlistAPI'),
+    path('musicAPI/search', views.search_songs, name='search_songs'),
     path('getToken/', getToken, name='getToken'),
     path('getUser/', getUser, name='getUser'),
-    path('getUris/', getUris, name='getUris'),
+    path('getUris/', views.get_uris, name='get_uris'),  
 ]
 
 # if settings.DEBUG:

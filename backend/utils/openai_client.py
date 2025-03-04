@@ -55,8 +55,8 @@ def generate_song_suggestions(prompt):
     response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=[
-            {"role": "system", "content": "You are an expert music recommendation assistant."},
-            {"role": "user", "content": f"Recommend some songs based on the theme: {prompt}"}
+            {"role": "system", "content": "You are an expert music recommendation assistant."},#sets the model’s behavior to focus on music recommendations
+            {"role": "user", "content": f"Recommend some songs based on the theme: {prompt}"} #inserts the provided prompt into the request
         ],
         temperature=0.7,
         max_tokens=50

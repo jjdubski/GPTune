@@ -385,6 +385,35 @@ def getUser(request):
         return JsonResponse(user)
     else:
         return JsonResponse({"error": "No token found"}, status=404)
+    
+
+
+
+
+def search_songs(request):
+    query = request.GET.get("query", "")
+    
+    if not query:
+        return JsonResponse({"error": "No query provided"}, status=400)
+
+    # Mock AI response (Replace this with your AI integration)
+    ai_songs = [
+        {"title": "Song 1", "artist": "Artist 1", "album": "Album 1"},
+        {"title": "Song 2", "artist": "Artist 2", "album": "Album 2"},
+    ]
+    ai_artists = [
+        {"name": "Artist 1", "image": "artist1.jpg"},
+        {"name": "Artist 2", "image": "artist2.jpg"},
+    ]
+
+    return JsonResponse({"songs": ai_songs, "artists": ai_artists})
+
+
+
+
+
+
+
 
 def getLikedSongs():
     # if "spotify_token" not in request.session:
@@ -468,5 +497,17 @@ def getLikedSongs():
     
     return JsonResponse({"message": "Saved songs imported successfully"}, status=201)
 
-def getUris(request):
-    return JsonResponse({'message': 'testing'}, status = 404)
+def get_uris(request):  # Use snake_case naming
+
+    # Fetch a list of song URIs from Spotify or your database
+    try:
+        # Example: Fetching user's top 10 tracks from Spotify
+        results = sp.current_user_top_tracks(limit=10)
+
+        uris = [track["uri"] for track in results["items"]]  # Extract URIs
+        return JsonResponse({'uris': uris}, status=200)
+
+    except Exception as e:
+        logger.error(f"Error fetching URIs: {str(e)}")
+        return JsonResponse({'error': f"Failed to fetch URIs: {str(e)}"}, status=500)
+
