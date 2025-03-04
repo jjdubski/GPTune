@@ -12,6 +12,7 @@ from songs.models import Song
 from spotipy import SpotifyOAuth
 from utils.spotifyClient import sp
 from utils.openai_client import client, prompt_for_song
+from utils.openai_client import generate_song_suggestions
 
 logger = logging.getLogger(__name__)
 
@@ -108,7 +109,31 @@ def getRecommendations(request):
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
     return JsonResponse({"error": "Invalid request method"}, status=405)
+#below is the function to search page user 
+def getAISongRecommendations(request):
+    search_query = request.GET.get('query', '')
 
+    if not search_query:
+        return JsonResponse({'error': 'No search query provided'}, status=400)
+
+    # Get AI-generated song recommendations
+    ai_suggestions = generate_song_suggestions(search_query)
+
+    recommendations = []
+    for suggestion in ai_suggestions:
+        # Search for songs in Spotify based on AI suggestions
+        results = sp.search(q=suggestion, type="track", limit=3)
+        
+        for track in results['tracks']['items']:
+            recommendations.append({
+                'name': track['name'],
+                'artist': track['artists'][0]['name'],
+                'album': track['album']['name'],
+                'spotify_url': track['external_urls']['spotify'],
+                'preview_url': track.get('preview_url', None),
+            })
+
+    return JsonResponse({'recommendations': recommendations})
 def generate_response(prompt, num_runs=10):
     # global response_index 
     # print(f"Response {response_index}: ")
@@ -361,6 +386,35 @@ def getUser(request):
         return JsonResponse(user)
     else:
         return JsonResponse({"error": "No token found"}, status=404)
+    
+
+
+
+
+def search_songs(request):
+    query = request.GET.get("query", "")
+    
+    if not query:
+        return JsonResponse({"error": "No query provided"}, status=400)
+
+    # Mock AI response (Replace this with your AI integration)
+    ai_songs = [
+        {"title": "Song 1", "artist": "Artist 1", "album": "Album 1"},
+        {"title": "Song 2", "artist": "Artist 2", "album": "Album 2"},
+    ]
+    ai_artists = [
+        {"name": "Artist 1", "image": "artist1.jpg"},
+        {"name": "Artist 2", "image": "artist2.jpg"},
+    ]
+
+    return JsonResponse({"songs": ai_songs, "artists": ai_artists})
+
+
+
+
+
+
+
 
 def getLikedSongs():
     # if "spotify_token" not in request.session:
@@ -444,5 +498,17 @@ def getLikedSongs():
     
     return JsonResponse({"message": "Saved songs imported successfully"}, status=201)
 
-def getUris(request):
-    return JsonResponse({'message': 'testing'}, status = 404)
+def get_uris(request):  # Use snake_case naming
+
+    # Fetch a list of song URIs from Spotify or your database
+    try:
+        # Example: Fetching user's top 10 tracks from Spotify
+        results = sp.current_user_top_tracks(limit=10)
+
+        uris = [track["uri"] for track in results["items"]]  # Extract URIs
+        return JsonResponse({'uris': uris}, status=200)
+
+    except Exception as e:
+        logger.error(f"Error fetching URIs: {str(e)}")
+        return JsonResponse({'error': f"Failed to fetch URIs: {str(e)}"}, status=500)
+
