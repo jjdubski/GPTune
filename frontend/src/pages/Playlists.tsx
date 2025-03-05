@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Playlist from '../components/Playlist/Playlist'
 import './Playlist.css'
+<<<<<<< Updated upstream
 import PlaylistList from '../components/PlaylistList/PlaylistList'
 import RefreshButton from '../components/RefreshButton/RefreshButton'
+=======
+import RefreshButton from '../components/RefreshIcon/RefreshIcon'
+>>>>>>> Stashed changes
 interface Playlist {
     playlistID: number;
     name: string;
