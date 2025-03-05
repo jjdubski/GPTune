@@ -9,7 +9,7 @@ interface ArtistProps {
     url: string;  // URL for the artist's Spotify page
 }
 
-const Artist: React.FC<ArtistProps> = ({ name, image, genres, popularity, url }) => {
+const Artist: React.FC<ArtistProps> = ({ name, image, url }) => {
     const handleClick = () => {
         window.open(url, '_blank'); // Opens URL in a new tab
     };
