@@ -53,7 +53,9 @@ const Song: React.FC<SongProps> = ({title, artist, album, image, uri}) => {
     // }
     return (
         <div className='song'>
-            <img className="song-image" src={song.image} alt="cover_art" onClick={changeSong(song.uri)} />
+            <button onClick={changeSong(uri)}>
+                <img className="song-image" src={image} alt="cover_art"/>
+            </button>
 
             <div className='song-info'>
                 <p className='song-title'>{title}</p>
