@@ -414,7 +414,7 @@ def search_songs(request):
             return JsonResponse({"error": "No artists found"}, status=500)
         
          # Step 2: Get song recommendations based on those artists
-        ai_response = prompt_for_song(query, 10)
+        ai_response = prompt_for_song(promptSongs, 10)
         song_list = json.loads(ai_response)
 
         # Step 3: Search on Spotify for real data

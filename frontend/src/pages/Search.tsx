@@ -52,7 +52,7 @@ const Search: React.FC = () => {
                 headers: { "Content-Type": "application/json" }
             });
     
-            if (!response.ok) {
+            if (!response) {
                 throw new Error("Network response was not ok");
             }
     
