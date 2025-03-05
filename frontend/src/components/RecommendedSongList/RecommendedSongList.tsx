@@ -46,8 +46,14 @@ const RecommendedSongList: React.FC<SongListProps> = ({ playlist }) => {
                 setError('Failed to fetch songs. Please try again later.');
             }
         };
-        sendPlaylistToChatGPT();
-        fetchSongs();
+
+        const fetchData = async () => {
+            await fetchSongs();
+            sendPlaylistToChatGPT()
+
+        }
+        
+        fetchData();
     }, [playlist]);
 
     const sendPlaylistToChatGPT = async () => {
@@ -84,7 +90,7 @@ const RecommendedSongList: React.FC<SongListProps> = ({ playlist }) => {
             ) : (
                 songs.map((song) => (
                     <div key={song.id}>
-                        <Song title={song.title} artist={song.artist} album={song.album} image={song.coverArt} uri = {song.uri}/>
+                        <Song trackID = {song.trackID} title={song.title} artist={song.artist} album={song.album} image={song.coverArt} uri = {song.uri}/>
                     </div>
                 ))
             )}

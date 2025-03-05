@@ -61,7 +61,7 @@ auth_manager = SpotifyOAuth(
     client_id=os.getenv("DJANGO_APP_SPOTIFY_CLIENT_ID"),
     client_secret=os.getenv("DJANGO_APP_SPOTIFY_SECRET"),
     redirect_uri="http://localhost:8000/callback",
-    scope="user-library-read user-read-email user-top-read user-read-private user-follow-read playlist-read-private playlist-read-collaborative app-remote-control streaming user-read-currently-playing user-modify-playback-state user-read-playback-state",
+    scope="user-library-read user-read-email user-top-read user-read-private user-follow-read playlist-read-private playlist-read-collaborative app-remote-control streaming user-read-currently-playing user-modify-playback-state user-read-playback-state playlist-modify-private playlist-modify-public",
     cache_handler=CustomCacheHandler()    
     # cache_handler=CustomCacheHandler(cache_path=".cache")
 )

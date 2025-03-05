@@ -147,11 +147,40 @@ const AddToPlaylist: React.FC = () => {
 
     const handleSelectPlaylist = (playlistID: string) => {
         setSelectedPlaylistID(playlistID);
+        setPlaylistSongs([]); // Reset songs when switching playlists
+        hasFetchedSongs.current = false; // Allow new recommendations to be fetched
     };
 
-    const handleAddSong = (trackID: string) => {
-        setSongID(trackID);
-    }
+    const handleAddSong = async (trackID: string) => {
+        if (playlistSongs.some(song => song.trackID === trackID)) {
+            console.log("Song already in playlist.");
+            return;
+        }
+    
+        try {
+            const response = await fetch("http://localhost:8000/playlistAPI/addSongToPlaylist", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    song: { uri: trackID },  // Sending trackID as the 'uri' cuz thats what backend expects. Spotipy can take ether
+                    playlist: { playlistID: selectedPlaylistID }  // Sending playlistID in the expected structure
+                }),
+            });
+    
+            if (response.ok) {
+                console.log(`Song ${trackID} added successfully.`);
+                setSongID(trackID);
+                setPlaylistSongs([...playlistSongs, { trackID, title: "Unknown", artist: "Unknown", album: "Unknown", image: "", uri: "" }]); // Temporary UI update
+                hasFetchedSongs.current = false; // Allow new recommendations
+                generateSongs(); // Fetch new recommendations
+            } else {
+                console.error("Failed to add song:", await response.text());
+            }
+        } catch (error) {
+            console.error("Error adding song:", error);
+        }
+    };
+
     
 
     const handleRefresh = () => {
@@ -177,9 +206,13 @@ const AddToPlaylist: React.FC = () => {
                     </div>
                     <div className="scroll">
                         {recommendedSongs.length > 0 ? (
-                            recommendedSongs.map((song, index) => (
-                                <AddSong key={index} song={song} onAddSong={handleAddSong}/>
-                            ))
+                            recommendedSongs.map((song, index) => {
+                                if (!song.trackID) {
+                                    console.error(`Skipping invalid song at index ${index}:`, song);
+                                    return null; // Skip rendering if song is invalid
+                                }
+                                return <AddSong key={song.trackID} song={song} onAddSong={handleAddSong}/>
+                        })
                             
                         ) : selectedPlaylistID ? (
                             <p>Loading recommendations...</p>

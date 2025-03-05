@@ -205,21 +205,32 @@ def getPlaylistSongs(request, playlist_id):
 def addSongToPlaylist(request):
     if request.method != "POST":
         return JsonResponse({'error': 'Invalid request method'}, status=400)
+    
+    print(f"Request received: {request}")  # Log the entire request object
+    
     try:
+        # Parse the request body (the JSON data sent by the client)
         data = json.loads(request.body)
-        print(data)
-        playlist_id = data.get('playlist').get('playlistID')
+        print(f"Request Body: {data}")  # Log the parsed request body
+        
+        # Extract playlist ID and track URI from the parsed data
+        playlist_id = data.get('playlist', {}).get('playlistID')
         track_uri = data.get('song', {}).get('uri')
-        print("Playlist: ", playlist_id)
-        print("track: ", track_uri)
+
+        print(f"Playlist ID: {playlist_id}")
+        print(f"Track URI: {track_uri}")
+        
+        # Check if either playlist_id or track_uri is missing
         if not playlist_id or not track_uri:
-            
             return JsonResponse({'error': 'Missing playlistID or song URI'}, status=400)
 
-        # Add the track to the playlist
         sp.playlist_add_items(playlist_id, [track_uri])
 
         return JsonResponse({'message': 'Song added successfully'}, status=200)
     
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+    except KeyError as e:
+        return JsonResponse({'error': f'Missing required field: {str(e)}'}, status=400)
     except Exception as e:
         return JsonResponse({'error': f"Failed to add song: {str(e)}"}, status=500)

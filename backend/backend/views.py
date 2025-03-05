@@ -97,6 +97,7 @@ def getRecommendations(request):
                 trackInfo = sp.track(trackID)
                 #print(trackInfo,"\n\n")
                 songs[trackID] = {
+                    "trackID" : trackID,
                     "title": trackInfo['name'],
                     "artist": trackInfo['artists'][0]['name'],
                     "album": trackInfo['album']['name'],

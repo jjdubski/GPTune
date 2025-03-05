@@ -2,6 +2,7 @@ import React from 'react';
 import './Song.css';
 
 interface SongProps {
+    trackID: string;
     title: string;
     artist: string;
     album: string;

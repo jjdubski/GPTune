@@ -83,18 +83,21 @@ const AddSong: React.FC<AddSongProps> = ({ song, onAddSong }) => {
 
   return isLoading ? null : (
     <div className="add-song" onClick={changeSong}>
-      <img className="song-image" src={song.image} alt="cover_art" />
+      <img className="song-image" src={song.image} alt={song.title} />
       <div className="song-info">
         <p className="song-title">{song.title}</p>
         <p className="song-artist">{song.artist}</p>
         <p className="song-album">{song.album}</p>
       </div>
-      <button className="add-button" onClick={() => {
-        // e.stopPropagation(); // Prevent triggering `changeSong` when clicking the button
-        onAddSong(song.trackID)
-      }}>
-        <img src={plusIcon} alt="plus-icon" className="add-icon" />
-      </button>
+      <div onClick={(e) => e.stopPropagation()}>
+        <button className="add-button" onClick={(e) => {
+          e.stopPropagation();
+          console.log("Adding song: ", song.trackID);
+          onAddSong(song.trackID);
+        }}>
+          <img src={plusIcon} alt="plus-icon" className="add-icon" />
+        </button>
+      </div>
     </div>
   );
 };
