@@ -8,12 +8,11 @@ interface SongProps {
     album: string;
     image: string;
     uri: string; 
-    onPlay: (uri: string) => void;
 }
 
 
 
-const Song: React.FC<SongProps> = ({title, artist, album, image, uri, onPlay}) => {
+const Song: React.FC<SongProps> = ({title, artist, album, image, uri}) => {
     const changeSong = async () => {
         const requestData = {
             uri: uri

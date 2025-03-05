@@ -15,11 +15,11 @@ interface Song {
     uri: string
 }
 
-interface Playlist {
-    playlistID: string;
-    name: string;
-    image: string;
-}
+// interface Playlist {
+//     playlistID: string;
+//     name: string;
+//     image: string;
+// }
 
 
 const AddToPlaylist: React.FC = () => {
@@ -58,13 +58,20 @@ const AddToPlaylist: React.FC = () => {
     
             const data = await res.json();
             if (res.ok) {
-                const songList: Song[] = Object.values(data.songs as { trackID: string; title: string; artist: string; album: string; image: string; uri:string }[]).map((item) => ({
-                    trackID: item.trackID,
-                    title: item.title,
-                    artist: item.artist,
-                    album: item.album,
-                    image: item.image,
-                    uri: item.uri
+                const songList: Song[] = Object.values(data.songs as { 
+                        trackID: string; 
+                        title: string; 
+                        artist: string;
+                        album: string; 
+                        image: string; 
+                        uri:string;
+                    }[]).map((item) => ({
+                        trackID: item.trackID,
+                        title: item.title,
+                        artist: item.artist,
+                        album: item.album,
+                        image: item.image,
+                        uri: item.uri
                 }));
                 
                 setRecommendedSongs(songList);
@@ -196,6 +203,7 @@ const AddToPlaylist: React.FC = () => {
     const handleRefresh = () => {
         console.log("Refesh Button Clicked")
         hasFetchedSongs.current = false;  // Set hasFetched to false
+        setRecommendedSongs([])
         generateSongs();  // Call your generateSongs function
     };
 
