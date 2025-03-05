@@ -13,7 +13,7 @@ interface Song {
     title: string;
     artist: string;
     album: string;
-    releaseDate: string;
+    // releaseDate: string;
     image: string;
     uri: string; 
 }
@@ -28,11 +28,12 @@ interface Artist {
 }
 
 const Search: React.FC = () => {
-    // const [query, setQuery] = useState<string>(''); 
-    const [songs, setSongs] = useState<Song[]>([]); 
+    const [query, setQuery] = useState<string>(''); 
+    const [songs, setSongs] = useState<Song[]>([]);
+    const [artists, setArtists] = useState<Artist[]>([])
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [artists, setArtists] = useState<Artist[]>([])
+    
 
     const [currentUser, setCurrentUser] = useState<{ email: string; username: string; image: string }>({
         email: '',
@@ -47,18 +48,36 @@ const Search: React.FC = () => {
                 headers: { "Content-Type": "application/json" }
             });
     
-            if (!response.ok) {
+            if (!response) {
                 throw new Error("Network response was not ok");
             }
     
             const data = await response.json();
-            setSongs(data.songs || []);
-            setArtists(data.artists || []);
+            console.log("API Responce: ", data)
+            if (response.ok) {
+                const songList: Song[] = Object.values(data.songs as { 
+                        trackID: string; 
+                        title: string; 
+                        artist: string;
+                        album: string; 
+                        image: string; 
+                        uri:string;
+                    }[]).map((item) => ({
+                        trackID: item.trackID,
+                        title: item.title,
+                        artist: item.artist,
+                        album: item.album,
+                        image: item.image,
+                        uri: item.uri
+                }));
+                setSongs(songList);
+                setArtists(data.artists || []);
+            } else {
+                console.error('Error:', data);
+            }
         } catch (error) {
             console.error("Error fetching music data:", error);
             setError("Failed to fetch music data. Please try again later.");
-        } finally {
-            setIsLoading(false);
         }
     };
     
@@ -88,9 +107,11 @@ const Search: React.FC = () => {
     useEffect(() => {
         const storedQuery = localStorage.getItem("searchQuery");
         if (storedQuery) {
+            setQuery(storedQuery)
             fetchSongsAndArtists(storedQuery);
             localStorage.removeItem("searchQuery");  // Clear after fetching
         }
+        setIsLoading(false);
     }, []);
     
     // useEffect will fetch user data on page load
@@ -104,7 +125,6 @@ const Search: React.FC = () => {
                     image: data.user.image || '/spotify-logo.png'
                 });
                 console.log("User:", data);
-                setIsLoading(false);
             });
     }, []);
 
@@ -113,11 +133,16 @@ const Search: React.FC = () => {
     // };
 
     const handleSearch = (query: string) => {
+        setQuery(query);
+        localStorage.setItem("searchQuery", query);
         fetchSongsAndArtists(query);
     };
     
 
     return (
+        isLoading ? (
+            <></>
+        ) : (
         <div className="search-page">
             {/* Top Bar - User or Spotify Button */}
                 {currentUser.email ? (
@@ -135,7 +160,7 @@ const Search: React.FC = () => {
                 <div className="song-list-section">
                     <div className="song-list-section-top">
                         <RefreshButton styles={{opacity: 0}} onRefresh={() => {}} /> { /* This one is not displayed */}
-                        <h2 className="song-list-section-title">"songs for a road trip"</h2>
+                        <h2 className="song-list-section-title">"Songs for: {query}"</h2>
                         <RefreshButton onRefresh={() => {}} />
                     </div>
                     {/* make it work with the list of songs */}
@@ -172,7 +197,7 @@ const Search: React.FC = () => {
                 </div>
             </div>
         </div>
-    );
+    )); 
 };
 
 export default Search;

@@ -1,4 +1,5 @@
 import os
+from django.http import JsonResponse
 import openai
 import logging
 import time
@@ -9,6 +10,9 @@ import json
 openai.api_key = os.getenv("OPENAI_API_KEY")
 client = openai.OpenAI(api_key=openai.api_key)
 logger = logging.getLogger(__name__)
+
+if not openai.api_key:
+    raise ValueError("Missing OpenAI API Key!")
 
 
 # def process_json(output):
@@ -40,6 +44,8 @@ def prompt_for_song(prompt, num_runs):
             )
             output = response.choices[0].message.content
             if not output.strip():
+                print("Error: OpenAI returned an empty response!")
+                print("Raw response:", response)
                 raise ValueError("Received empty response from GPT")
             return output  
         except Exception as e:
@@ -65,6 +71,52 @@ def generate_song_suggestions(prompt):
     suggestions = response['choices'][0]['message']['content'].split("\n")
     return [s.strip() for s in suggestions if s.strip()]
 
+
+def promptForArtists(prompt, numArtists=6):
+    message = f"""Give me {numArtists} artists that match this description: {prompt}.\n
+    Return only the artist names in a JSON list format. Do not include explanations, descriptions, or extra text. 
+    Do not make up artists. Do not over-recommend one artist."""
+
+    retries = 5
+    for attempt in range(retries):
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4",
+                messages=[{"role": "user", "content": message}],
+                temperature=0.7
+            )
+
+            # Print raw response for debugging
+            print(response)
+
+            # Extract response content correctly based on new API format
+            output = response.choices[0].message.content.strip()
+
+            if not output:
+                raise ValueError("Received empty response from OpenAI API")
+
+            print(output)
+            # Attempt to parse the response as JSON
+            try:
+                artist_list = json.loads(output)
+                if isinstance(artist_list, list) and all(isinstance(artist, str) for artist in artist_list):
+                    return artist_list
+                else:
+                    raise ValueError("Response is not a valid JSON list")
+                
+            except json.JSONDecodeError:
+                print(f"Error parsing JSON: {output}")
+                return []
+            
+        except Exception as e:
+            print(f"GPT Error: {e}")
+            if "rate_limit_exceeded" in str(e):
+                time.sleep(30)  # Backoff for rate limit issues
+            else:
+                break
+    
+    return []
+    
 
 # def generate_recommendations(user_data):
 #     try:
