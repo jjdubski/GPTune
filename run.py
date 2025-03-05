@@ -53,6 +53,18 @@ try:
 
     print('\033[92mNode modules installed.\033[0m')
 
+    print('\033[93mSDeleting migrations...\033[0m')
+    try:
+        if os.name == 'posix':
+            subprocess.run(['rm', '-rf', 'backend/songs/migrations'])
+            subprocess.run(['rm', '-rf', 'backend/playlists/migrations'])
+        else:
+            subprocess.run(['rmdir', '/s', '/q', 'backend\\songs\\migrations'], shell=True)
+            subprocess.run(['rmdir', '/s', '/q', 'backend\\playlists\\migrations'], shell=True)
+        print('\033[92mMigrations deleted.\033[0m')
+    except:
+        print("\033[91mError deleting migrations.\033[0m")
+
     print('Starting app with\033[94m docker-compose\033[0m...')
 
     if check_command(['docker-compose', 'version']):

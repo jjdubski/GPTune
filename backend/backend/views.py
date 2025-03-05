@@ -340,7 +340,7 @@ def populateSongs():
                     release_date=release_date,
                     genre=", ".join(song.get('genres', [])),
                     image=song['album']['images'][0]['url'] if song['album']['images'] else None,
-                    uri = song.get('uri')
+                    uri = f"spotify:track:{song['id']}"
                 )
         return True
     except Exception as e:
@@ -389,9 +389,6 @@ def getUser(request):
         return JsonResponse({"error": "No token found"})
     
 
-
-
-
 def search_songs(request):
     query = request.GET.get("query", "")
     
@@ -409,13 +406,6 @@ def search_songs(request):
     ]
 
     return JsonResponse({"songs": ai_songs, "artists": ai_artists})
-
-
-
-
-
-
-
 
 def getLikedSongs():
     # if "spotify_token" not in request.session:
