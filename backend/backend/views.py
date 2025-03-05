@@ -400,7 +400,7 @@ def search_songs(request):
     
     try:
         # Fetch artists from GPT
-        artists = promptForArtists(query, 5)  # Fetch 5 artists
+        artists = promptForArtists(query, 6)  # Fetch 6 artists
         if not artists:
             return JsonResponse({"error": "No artists found"}, status=500)
         
