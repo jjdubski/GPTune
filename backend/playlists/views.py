@@ -214,17 +214,17 @@ def addSongToPlaylist(request):
         print(f"Request Body: {data}")  # Log the parsed request body
         
         # Extract playlist ID and track URI from the parsed data
-        playlist_id = data.get('playlist', {}).get('playlistID')
-        track_uri = data.get('song', {}).get('uri')
+        playlist_id = data['playlistID']
+        track_id = data['trackID']
 
         print(f"Playlist ID: {playlist_id}")
-        print(f"Track URI: {track_uri}")
+        print(f"Track ID: {track_id}")
         
         # Check if either playlist_id or track_uri is missing
-        if not playlist_id or not track_uri:
+        if not playlist_id or not track_id:
             return JsonResponse({'error': 'Missing playlistID or song URI'}, status=400)
 
-        sp.playlist_add_items(playlist_id, [track_uri])
+        sp.playlist_add_items(playlist_id, [track_id])
 
         return JsonResponse({'message': 'Song added successfully'}, status=200)
     

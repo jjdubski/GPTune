@@ -6,7 +6,7 @@ interface RefreshButtonProps {
   styles?: React.CSSProperties; // Optional styles for the button
 }
 
-const RefreshButton: React.FC<RefreshButtonProps> = ({ onRefresh, styles }) => {
+const RefreshButton: React.FC<RefreshButtonProps> = ({ styles, onRefresh }) => {
   const [isClicked, setIsClicked] = useState(false);
 
   const handleClick = () => {
@@ -15,7 +15,7 @@ const RefreshButton: React.FC<RefreshButtonProps> = ({ onRefresh, styles }) => {
     onRefresh(); // Call the passed function when the button is clicked
     setTimeout(() => {
       setIsClicked(false);
-    }, 2000); // Spin for 2 seconds
+    }, 5000); // Spin for 5 seconds
   };
 
   return (
