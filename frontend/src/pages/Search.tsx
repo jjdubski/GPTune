@@ -44,7 +44,7 @@ const Search: React.FC = () => {
     });
 
     const fetchSongsAndArtists = async (query: string) => {
-        setError(null);
+        // setError(null);
         setIsLoadingSongs(true);
         setIsLoadingArtists(true);
         try {
@@ -137,7 +137,7 @@ const Search: React.FC = () => {
     }, []);
 
     const handleRefresh = () => {
-        setError(null);
+        // setError(null);
         fetchSongsAndArtists(query);
     };
 
@@ -147,6 +147,7 @@ const Search: React.FC = () => {
 
     const handleSearch = (query: string) => {
         setQuery(query);
+        setError(null);
         localStorage.setItem("searchQuery", query);
         fetchSongsAndArtists(query);
     };
