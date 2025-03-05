@@ -194,9 +194,10 @@ const AddToPlaylist: React.FC = () => {
     
 
     const handleRefresh = () => {
+        console.log("Refesh Button Clicked")
         hasFetchedSongs.current = false;  // Set hasFetched to false
         generateSongs();  // Call your generateSongs function
-      };
+    };
 
     return (
         isLoading ? (
@@ -210,10 +211,11 @@ const AddToPlaylist: React.FC = () => {
                     </div>
                 </div>
                 <div className="add-songs-container">
-                    <div className="add-songs-header">
-                        <h1 className="add-songs-title">Recommended Songs</h1>
-                        <RefreshButton onRefresh={handleRefresh} />
-                    </div>
+                <div className="add-songs-header">
+                    <h1 className="add-songs-title">Recommended Songs</h1>
+                    <script>console.log("Selected PlaylistID: ", selectedPlaylistID)</script> 
+                    {selectedPlaylistID && <RefreshButton onRefresh={handleRefresh} />}
+                </div>
                     <div className="scroll">
                         {recommendedSongs.length > 0 ? (
                             recommendedSongs.map((song, index) => {

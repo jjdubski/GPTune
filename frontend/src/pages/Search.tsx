@@ -14,6 +14,7 @@ interface Artist {
     image: string;
     genres?: string[];
     popularity?: number;
+    url : string;
 }
 
 const Search: React.FC = () => {
@@ -157,6 +158,7 @@ const Search: React.FC = () => {
                                         image={artist.image}
                                         genres={artist.genres}
                                         popularity={artist.popularity}
+                                        url = {artist.url}
                                     />
                                 ))
                             )}
