@@ -12,7 +12,7 @@ interface SongProps {
 
 
 
-const Song: React.FC<SongProps> = ({title, artist, album, image, uri}) => {
+const Song: React.FC<SongProps> = ({title, artist, album, image, uri, onPlay}) => {
     const changeSong = async () => {
         const requestData = {
             uri: uri

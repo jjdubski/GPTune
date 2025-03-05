@@ -15,7 +15,7 @@ const Artist: React.FC<ArtistProps> = ({ name, image, genres, popularity, url })
     };
 
     return (
-        <div className="artist" onClick={handleClick} style={{ cursor: 'pointer' }}>
+        <div className="artist" onClick={handleClick} >
             <img src={image} alt={`${name} artist cover`} className="artist-image" />
             <div className="artist-info">
                 <p className="artist-name">{name}</p>

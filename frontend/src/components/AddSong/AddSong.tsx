@@ -7,8 +7,8 @@ interface Song {
   artist: string;
   album: string;
   image: string;
-  trackURI: string; 
-  onPlay: (trackURI: string) => void;
+  uri: string; 
+  onPlay: (uri: string) => void;
 }
 
 // interface AddSongProps {
@@ -49,7 +49,7 @@ const AddSong: React.FC<{ song: Song }> = ({ song }) => {
     <div className="add-song">
       <button 
         className="song-image-container"
-        onClick={() => song.onPlay(song.trackURI)} 
+        onClick={() => song.onPlay(song.uri)} 
       >
         <div className="arrow-right"></div> 
 

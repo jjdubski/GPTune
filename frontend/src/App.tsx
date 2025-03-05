@@ -52,7 +52,7 @@ function App() {
       .catch(error => console.error('Error Fetching User: ', error))
 
       // needs implementation on backend for pulling and setting URI
-      fetch('http://localhost:8000/getUrls')
+      fetch('http://localhost:8000/getUris')
         .then(res => {
           if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
