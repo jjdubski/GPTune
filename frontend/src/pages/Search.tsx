@@ -13,7 +13,7 @@ interface Song {
     title: string;
     artist: string;
     album: string;
-    releaseDate: string;
+    // releaseDate: string;
     image: string;
     uri: string; 
 }
@@ -25,17 +25,6 @@ interface Artist {
     genres?: string[];
     popularity?: number;
     url : string;
-}
-
-interface Song {
-    id: number;
-    trackID: string;
-    title: string;
-    artist: string;
-    album: string;
-    releaseDate: string;
-    image: string;
-    url: string; 
 }
 
 const Search: React.FC = () => {
@@ -65,13 +54,30 @@ const Search: React.FC = () => {
     
             const data = await response.json();
             console.log("API Responce: ", data)
-            setSongs(data.songs || []);
-            setArtists(data.artists || []);
+            if (response.ok) {
+                const songList: Song[] = Object.values(data.songs as { 
+                        trackID: string; 
+                        title: string; 
+                        artist: string;
+                        album: string; 
+                        image: string; 
+                        uri:string;
+                    }[]).map((item) => ({
+                        trackID: item.trackID,
+                        title: item.title,
+                        artist: item.artist,
+                        album: item.album,
+                        image: item.image,
+                        uri: item.uri
+                }));
+                setSongs(songList);
+                setArtists(data.artists || []);
+            } else {
+                console.error('Error:', data);
+            }
         } catch (error) {
             console.error("Error fetching music data:", error);
             setError("Failed to fetch music data. Please try again later.");
-        } finally {
-            setIsLoading(false);
         }
     };
     
@@ -105,6 +111,7 @@ const Search: React.FC = () => {
             fetchSongsAndArtists(storedQuery);
             localStorage.removeItem("searchQuery");  // Clear after fetching
         }
+        setIsLoading(false);
     }, []);
     
     // useEffect will fetch user data on page load
@@ -118,7 +125,6 @@ const Search: React.FC = () => {
                     image: data.user.image || '/spotify-logo.png'
                 });
                 console.log("User:", data);
-                setIsLoading(false);
             });
     }, []);
 
@@ -134,6 +140,9 @@ const Search: React.FC = () => {
     
 
     return (
+        isLoading ? (
+            <></>
+        ) : (
         <div className="search-page">
             {/* Top Bar - User or Spotify Button */}
                 {currentUser.email ? (
@@ -188,7 +197,7 @@ const Search: React.FC = () => {
                 </div>
             </div>
         </div>
-    );
+    )); 
 };
 
 export default Search;
