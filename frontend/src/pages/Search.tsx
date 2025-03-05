@@ -8,6 +8,16 @@ import SearchBar from '../components/SearchBar/SearchBar';
 import './Search.css';
 import Song from '../components/Song/Song';
 
+interface Song {
+    trackID: string;
+    title: string;
+    artist: string;
+    album: string;
+    releaseDate: string;
+    image: string;
+    uri: string; 
+}
+
 interface Artist {
     id: number;
     name: string;
@@ -43,9 +53,6 @@ const Search: React.FC = () => {
     });
 
     const fetchSongsAndArtists = async (query: string) => {
-        setIsLoading(true);
-        setError(null);
-    
         try {
             const response = await fetch(`http://localhost:8000/musicAPI/search?query=${encodeURIComponent(query)}`, {
                 method: "GET",
@@ -102,18 +109,17 @@ const Search: React.FC = () => {
     
     // useEffect will fetch user data on page load
     useEffect(() => {
-            fetch('http://localhost:8000/getUser')
-                .then(res => res.json())
-                .then(data => {   
-                console.log(data);
+        fetch('http://localhost:8000')
+            .then(res => res.json())
+            .then(data => {
                 setCurrentUser({
-                    email: data.email || '',
-                    username: data.display_name || '',
-                    image: data.image || '/spotify-logo.png'
+                    email: data.user.email || '',
+                    username: data.user.display_name || '',
+                    image: data.user.image || '/spotify-logo.png'
                 });
+                console.log("User:", data);
                 setIsLoading(false);
-                  // console.log("Email:", data.email);
-            })
+            });
     }, []);
 
     // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,14 +150,14 @@ const Search: React.FC = () => {
                 {/* Left Section: Song List */}
                 <div className="song-list-section">
                     <div className="song-list-section-top">
-                        <RefreshButton />
+                        <RefreshButton styles={{opacity: 0}} onRefresh={() => {}} /> { /* This one is not displayed */}
                         <h2 className="song-list-section-title">"Songs for: {query}"</h2>
-                        <RefreshButton />
+                        <RefreshButton onRefresh={() => {}} />
                     </div>
                     {/* make it work with the list of songs */}
                     {/* <SongList songs={songs}/> */}
                     <div className="scroll">
-                    <SongList songs={songs} />
+                    <SongList tracks={songs} />
 
                     </div>
                 </div>
