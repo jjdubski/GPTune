@@ -44,9 +44,9 @@ const AddSong: React.FC<{ song: Song }> = ({ song }) => {
   }, [song]);
 
   return (
-   isLoading ? (
-  <> </> 
-): 
+    isLoading ? (
+      <></>
+    ) :
     <div className="add-song" onClick={() => song.onPlay(song.uri)} >
       <img className="song-image" src={song.image} alt="cover_art" />
       <div className="song-info">
@@ -59,7 +59,7 @@ const AddSong: React.FC<{ song: Song }> = ({ song }) => {
         <img src={plusIcon} alt="plus-icon" className="add-icon" onClick={() => onAddToPlaylist(song)}/>
       </button>
     </div>
-);   
+  );   
 };
 
 export default AddSong;
