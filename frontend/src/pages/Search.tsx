@@ -33,6 +33,8 @@ const Search: React.FC = () => {
     const [artists, setArtists] = useState<Artist[]>([])
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingSongs, setIsLoadingSongs] = useState(false);
+    const [isLoadingArtists, setIsLoadingArtists] = useState(false);
     
 
     const [currentUser, setCurrentUser] = useState<{ email: string; username: string; image: string }>({
@@ -42,6 +44,8 @@ const Search: React.FC = () => {
     });
 
     const fetchSongsAndArtists = async (query: string) => {
+        setIsLoadingSongs(true);
+        setIsLoadingArtists(true);
         try {
             const response = await fetch(`http://localhost:8000/musicAPI/search?query=${encodeURIComponent(query)}`, {
                 method: "GET",
@@ -53,7 +57,7 @@ const Search: React.FC = () => {
             }
     
             const data = await response.json();
-            console.log("API Responce: ", data)
+            console.log("API Response: ", data)
             if (response.ok) {
                 const songList: Song[] = Object.values(data.songs as { 
                         trackID: string; 
@@ -74,7 +78,10 @@ const Search: React.FC = () => {
                 setArtists(data.artists || []);
             } else {
                 console.error('Error:', data);
+                setError('Please try a different prompt.');
             }
+            setIsLoadingSongs(false);
+            setIsLoadingArtists(false);
         } catch (error) {
             console.error("Error fetching music data:", error);
             setError("Failed to fetch music data. Please try again later.");
@@ -128,6 +135,10 @@ const Search: React.FC = () => {
             });
     }, []);
 
+    const handleRefresh = () => {
+        fetchSongsAndArtists(query);
+    };
+
     // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //     setQuery(event.target.value);
     // };
@@ -160,14 +171,19 @@ const Search: React.FC = () => {
                 <div className="song-list-section">
                     <div className="song-list-section-top">
                         <RefreshButton styles={{opacity: 0}} onRefresh={() => {}} /> { /* This one is not displayed */}
-                        <h2 className="song-list-section-title">"Songs for: {query}"</h2>
-                        <RefreshButton onRefresh={() => {}} />
+                        <h2 className="song-list-section-title">Songs matching: "{query}"</h2>
+                        <RefreshButton onRefresh={handleRefresh} />
                     </div>
                     {/* make it work with the list of songs */}
                     {/* <SongList songs={songs}/> */}
                     <div className="scroll">
-                    <SongList tracks={songs} />
-
+                    {error ? (
+                        <></>
+                    ) : isLoadingSongs ? (
+                        <p>Loading Songs...</p>
+                    ) : (
+                        <SongList tracks={songs} />
+                    )}
                     </div>
                 </div>
                 {/* Right Section: Popular Artists */}
@@ -178,7 +194,9 @@ const Search: React.FC = () => {
                         <h2 className="popular-artists-title">Popular Artists <span className="small-text">* based on your prompt</span></h2>
                         <div className="artist-grid">
                             {error ? (
-                                <p className="error-text">{error}</p>
+                                <p className="error-text" style={{ color: 'red' }}>{error}</p>
+                            ) : isLoadingArtists ? (
+                                <p>Loading Artists...</p>
                             ) : artists.length === 0 ? (
                                 <p className="empty-text">No artists found</p>
                             ) : (
