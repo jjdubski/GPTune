@@ -18,6 +18,7 @@ interface Playlist {
     image: string;
 }
 
+
 const AddToPlaylist: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [playlistSongs, setPlaylistSongs] = useState<Song[]>([]);
@@ -25,6 +26,15 @@ const AddToPlaylist: React.FC = () => {
     const [selectedPlaylistID, setSelectedPlaylistID] = useState<string | null>(null);
     const hasFetchedSongs = useRef(false);
 
+    useEffect(() => {
+        fetch('http://localhost:8000')
+            .then((res) => res.json())
+            .then((data) => {
+                if (!data.user || !data.user.email) {
+                    window.location.href ="http://127.0.0.1:8000/login/"; // Redirect to login page
+                }
+            })
+    }, []);
     const generateSongs = useCallback(async () => {
         if (hasFetchedSongs.current) return; //should be good
         const requestData = {

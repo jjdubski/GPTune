@@ -5,11 +5,14 @@ interface SongProps {
     title: string;
     artist: string;
     album: string;
-    image : string;
-    uri: string;
+    image: string;
+    uri: string; 
+    onPlay: (uri: string) => void;
 }
 
-const Song: React.FC<SongProps> = ({title, artist, album, image, uri}) => {
+
+
+const Song: React.FC<SongProps> = ({title, artist, album, image, uri, onPlay}) => {
     const changeSong = async () => {
         const requestData = {
             uri: uri
@@ -57,11 +60,14 @@ const Song: React.FC<SongProps> = ({title, artist, album, image, uri}) => {
     return (
         <div className='song' onClick={changeSong}>
             <img className="song-image" src={image} alt={`${title} album cover`} />
+
             <div className='song-info'>
                 <p className='song-title'>{title}</p>
                 <p className='song-artist'>{artist}</p>
                 <p className='song-album'>{album}</p>
+
             </div>
+            {/* <button className="play-button" onClick={() => onPlay(uri)}></button> Play button */}
         </div>
     );
 };

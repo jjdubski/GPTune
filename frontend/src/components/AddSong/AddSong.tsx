@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./AddSong.css";
-import Song from "../Song/Song";
-import plusIcon from "/plus-icon.png"
+import plusIcon from "/plus-icon.png";
 
 interface Song {
   title: string;
   artist: string;
   album: string;
   image: string;
+  uri: string; 
+  onPlay: (uri: string) => void;
 }
 
 // interface AddSongProps {
@@ -40,25 +41,26 @@ const AddSong: React.FC<{ song: Song }> = ({ song }) => {
     const img = new Image();
     img.src = song.image;
     img.onload = () => setIsLoading(false);
-  }
-  , [song]);
-  
+  }, [song]);
+
   return (
     isLoading ? (
       <></>
     ) :
-    <div className="add-song">
-      <img className="song-image" src={song.image} alt="cover_art"/>
+    <div className="add-song" onClick={() => song.onPlay(song.uri)} >
+      <img className="song-image" src={song.image} alt="cover_art" />
       <div className="song-info">
         <p className="song-title">{song.title}</p>
         <p className="song-artist">{song.artist}</p>
         <p className="song-album">{song.album}</p>
       </div>
+
       <button className="add-button">
         <img src={plusIcon} alt="plus-icon" className="add-icon" onClick={() => onAddToPlaylist(song)}/>
       </button>
     </div>
-  );
+  );   
 };
 
 export default AddSong;
+

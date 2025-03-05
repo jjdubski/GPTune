@@ -103,9 +103,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/songs" element={<Songs />} />
           <Route path="/playlists" element={<Playlists />} />
-          <Route path="/add-to-playlist" element={<AddtoPlaylist />} />
           <Route path="/search" element={<Search />} />
           <Route path="/playlist/:playlistID" element={<PlaylistDetails />} />
+          <Route path="/add-to-playlist" element={<AddtoPlaylist />} />
+
           
           {/* <Route path="logout" element={<Logout />} /> */}
           {/* <Route path='/discover' element={<Discover />} /> */}

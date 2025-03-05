@@ -10,6 +10,7 @@
     color: white;
     width: 120px; 
     max-height: 150px;
+    
 }*/
 
 /*
@@ -41,4 +42,8 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+
+}
+.artist {
+    cursor: pointer;
 }

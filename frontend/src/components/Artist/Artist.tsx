@@ -6,11 +6,16 @@ interface ArtistProps {
     image: string;
     genres?: string[];
     popularity?: number;
+    url: string;  // URL for the artist's Spotify page
 }
 
-const Artist: React.FC<ArtistProps> = ({ name, image, genres, popularity }) => {
+const Artist: React.FC<ArtistProps> = ({ name, image, url }) => {
+    const handleClick = () => {
+        window.open(url, '_blank'); // Opens URL in a new tab
+    };
+
     return (
-        <div className="artist">
+        <div className="artist" onClick={handleClick} >
             <img src={image} alt={`${name} artist cover`} className="artist-image" />
             <div className="artist-info">
                 <p className="artist-name">{name}</p>
