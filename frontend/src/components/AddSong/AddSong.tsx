@@ -9,7 +9,6 @@ interface Song {
   album: string;
   image: string;
   uri: string; 
-  onPlay: (uri: string) => void;
 }
 
 // interface Playlist {
@@ -82,7 +81,10 @@ const AddSong: React.FC<AddSongProps> = ({ song, onAddSong }) => {
     }
   };
 
-  return isLoading ? null : (
+  return (
+    isLoading ? ( 
+      <></> 
+    ) : 
     <div className="add-song" onClick={changeSong}>
       <img className="song-image" src={song.image} alt={song.title} />
       <div className="song-info">
@@ -100,7 +102,7 @@ const AddSong: React.FC<AddSongProps> = ({ song, onAddSong }) => {
         </button>
       </div>
     </div>
-  );   
+  );  
 };
 
 export default AddSong;

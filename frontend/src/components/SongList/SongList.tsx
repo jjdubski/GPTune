@@ -3,14 +3,13 @@ import './SongList.css'
 import Song  from '../Song/Song'
 
 interface Song {
-    id: number;
     trackID: string;
     title: string;
     artist: string;
     album: string;
     releaseDate: string;
     image: string;
-    url: string; 
+    uri: string; 
 }
 
 interface SongListProps {
@@ -42,9 +41,6 @@ const SongList: React.FC<SongListProps> = ({ playlistID }) => {
                 setError('Failed to fetch Songs. Please try again later.' + error)
             })
     }, [playlistID])
-    const handlePlay = (uri: string) => {
-        console.log("Playing song with URL:", uri);
-    };
     
     return (
         <div>
@@ -54,15 +50,14 @@ const SongList: React.FC<SongListProps> = ({ playlistID }) => {
                 <p>No Songs available</p>
             ) : (
                 songs.map((song) => (
-                    <div className="song-item" key={song.id}>
+                    <div className="song-item" key={song.trackID}>
                         {/* <p>ID: {song.id}</p>
                         <p>Track ID: {song.trackID}</p>
                         <p>Title: {song.title}</p>
                         <p>Artist: {song.artist}</p>
                         <p>Album: {song.album}</p>
                         <p>Release Date: {song.releaseDate}</p> */}
-                        <Song title={song.title} artist={song.artist} album={song.album} image={song.image} uri={song.url}
-                            onPlay={handlePlay}/>
+                        <Song trackID={song.trackID} title={song.title} artist={song.artist} album={song.album} image={song.image} uri={song.uri}/>
                     </div>
                 ))
             )}

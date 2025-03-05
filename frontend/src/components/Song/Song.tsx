@@ -12,22 +12,23 @@ interface SongProps {
 
 
 
-const Song: React.FC<SongProps> = ({title, artist, album, image, uri}) => {
+const Song: React.FC<SongProps> = ({ title, artist, album, image, uri}) => {
+    
     const changeSong = async () => {
         const requestData = {
-            uri: uri
-        }
-         console.log('Changing song to:', uri);
-        try{
-            await fetch ('http://localhost:8000/songAPI/playSong/',{ 
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
-            });
+            uri: uri,
+        };
+        console.log("Changing song to:", uri);
+        try {
+        await fetch("http://localhost:8000/songAPI/playSong/", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestData),
+        });
         } catch (error) {
-            console.error('Error changing song:', error);
+        console.error("Error changing song:", error);
         }
     };
             
