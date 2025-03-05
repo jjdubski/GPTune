@@ -223,11 +223,12 @@ def search_songs(request):
 
             if results["artists"]["items"]:
                 artist_info = results["artists"]["items"][0]
+                print(artist_info)
                 artist_recommendations.append({
                     "name": artist_info["name"],
-                    "spotify_url": artist_info["external_urls"]["spotify"],
+                    # "spotify_url": artist_info["external_urls"]["spotify"],
                     "image": artist_info["images"][0]["url"] if artist_info["images"] else None,
-                    "uri": artist_info["uri"]
+                    "url": artist_info["external_urls"]["spotify"]
                 })
         return JsonResponse({"artists": artist_recommendations, "songs": song_recommendations}, safe=False)
 

@@ -155,7 +155,7 @@ const Search: React.FC = () => {
                 )}
 
             {/* Main Content */}
-            <div className="search-page-container">
+            {/* <div className="search-page-container"> */}
                 {/* Left Section: Song List */}
                 <div className="song-list-section">
                     <div className="song-list-section-top">
@@ -187,15 +187,15 @@ const Search: React.FC = () => {
                                         key={index}
                                         name={artist.name}
                                         image={artist.image}
-                                        genres={artist.genres}
-                                        popularity={artist.popularity}
+                                        // genres={artist.genres}
+                                        // popularity={artist.popularity}
                                         url = {artist.url}
                                     />
                                 ))
                             )}
                         </div>
                 </div>
-            </div>
+            {/* </div> */}
         </div>
     )); 
 };
