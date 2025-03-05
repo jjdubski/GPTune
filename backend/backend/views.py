@@ -12,7 +12,7 @@ from songs.models import Song
 from spotipy import SpotifyOAuth
 from utils.spotifyClient import sp
 from utils.openai_client import client, prompt_for_song
-from utils.openai_client import generate_song_suggestions
+from utils.openai_client import generate_song_suggestions, promptForArtists
 
 logger = logging.getLogger(__name__)
 
@@ -113,7 +113,7 @@ def getRecommendations(request):
 #below is the function to search page user 
 def getAISongRecommendations(request):
     search_query = request.GET.get('query', '')
-
+    
     if not search_query:
         return JsonResponse({'error': 'No search query provided'}, status=400)
 
@@ -132,6 +132,7 @@ def getAISongRecommendations(request):
                 'album': track['album']['name'],
                 'spotify_url': track['external_urls']['spotify'],
                 'preview_url': track.get('preview_url', None),
+                'uri' : track['uri']
             })
 
     return JsonResponse({'recommendations': recommendations})
@@ -395,17 +396,59 @@ def search_songs(request):
     if not query:
         return JsonResponse({"error": "No query provided"}, status=400)
 
-    # Mock AI response (Replace this with your AI integration)
-    ai_songs = [
-        {"title": "Song 1", "artist": "Artist 1", "album": "Album 1"},
-        {"title": "Song 2", "artist": "Artist 2", "album": "Album 2"},
-    ]
-    ai_artists = [
-        {"name": "Artist 1", "image": "artist1.jpg"},
-        {"name": "Artist 2", "image": "artist2.jpg"},
-    ]
+    # # Mock AI response (Replace this with your AI integration)
+    # ai_songs = [
+    #     {"title": "Song 1", "artist": "Artist 1", "album": "Album 1"},
+    #     {"title": "Song 2", "artist": "Artist 2", "album": "Album 2"},
+    # ]
+    # ai_artists = [
+    #     {"name": "Artist 1", "image": "artist1.jpg"},
+    #     {"name": "Artist 2", "image": "artist2.jpg"},
+    # ]
+    promptSongs = "Show me songs that match this query: " + query
+    
+    try:
+        #artist from gpt
+        artists = promptForArtists(query, 5)  # Fetch 5 artists
+        if not artists:
+            return JsonResponse({"error": "No artists found"}, status=500)
+        
+         # Step 2: Get song recommendations based on those artists
+        ai_response = prompt_for_song(query, 10)
+        song_list = json.loads(ai_response)
 
-    return JsonResponse({"songs": ai_songs, "artists": ai_artists})
+        # Step 3: Search on Spotify for real data
+        song_recommendations = []
+        for song in song_list:
+            title = song.get("title", "").strip()
+            artist = song.get("artist", "").strip()
+
+            if not title or not artist:
+                continue
+
+            search_query = f"track:{title} artist:{artist}"
+            results = sp.search(q=search_query, type="track", limit=1)
+
+            if results["tracks"]["items"]:
+                track = results["tracks"]["items"][0]
+                song_recommendations.append({
+                    "title": track["name"],
+                    "artist": track["artists"][0]["name"],
+                    "album": track["album"]["name"],
+                    "spotify_url": track["external_urls"]["spotify"],
+                    "preview_url": track.get("preview_url"),
+                    "uri": track["uri"]
+                })
+
+        return JsonResponse({"artists": artists, "songs": song_recommendations})
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+        
+        for song in songList:
+            title = song
+
+    return JsonResponse()
 
 def getLikedSongs():
     # if "spotify_token" not in request.session:

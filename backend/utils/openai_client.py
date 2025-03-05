@@ -66,6 +66,31 @@ def generate_song_suggestions(prompt):
     return [s.strip() for s in suggestions if s.strip()]
 
 
+def promptForArtists(prompt, numArtists = 6):
+    message = f"""Give me {numArtists} artists that match this description: {prompt}.\n
+    Return only the artist names in a JSON list format. Do not include explanations, descriptions, or extra text. 
+    Do not make up artists. Do not over-recommend one artist."""
+    
+    retires = 5
+    for attempts in range(retires):
+        try:
+            response = client.chat.completions.create(
+                messages=[{"role": "user", "content": message}],
+                model="gpt-4o",
+                n=1,
+                temperature=0.7
+            )
+            output = response.choices[0].message.content
+            return json.loads(output)  # Ensure it's a list of artist names
+        except Exception as e:
+            print(f"GPT Error: {e}")
+            if "rate_limit_exceeded" in str(e):
+                time.sleep(30)
+            else:
+                break
+    return []
+    
+
 # def generate_recommendations(user_data):
 #     try:
 #         logging.info(f"Received user data for recommendations: {user_data}")

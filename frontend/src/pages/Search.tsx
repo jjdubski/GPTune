@@ -17,12 +17,24 @@ interface Artist {
     url : string;
 }
 
+interface Song {
+    id: number;
+    trackID: string;
+    title: string;
+    artist: string;
+    album: string;
+    releaseDate: string;
+    image: string;
+    url: string; 
+}
+
 const Search: React.FC = () => {
-    // const [query, setQuery] = useState<string>(''); 
-    const [songs, setSongs] = useState<any[]>([]); 
+    const [query, setQuery] = useState<string>(''); 
+    const [songs, setSongs] = useState<Song[]>([]);
+    const [artists, setArtists] = useState<Artist[]>([])
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [artists, setArtists] = useState<Artist[]>([])
+    
 
     const [currentUser, setCurrentUser] = useState<{ email: string; username: string; image: string }>({
         email: '',
@@ -45,6 +57,7 @@ const Search: React.FC = () => {
             }
     
             const data = await response.json();
+            console.log("API Responce: ", data)
             setSongs(data.songs || []);
             setArtists(data.artists || []);
         } catch (error) {
@@ -81,6 +94,7 @@ const Search: React.FC = () => {
     useEffect(() => {
         const storedQuery = localStorage.getItem("searchQuery");
         if (storedQuery) {
+            setQuery(storedQuery)
             fetchSongsAndArtists(storedQuery);
             localStorage.removeItem("searchQuery");  // Clear after fetching
         }
@@ -107,6 +121,8 @@ const Search: React.FC = () => {
     // };
 
     const handleSearch = (query: string) => {
+        setQuery(query);
+        localStorage.setItem("searchQuery", query);
         fetchSongsAndArtists(query);
     };
     
@@ -129,7 +145,7 @@ const Search: React.FC = () => {
                 <div className="song-list-section">
                     <div className="song-list-section-top">
                         <RefreshButton />
-                        <h2 className="song-list-section-title">"songs for a road trip"</h2>
+                        <h2 className="song-list-section-title">"Songs for: {query}"</h2>
                         <RefreshButton />
                     </div>
                     {/* make it work with the list of songs */}
