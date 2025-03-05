@@ -2,35 +2,35 @@ import React from 'react';
 import './Song.css';
 
 interface SongProps {
+    trackID: string;
     title: string;
     artist: string;
     album: string;
     image: string;
     uri: string; 
-    onPlay: (uri: string) => void;
 }
 
 
 
-const Song: React.FC<SongProps> = ({title, artist, album, image, uri, onPlay}) => {
+const Song: React.FC<SongProps> = ({ title, artist, album, image, uri}) => {
+    
     const changeSong = async () => {
         const requestData = {
-            uri: uri
+            uri: uri,
+        };
+        console.log("Changing song to:", uri);
+        try {
+        await fetch("http://localhost:8000/songAPI/playSong/", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestData),
+        });
+        } catch (error) {
+        console.error("Error changing song:", error);
         }
-         console.log('Changing song to:', uri);
-        try{
-            await fetch ('http://localhost:8000/songAPI/playSong/',{ 
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
-            });
-        }
-        catch (error){  
-            console.error('Error changing song:', error);
-        }
-    }
+    };
             
             // const data = await res.json();
             // if (res.ok) {

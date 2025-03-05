@@ -10,6 +10,7 @@ interface Song {
     album: string;
     releaseDate: string;
     coverArt: string;
+    uri: string;
 }
 
 interface Playlist {
@@ -27,6 +28,8 @@ const RecommendedSongList: React.FC<SongListProps> = ({ playlist }) => {
     const [songs, setSongs] = useState<Song[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [response, setResponse] = useState('');
+
+
     
 
     useEffect(() => {
@@ -43,13 +46,19 @@ const RecommendedSongList: React.FC<SongListProps> = ({ playlist }) => {
                 setError('Failed to fetch songs. Please try again later.');
             }
         };
-        sendPlaylistToChatGPT();
-        fetchSongs();
+
+        const fetchData = async () => {
+            await fetchSongs();
+            sendPlaylistToChatGPT()
+
+        }
+        
+        fetchData();
     }, [playlist]);
 
     const sendPlaylistToChatGPT = async () => {
         const requestData = {
-            prompt: `Here is a playlist: Brat SUmmer. Description: Its Charli xcx's summer and we gotta be bummpin that. Songs: 1. Boom Clap by Charli XCX 2. Break the Rules by Charli XCX 3. Doing It by Charli XCX 4. Famous by Charli XCX 5. Gold Coins by Charli XCX 6. Hanging}`,
+            prompt: `Here is a playlist: ${playlist.name}. Songs: ${songs.map(song => song.title).join(', ')}`,
             num_runs: 1
         };
         try {
@@ -81,7 +90,7 @@ const RecommendedSongList: React.FC<SongListProps> = ({ playlist }) => {
             ) : (
                 songs.map((song) => (
                     <div key={song.id}>
-                        <Song title={song.title} artist={song.artist} album={song.album} img={song.coverArt} />
+                        <Song trackID = {song.trackID} title={song.title} artist={song.artist} album={song.album} image={song.coverArt} uri = {song.uri}/>
                     </div>
                 ))
             )}

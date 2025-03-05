@@ -3,25 +3,29 @@ import './SongList.css'
 import Song  from '../Song/Song'
 
 interface Song {
-    id: number;
     trackID: string;
     title: string;
     artist: string;
     album: string;
     releaseDate: string;
     image: string;
-    url: string; 
+    uri: string; 
 }
 
 interface SongListProps {
+    tracks?: Song[];
     playlistID?: string;
 }
 
-const SongList: React.FC<SongListProps> = ({ playlistID }) => {
+const SongList: React.FC<SongListProps> = ({ playlistID, tracks }) => {
     const [songs, setSongs] = useState<Song[]>([])  
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
+        if (tracks) {
+            setSongs(tracks)
+            return
+        }
         const url = playlistID ? `http://localhost:8000/playlistAPI/getPlaylistSongs/${playlistID}/` 
         : 'http://localhost:8000/songAPI/songs/?format=json';
 
@@ -41,10 +45,7 @@ const SongList: React.FC<SongListProps> = ({ playlistID }) => {
                 console.error('Error fetching Songs:', error)
                 setError('Failed to fetch Songs. Please try again later.' + error)
             })
-    }, [playlistID])
-    const handlePlay = (uri: string) => {
-        console.log("Playing song with URL:", uri);
-    };
+    }, [playlistID, tracks])
     
     return (
         <div>
@@ -54,15 +55,14 @@ const SongList: React.FC<SongListProps> = ({ playlistID }) => {
                 <p>No Songs available</p>
             ) : (
                 songs.map((song) => (
-                    <div className="song-item" key={song.id}>
+                    <div className="song-item" key={song.trackID}>
                         {/* <p>ID: {song.id}</p>
                         <p>Track ID: {song.trackID}</p>
                         <p>Title: {song.title}</p>
                         <p>Artist: {song.artist}</p>
                         <p>Album: {song.album}</p>
                         <p>Release Date: {song.releaseDate}</p> */}
-                        <Song title={song.title} artist={song.artist} album={song.album} image={song.image} uri={song.url}
-                            onPlay={handlePlay}/>
+                        <Song trackID={song.trackID} title={song.title} artist={song.artist} album={song.album} image={song.image} uri={song.uri}/>
                     </div>
                 ))
             )}

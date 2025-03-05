@@ -42,6 +42,8 @@ function App() {
         .then(data => {
           if (data) {
             // console.log('User: ', data)
+            
+          
             setSubscription(data.product)
           }
           else {

@@ -18,24 +18,25 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from .views import index, login, callback, logout, getToken, getRecommendations, getUser, getUris
-
-
-
+from . import views 
 
 urlpatterns = [
-    path('admin/', admin.site.urls, name='admin'),
-    path('', index, name='index'), # Default view
-    path("login/", login, name='login'),
-    path("callback/", callback, name='callback'),
+    # Links to songs and playlists on backend
     path('songAPI/', include('songs.urls'), name='songAPI'),
-    path('logout/', logout, name='logout'),
-    #path("recommend/", recommend_songs, name="recommend-songs"),
-    path("getRecommendations/", getRecommendations, name='getRecommendations'),
     path('playlistAPI/', include('playlists.urls'), name='playlistAPI'),
-    path('getToken/', getToken, name='getToken'),
-    path('getUser/', getUser, name='getUser'),
-    path('getUris/', getUris, name='getUris'),
+    # Admin
+    path('admin/', admin.site.urls, name='admin'),
+    # OTher
+    path('', views.index, name='index'),  # Default view
+    path("login/", views.login, name='login'),
+    path("callback/", views.callback, name='callback'),
+    path('logout/', views.logout, name='logout'),
+    path("getAISongRecommendations/", views.getAISongRecommendations, name='getAISongRecommendations'),
+    path("getRecommendations/", views.getRecommendations, name='getRecommendations'),
+    path('musicAPI/search', views.search_songs, name='search_songs'),
+    path('getToken/', views.getToken, name='getToken'),
+    path('getUser/', views.getUser, name='getUser'),
+    path('getUris/', views.get_uris, name='get_uris'),  
 ]
 
 # if settings.DEBUG:

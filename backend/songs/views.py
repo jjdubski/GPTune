@@ -81,14 +81,14 @@ def playSong(request):
                 if not playbackState or not playbackState.get('is_playing'):
                     # Get available devices
                     devices = sp.devices().get('devices', [])
-                    print("Available devices:", devices)
+                    #print("Available devices:", devices)
 
                     if not devices:
                         return JsonResponse({"error": "No active devices found. Please open Spotify on a device."}, status=400)
 
                     # Select the first available device
                     device_id = devices[0]['id']
-                    print(f"Setting playback to device {device_id}")
+                    #print(f"Setting playback to device {device_id}")
 
                     # Transfer playback to the selected device
                     sp.transfer_playback(device_id, force_play=True)
