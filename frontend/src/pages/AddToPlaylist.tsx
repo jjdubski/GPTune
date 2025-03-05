@@ -24,12 +24,12 @@ interface Song {
 
 const AddToPlaylist: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
-    const [songID, setSongID] = useState('');
     const [playlistSongs, setPlaylistSongs] = useState<Song[]>([]);
     const [recommendedSongs, setRecommendedSongs] = useState<Song[]>([]);
     const [selectedPlaylistID, setSelectedPlaylistID] = useState<string | null>(null);
     const hasFetchedSongs = useRef(false);
 
+    // checks if user is logged in, redirects to login page if not
     useEffect(() => {
         fetch('http://localhost:8000')
             .then((res) => res.json())
@@ -38,7 +38,15 @@ const AddToPlaylist: React.FC = () => {
                     window.location.href ="http://127.0.0.1:8000/login/"; // Redirect to login page
                 }
             })
+            .catch((error) => {
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     }, []);
+
+    // Fetches recommended songs based on selected playlist songs 
     const generateSongs = useCallback(async () => {
         if (hasFetchedSongs.current) return; //should be good
         const requestData = {
@@ -84,6 +92,7 @@ const AddToPlaylist: React.FC = () => {
         hasFetchedSongs.current = true;
     }, [playlistSongs]);
 
+    // Fetches songs from selected playlist
     useEffect(() => {
         const fetchPlaylists = async () => {
             if(!selectedPlaylistID){
@@ -100,60 +109,13 @@ const AddToPlaylist: React.FC = () => {
             catch (error) {
                 console.error('Error fetching Playlist songs:', error);
             }
-            hasFetchedSongs.current = false;
+            hasFetchedSongs.current = false; // Allow new recommendations
         }
         
         fetchPlaylists();
     }, [selectedPlaylistID]);
 
-    useEffect(() => {
-        // return
-        const addSong = async () => {
-            const requestData = {
-                // playlist: selectedPlaylist,
-                song: songID,
-                playlist: selectedPlaylistID,
-            };
-            console.log("addsongdata",requestData);
-            try {
-                const response = await fetch("http://localhost:8000/playlistAPI/addSongToPlaylist", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(requestData),
-                });
-        
-                if (response.ok) {
-                // console.log("Song added successfully to", selectedPlaylist);
-                
-                } else {
-                console.error("Failed to add song to playlist:", response);
-                }
-            } catch (error) {
-                console.error("Error adding song:", error);
-            } 
-        }
-        addSong();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [songID])
-
-    useEffect(() => {
-        fetch('http://127.0.0.1:8000/getUser')
-            .then(res => res.json())
-            .then(data => {
-            console.log(data);
-            if (data.error) {
-                console.error('User email not found');
-                window.location.href = 'http://127.0.0.1:8000/login';
-                return;
-            }
-            
-            setIsLoading(false);
-              // console.log("Email:", data.email);
-        })
-    }, []);
-
+    // if playlistSongs changes (and its greater than 0) generate new recommendations
     useEffect(() => {
         if (playlistSongs.length > 0) {
             generateSongs();
@@ -162,44 +124,43 @@ const AddToPlaylist: React.FC = () => {
     }, [playlistSongs]);
 
 
+    // Updates selectedPlaylistID and resets songs
     const handleSelectPlaylist = (playlistID: string) => {
-        setSelectedPlaylistID(playlistID);
         setPlaylistSongs([]); // Reset songs when switching playlists
-        hasFetchedSongs.current = false; // Allow new recommendations to be fetched
+        setSelectedPlaylistID(playlistID);
     };
 
+    // Adds song to selected playlist
     const handleAddSong = async (trackID: string) => {
         if (playlistSongs.some(song => song.trackID === trackID)) {
             console.log("Song already in playlist.");
             return;
         }
-    
-        try {
-            const response = await fetch("http://localhost:8000/playlistAPI/addSongToPlaylist", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    song: { uri: trackID },  // Sending trackID as the 'uri' cuz thats what backend expects. Spotipy can take ether
-                    playlist: { playlistID: selectedPlaylistID }  // Sending playlistID in the expected structure
-                }),
-            });
-    
-            if (response.ok) {
-                console.log(`Song ${trackID} added successfully.`);
-                setSongID(trackID);
-                setPlaylistSongs([...playlistSongs, { trackID, title: "Unknown", artist: "Unknown", album: "Unknown", image: "", uri: "" }]); // Temporary UI update
-                hasFetchedSongs.current = false; // Allow new recommendations
-                generateSongs(); // Fetch new recommendations
-            } else {
-                console.error("Failed to add song:", await response.text());
+        const addSong = async () => {
+            try {
+                const response = await fetch("http://localhost:8000/playlistAPI/addSongToPlaylist", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        trackID: trackID ,  // Sending trackID as the 'uri' cuz thats what backend expects. Spotipy can take ether
+                        playlistID: selectedPlaylistID  // Sending playlistID in the expected structure
+                    }),
+                });
+        
+                if (response.ok) {
+                    console.log(`Song ${trackID} added successfully.`);
+                    // setPlaylistSongs([...playlistSongs, { trackID, title: "Unknown", artist: "Unknown", album: "Unknown", image: "", uri: "" }]); // Temporary UI update
+                } else {
+                    console.error("Failed to add song:", await response.text());
+                }
+            } catch (error) {
+                console.error("Error adding song:", error);
             }
-        } catch (error) {
-            console.error("Error adding song:", error);
-        }
+        };
+        addSong();
     };
 
-    
-
+    // Fetches new recommendations when refresh button is clicked
     const handleRefresh = () => {
         console.log("Refesh Button Clicked")
         hasFetchedSongs.current = false;  // Set hasFetched to false
