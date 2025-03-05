@@ -10,6 +10,7 @@ class Song(models.Model):
     release_date = models.DateField(blank=True, null=True)
     genre = models.CharField(max_length=50)
     image = models.URLField(max_length=200, blank=True)
+    uri = models.CharField(max_length=100, blank=False, null= False)
 
     def __str__(self):
         return f"{self.title} by {self.artist}"

@@ -11,6 +11,7 @@ interface Song {
     album: string;
     releaseDate: string;
     image: string;
+    uri: string
 }   
 
 const PlaylistDetails: React.FC = () => {
@@ -57,7 +58,7 @@ const PlaylistDetails: React.FC = () => {
                 <div>
                     {playlist.map((song, index) => (
                         <div className="song-item" key={`${index}`}>
-                            <Song title={song.title} artist={song.artist} album={song.album} image={song.image} />
+                            <Song title={song.title} artist={song.artist} album={song.album} image={song.image} uri = {song.uri} />
                         </div>
                     ))}
                 </div>

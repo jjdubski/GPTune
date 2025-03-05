@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Playlist from '../components/Playlist/Playlist'
 import './Playlist.css'
-import PlaylistList from '../components/PlaylistList/PlaylistList'
-import RefreshButton from '../components/RefreshIcon/RefreshIcon'
+import RefreshButton from '../components/RefreshButton/RefreshButton'
 interface Playlist {
     playlistID: number;
     name: string;

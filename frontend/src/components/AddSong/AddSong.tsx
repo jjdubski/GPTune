@@ -11,8 +11,31 @@ interface Song {
   onPlay: (trackURI: string) => void;
 }
 
+// interface AddSongProps {
+// }
+
 const AddSong: React.FC<{ song: Song }> = ({ song }) => {
   const [isLoading, setIsLoading] = useState(true);
+  
+  const onAddToPlaylist = async (song: Song) => {
+    try {
+      const response = await fetch("http://localhost:8000/api/addSongToPlaylist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(song),
+      });
+
+      if (response.ok) {
+        console.log("Song added successfully");
+      } else {
+        console.error("Failed to add song to playlist:", response);
+      }
+    } catch (error) {
+      console.error("Error adding song:", error);
+    }
+  };
 
   useEffect(() => {
     const img = new Image();
@@ -39,7 +62,9 @@ const AddSong: React.FC<{ song: Song }> = ({ song }) => {
         <p className="song-album">{song.album}</p>
       </div>
 
-      <img src={plusIcon} alt="plus-icon" className="add-icon" />
+      <button className="add-button">
+        <img src={plusIcon} alt="plus-icon" className="add-icon" onClick={() => onAddToPlaylist(song)}/>
+      </button>
     </div>
   );
 };

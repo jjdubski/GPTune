@@ -242,13 +242,25 @@ def login(request):
     return redirect(auth_url)
 
 def logout(request):
-    request.session.flush()
+    try:
+        request.session.flush()
+    except Exception as e:
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error logging out: {str(e)}")
+        #return JsonResponse({"error": "Failed to log out"}, status=500)
     # log user out of Spotify
     sp.auth_manager.cache_handler.delete_cached_token()
     #cleanup database
-    Song.objects.all().delete()
-    Playlist.objects.all().delete()
-
+    try:
+        Song.objects.all().delete()
+    except Exception as e:
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error cleaning up database: {str(e)}")
+    try:
+        Playlist.objects.all().delete()
+    except Exception as e:
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error cleaning up database: {str(e)}")
     return redirect('http://localhost:3000/')
 
 def callback(request):
@@ -300,7 +312,8 @@ def populateSongs():
                     album=song['album']['name'],
                     release_date=release_date,
                     genre=", ".join(song.get('genres', [])),
-                    image=song['album']['images'][0]['url'] if song['album']['images'] else None
+                    image=song['album']['images'][0]['url'] if song['album']['images'] else None,
+                    uri = song.get('uri')
                 )
         return True
     except Exception as e:
@@ -369,6 +382,7 @@ def getLikedSongs():
         return JsonResponse({"error": f"Failed to get saved songs: {str(e)}"}, status=500)
     
     for song in raw_liked_songs:
+        # print(song)
         release_date = song['track']['album']['release_date']
         if release_date:
             release_date_parts = release_date.split('-')
@@ -388,6 +402,8 @@ def getLikedSongs():
         artist_data = track['artists'][0]
         # artist_id = artist_data['id']
         artist_name = artist_data['name']
+        uri = track.get('uri','')
+        
 
         # Check if the song already exists
         if not Song.objects.filter(trackID=track_id).exists():
@@ -399,7 +415,8 @@ def getLikedSongs():
                 album=album_name,
                 release_date=release_date,
                 genre=", ".join(album_data.get('genres', [])),
-                image=album_data['images'][0]['url'] if album_data['images'] else ''
+                image=album_data['images'][0]['url'] if album_data['images'] else '',
+                uri = uri
             )
             liked_songs.append(song)
         else:
@@ -425,3 +442,6 @@ def getLikedSongs():
         playlist.save()
     
     return JsonResponse({"message": "Saved songs imported successfully"}, status=201)
+
+def getUris(request):
+    return JsonResponse({'message': 'testing'}, status = 404)
