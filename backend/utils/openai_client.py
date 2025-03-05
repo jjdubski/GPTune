@@ -1,4 +1,5 @@
 import os
+from django.http import JsonResponse
 import openai
 import logging
 import time

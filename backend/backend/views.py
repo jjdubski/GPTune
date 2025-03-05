@@ -396,29 +396,32 @@ def search_songs(request):
     if not query:
         return JsonResponse({"error": "No query provided"}, status=400)
 
-    # # Mock AI response (Replace this with your AI integration)
-    # ai_songs = [
-    #     {"title": "Song 1", "artist": "Artist 1", "album": "Album 1"},
-    #     {"title": "Song 2", "artist": "Artist 2", "album": "Album 2"},
-    # ]
-    # ai_artists = [
-    #     {"name": "Artist 1", "image": "artist1.jpg"},
-    #     {"name": "Artist 2", "image": "artist2.jpg"},
-    # ]
     promptSongs = "Show me songs that match this query: " + query
     
     try:
-        #artist from gpt
+        # Fetch artists from GPT
         artists = promptForArtists(query, 5)  # Fetch 5 artists
         if not artists:
             return JsonResponse({"error": "No artists found"}, status=500)
         
-         # Step 2: Get song recommendations based on those artists
+        # Get song recommendations based on those artists
         ai_response = prompt_for_song(promptSongs, 10)
-        song_list = json.loads(ai_response)
+        if not ai_response:
+            return JsonResponse({"error": "Empty response from AI"}, status=500)
+        
+        # Clean the AI response by removing JSON formatting markers
+        cleaned_response = ai_response.strip().strip("```json").strip("```").strip()
+        
+        try:
+            song_list = json.loads(cleaned_response)
+        except json.JSONDecodeError:
+            print(f"Invalid JSON format from AI: {cleaned_response}")
+            logger.error(f"Invalid JSON format from AI: {cleaned_response}")
+            return JsonResponse({"error": "Invalid JSON format from AI"}, status=500)
 
-        # Step 3: Search on Spotify for real data
+        # Search on Spotify for real data
         song_recommendations = []
+        print("Song List:", song_list)
         for song in song_list:
             title = song.get("title", "").strip()
             artist = song.get("artist", "").strip()
@@ -440,16 +443,33 @@ def search_songs(request):
                     "uri": track["uri"]
                 })
 
-        return JsonResponse({"artists": artists, "songs": song_recommendations})
+        artist_recommendations = []
+        print("Artist List:", artists)
+        for artist in artists:
+            if isinstance(artist, dict):
+                artist_name = artist.get("name", "").strip()
+            else:
+                artist_name = artist.strip()
+
+            if not artist_name:
+                continue
+
+            search_query = f"artist:{artist_name}"
+            results = sp.search(q=search_query, type="artist", limit=1)
+
+            if results["artists"]["items"]:
+                artist_info = results["artists"]["items"][0]
+                artist_recommendations.append({
+                    "name": artist_info["name"],
+                    "spotify_url": artist_info["external_urls"]["spotify"],
+                    "image": artist_info["images"][0]["url"] if artist_info["images"] else None,
+                    "uri": artist_info["uri"]
+                })
+        return JsonResponse({"artists": artist_recommendations, "songs": song_recommendations}, safe=False)
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
-        
-        for song in songList:
-            title = song
-
-    return JsonResponse()
-
+    
 def getLikedSongs():
     # if "spotify_token" not in request.session:
     #     return JsonResponse({"error": "User must be logged in to Spotify"}, status=401)
