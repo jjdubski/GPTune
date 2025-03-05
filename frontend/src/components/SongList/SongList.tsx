@@ -10,7 +10,7 @@ interface Song {
     album: string;
     releaseDate: string;
     image: string;
-    uri: string;
+    url: string; 
 }
 
 interface SongListProps {
@@ -42,6 +42,9 @@ const SongList: React.FC<SongListProps> = ({ playlistID }) => {
                 setError('Failed to fetch Songs. Please try again later.' + error)
             })
     }, [playlistID])
+    const handlePlay = (uri: string) => {
+        console.log("Playing song with URL:", uri);
+    };
     
     return (
         <div>
@@ -58,7 +61,8 @@ const SongList: React.FC<SongListProps> = ({ playlistID }) => {
                         <p>Artist: {song.artist}</p>
                         <p>Album: {song.album}</p>
                         <p>Release Date: {song.releaseDate}</p> */}
-                        <Song title={song.title} artist={song.artist} album={song.album} image={song.image} />
+                        <Song title={song.title} artist={song.artist} album={song.album} image={song.image} uri={song.url}
+                            onPlay={handlePlay}/>
                     </div>
                 ))
             )}

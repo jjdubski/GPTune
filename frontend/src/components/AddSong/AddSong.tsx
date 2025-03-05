@@ -8,7 +8,8 @@ interface Song {
   artist: string;
   album: string;
   image: string;
-  uri: string;
+  uri: string; 
+  onPlay: (uri: string) => void;
 }
 
 // interface Playlist {
@@ -99,7 +100,8 @@ const AddSong: React.FC<AddSongProps> = ({ song, onAddSong }) => {
         </button>
       </div>
     </div>
-  );
+  );   
 };
 
 export default AddSong;
+
