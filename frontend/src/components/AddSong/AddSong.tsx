@@ -3,6 +3,7 @@ import "./AddSong.css";
 import plusIcon from "/plus-icon.png";
 
 interface Song {
+  trackID: string;
   title: string;
   artist: string;
   album: string;
@@ -10,44 +11,51 @@ interface Song {
   uri: string;
 }
 
-interface Playlist {
-  playlistID: string;
-  name: string;
-  image: string;
+// interface Playlist {
+//   playlistID: string;
+//   name: string;
+//   image: string;
+// }
+interface AddSongProps{
+  song: Song
+  onAddSong: (trackID: string) => void;
 }
 
-const AddSong: React.FC<{ song: Song; selectedPlaylist: Playlist }> = ({ song, selectedPlaylist }) => {
+
+
+const AddSong: React.FC<AddSongProps> = ({ song, onAddSong }) => {
   const [isLoading, setIsLoading] = useState(true);
 
-  const onAddToPlaylist = async () => {
-    if (!selectedPlaylist) {
-      console.error("No playlist selected");
-      return;
-    }
+  // const onAddToPlaylist = async () => {
+  //   // if (!selectedPlaylist) {
+  //   //   console.error("No playlist selected");
+  //   //   return;
+  //   // }
 
-    const requestData = {
-      playlist: selectedPlaylist,
-      song: song,
-    };
+  //   const requestData = {
+  //     // playlist: selectedPlaylist,
+  //     song: song,
+  //   };
 
-    try {
-      const response = await fetch("http://localhost:8000/playlistAPI/addSongToPlaylist", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      });
+  //   try {
+  //     const response = await fetch("http://localhost:8000/playlistAPI/addSongToPlaylist", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(requestData),
+  //     });
 
-      if (response.ok) {
-        console.log("Song added successfully to", selectedPlaylist);
-      } else {
-        console.error("Failed to add song to playlist:", response);
-      }
-    } catch (error) {
-      console.error("Error adding song:", error);
-    }
-  };
+  //     if (response.ok) {
+  //       // console.log("Song added successfully to", selectedPlaylist);
+
+  //     } else {
+  //       console.error("Failed to add song to playlist:", response);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error adding song:", error);
+  //   }
+  // };
 
   useEffect(() => {
     const img = new Image();
@@ -81,9 +89,9 @@ const AddSong: React.FC<{ song: Song; selectedPlaylist: Playlist }> = ({ song, s
         <p className="song-artist">{song.artist}</p>
         <p className="song-album">{song.album}</p>
       </div>
-      <button className="add-button" onClick={(e) => {
-        e.stopPropagation(); // Prevent triggering `changeSong` when clicking the button
-        onAddToPlaylist();
+      <button className="add-button" onClick={() => {
+        // e.stopPropagation(); // Prevent triggering `changeSong` when clicking the button
+        onAddSong(song.trackID)
       }}>
         <img src={plusIcon} alt="plus-icon" className="add-icon" />
       </button>

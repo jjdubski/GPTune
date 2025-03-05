@@ -52,7 +52,7 @@ const RecommendedSongList: React.FC<SongListProps> = ({ playlist }) => {
 
     const sendPlaylistToChatGPT = async () => {
         const requestData = {
-            prompt: `Here is a playlist: Brat SUmmer. Description: Its Charli xcx's summer and we gotta be bummpin that. Songs: 1. Boom Clap by Charli XCX 2. Break the Rules by Charli XCX 3. Doing It by Charli XCX 4. Famous by Charli XCX 5. Gold Coins by Charli XCX 6. Hanging}`,
+            prompt: `Here is a playlist: ${playlist.name}. Songs: ${songs.map(song => song.title).join(', ')}`,
             num_runs: 1
         };
         try {

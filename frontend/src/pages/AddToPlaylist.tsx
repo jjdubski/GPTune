@@ -7,6 +7,7 @@ import RefreshButton from '../components/RefreshButton/RefreshButton';
 import Playlist from '../components/Playlist/Playlist';
 
 interface Song {
+    trackID: string;
     title: string;
     artist: string;
     album: string;
@@ -22,6 +23,7 @@ interface Playlist {
 
 const AddToPlaylist: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
+    const [songID, setSongID] = useState('');
     const [playlistSongs, setPlaylistSongs] = useState<Song[]>([]);
     const [recommendedSongs, setRecommendedSongs] = useState<Song[]>([]);
     const [selectedPlaylistID, setSelectedPlaylistID] = useState<string | null>(null);
@@ -46,7 +48,8 @@ const AddToPlaylist: React.FC = () => {
     
             const data = await res.json();
             if (res.ok) {
-                const songList: Song[] = Object.values(data.songs as { title: string; artist: string; album: string; image: string; uri:string }[]).map((item) => ({
+                const songList: Song[] = Object.values(data.songs as { trackID: string; title: string; artist: string; album: string; image: string; uri:string }[]).map((item) => ({
+                    trackID: item.trackID,
                     title: item.title,
                     artist: item.artist,
                     album: item.album,
@@ -82,8 +85,41 @@ const AddToPlaylist: React.FC = () => {
             }
             hasFetchedSongs.current = false;
         }
+        
         fetchPlaylists();
     }, [selectedPlaylistID]);
+
+    useEffect(() => {
+        // return
+        const addSong = async () => {
+            const requestData = {
+                // playlist: selectedPlaylist,
+                song: songID,
+                playlist: selectedPlaylistID,
+            };
+            console.log("addsongdata",requestData);
+            try {
+                const response = await fetch("http://localhost:8000/playlistAPI/addSongToPlaylist", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestData),
+                });
+        
+                if (response.ok) {
+                // console.log("Song added successfully to", selectedPlaylist);
+                
+                } else {
+                console.error("Failed to add song to playlist:", response);
+                }
+            } catch (error) {
+                console.error("Error adding song:", error);
+            } 
+        }
+        addSong();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [songID])
 
     useEffect(() => {
         fetch('http://127.0.0.1:8000/getUser')
@@ -113,6 +149,11 @@ const AddToPlaylist: React.FC = () => {
         setSelectedPlaylistID(playlistID);
     };
 
+    const handleAddSong = (trackID: string) => {
+        setSongID(trackID);
+    }
+    
+
     const handleRefresh = () => {
         hasFetchedSongs.current = false;  // Set hasFetched to false
         generateSongs();  // Call your generateSongs function
@@ -137,7 +178,7 @@ const AddToPlaylist: React.FC = () => {
                     <div className="scroll">
                         {recommendedSongs.length > 0 ? (
                             recommendedSongs.map((song, index) => (
-                                <AddSong key={index} song={song} selectedPlaylist={Playlist}/>
+                                <AddSong key={index} song={song} onAddSong={handleAddSong}/>
                             ))
                             
                         ) : selectedPlaylistID ? (
