@@ -67,7 +67,7 @@ const Song: React.FC<SongProps> = ({title, artist, album, image, uri, onPlay}) =
                 <p className='song-album'>{album}</p>
 
             </div>
-            <button className="play-button" onClick={() => onPlay(uri)}></button> {/* Play button */}
+            {/* <button className="play-button" onClick={() => onPlay(uri)}></button> Play button */}
         </div>
     );
 };
