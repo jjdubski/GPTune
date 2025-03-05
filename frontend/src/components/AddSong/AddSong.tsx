@@ -47,16 +47,8 @@ const AddSong: React.FC<{ song: Song }> = ({ song }) => {
    isLoading ? (
   <> </> 
 ): 
-    <div className="add-song">
-      <button 
-        className="song-image-container"
-        onClick={() => song.onPlay(song.uri)} 
-      >
-        <div className="arrow-right"></div> 
-
-        <img className="song-image" src={song.image} alt="cover_art" />
-      </button>
-
+    <div className="add-song" onClick={() => song.onPlay(song.uri)} >
+      <img className="song-image" src={song.image} alt="cover_art" />
       <div className="song-info">
         <p className="song-title">{song.title}</p>
         <p className="song-artist">{song.artist}</p>
