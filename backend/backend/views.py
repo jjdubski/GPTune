@@ -208,7 +208,7 @@ def search_songs(request):
 
 
         artist_recommendations = []
-        print("Artist List:", artists)
+        # print("Artist List:", artists)
         for artist in artists:
             if isinstance(artist, dict):
                 artist_name = artist.get("name", "").strip()
@@ -223,7 +223,7 @@ def search_songs(request):
 
             if results["artists"]["items"]:
                 artist_info = results["artists"]["items"][0]
-                print(artist_info)
+                # print(artist_info)
                 artist_recommendations.append({
                     "name": artist_info["name"],
                     # "spotify_url": artist_info["external_urls"]["spotify"],
@@ -265,7 +265,7 @@ def generate_response(prompt, num_runs=10):
                 if len(ban_list) > 30:
                     ban_list.clear()
                 prompt += f"\n\nThe following songs are already in the list or do not exist: {ban_list}, {unknown_songs}. Do not recommend them."
-                print(f"\t\tRe-prompting for song: ")
+                # print(f"\t\tRe-prompting for song: ")
                 track = prompt_for_song(prompt, 1)
                 track_info = process_json(track)
                 try:
@@ -334,28 +334,28 @@ def get_user_info():
 # Function to validate Song 
 def check_song_exists(title, artist, verbose=True):
     if f"{title}-{artist}" in unknown_songs:
-        if(verbose):
-            print(f"\t\tUnknown track, skipping.")
+        # if(verbose):
+            # print(f"\t\tUnknown track, skipping.")
         return None
     search_result = sp.search(q=f'artist:{artist} track:{title}', type='track')
     if search_result['tracks']['items']:
         track_id = search_result['tracks']['items'][0]['id']
         song_cache[track_id] = search_result['tracks']['items'][0]
-        if(verbose):
-            print(f"\t\tTrack ID: {track_id}")
+        # if(verbose):
+            # print(f"\t\tTrack ID: {track_id}")
         return track_id
     else:
         if(verbose):
-            print(f"\t\tTrack not found")
+            # print(f"\t\tTrack not found")
             unknown_songs.add(f"{title}-{artist}")
         return None
 
 # find new song is song doesnt exist
 def find_new_song(title, artist, tracks=[]):
-    print(f"\tSearching track ID for: {title} by {artist}")
+    # print(f"\tSearching track ID for: {title} by {artist}")
     track_id = check_song_exists(title, artist)
     if track_id in tracks:
-            print(f"\t\tTrack already recommended, skipping.")
+            # print(f"\t\tTrack already recommended, skipping.")
             track_id = None
     return track_id
 

@@ -10,10 +10,11 @@ interface Playlist {
 
 interface PlaylistListProps {
     onSelectPlaylist: (playlistID: string) => void;
+    selectedPlaylistID?: string;
 }
 
 
-const PlaylistList: React.FC<PlaylistListProps> = ({onSelectPlaylist}) => {
+const PlaylistList: React.FC<PlaylistListProps> = ({onSelectPlaylist, selectedPlaylistID}) => {
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -55,11 +56,16 @@ const PlaylistList: React.FC<PlaylistListProps> = ({onSelectPlaylist}) => {
                 {playlists
                     .sort((a, b) => (a.playlistID === 'liked_songs' ? -1 : b.playlistID === 'liked_songs' ? 1 : 0))
                     .map(playlist => (
-                        <div className='playlist-container' key={playlist.playlistID} onClick={() => onSelectPlaylist(playlist.playlistID)}>
+                        <div
+                            className='playlist-container'
+                            key={playlist.playlistID}
+                            onClick={() => onSelectPlaylist(playlist.playlistID)}
+                        >
                             <Playlist
                                 playlistID={playlist.playlistID}
                                 title={playlist.name}
                                 image={playlist.image}
+                                selectedPlaylistID={selectedPlaylistID}
                             />
                         </div>
                     ))}
