@@ -29,8 +29,8 @@ interface Artist {
 
 const Search: React.FC = () => {
     const [query, setQuery] = useState<string>(''); 
-    const [songs, setSongs] = useState<Song[]>([]);
-    const [artists, setArtists] = useState<Artist[]>([])
+    const [songs, setSongs] = useState<any[]>([]); 
+    const [artists, setArtists] = useState<any[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isLoadingSongs, setIsLoadingSongs] = useState(false);
@@ -89,29 +89,6 @@ const Search: React.FC = () => {
         }
     };
     
-
-    // const fetchSongsAndArtists = () => {
-        // fetch(`http://localhost:8000/musicAPI/search?query=${query}`)
-        //     .then((response) => {
-        //         if (!response.ok) {
-        //             throw new Error('Network response was not ok');
-        //         }
-        //         return response.json();
-        //     })
-        //     .then((data) => {
-        //         console.log('Data received:', data);
-        //         setSongs(data.songs || []);
-        //         setArtists(data.artists || []);
-        //         setError(null);
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error fetching music data:', error);
-        //         setError('Failed to fetch music data. Please try again later.');
-        //     });
-
-        // work with John to add route that returns an array of songs and artists (seperately)
-        // break this down to two different fetch calls, one for each
-    // };
     useEffect(() => {
         const storedQuery = localStorage.getItem("searchQuery");
         if (storedQuery) {
@@ -122,7 +99,6 @@ const Search: React.FC = () => {
         setIsLoading(false);
     }, []);
     
-    // useEffect will fetch user data on page load
     useEffect(() => {
         fetch('http://localhost:8000')
             .then(res => res.json())
@@ -133,13 +109,11 @@ const Search: React.FC = () => {
                     image: data.user.image || '/spotify-logo.png'
                 });
                 console.log("User:", data);
+                setIsLoading(false);
             });
     }, []);
 
-    const handleRefresh = () => {
-        // setError(null);
-        fetchSongsAndArtists(query);
-    };
+
 
     // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //     setQuery(event.target.value);
@@ -151,22 +125,23 @@ const Search: React.FC = () => {
         localStorage.setItem("searchQuery", query);
         fetchSongsAndArtists(query);
     };
-    
+
+    const handleRefresh = () => {
+        fetchSongsAndArtists(query);
+    };
 
     return (
         isLoading ? (
             <></>
         ) : (
         <div className="search-page">
-            {/* Top Bar - User or Spotify Button */}
-                {currentUser.email ? (
-        
-                    <User username={currentUser.username} image={currentUser.image} />
-                ) : (
-                    <div className="spotify-button-container">
-                        <SpotifyButton title="Link Spotify" img="./SpotifyButton.png" />
-                    </div>
-                )}
+            {currentUser.email ? (
+                <User username={currentUser.username} image={currentUser.image} />
+            ) : (
+                <div className="spotify-button-container">
+                    <SpotifyButton title="Link Spotify" img="./SpotifyButton.png" />
+                </div>
+            )}
 
             {/* Main Content */}
             {/* <div className="search-page-container"> */}
@@ -177,9 +152,8 @@ const Search: React.FC = () => {
                         <h2 className="song-list-section-title">Songs matching: "{query}"</h2>
                         <RefreshButton onRefresh={handleRefresh} />
                     </div>
-                    {/* make it work with the list of songs */}
-                    {/* <SongList songs={songs}/> */}
                     <div className="scroll">
+                      
                     {error ? (
                         <></>
                     ) : isLoadingSongs ? (
@@ -187,9 +161,9 @@ const Search: React.FC = () => {
                     ) : (
                         <SongList tracks={songs} />
                     )}
+
                     </div>
                 </div>
-                {/* Right Section: Popular Artists */}
                 <div className="artist-section">
                     <h2 className="above-prompt">Not what you are looking for? Enter a new prompt.</h2>
                     <SearchBar onSearch={handleSearch} />

@@ -167,7 +167,6 @@ const AddToPlaylist: React.FC = () => {
         setRecommendedSongs([])
         generateSongs();  // Call your generateSongs function
     };
-
     return (
         isLoading ? (
             <></>
