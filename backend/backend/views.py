@@ -405,6 +405,7 @@ def search_songs(request):
     #     {"name": "Artist 1", "image": "artist1.jpg"},
     #     {"name": "Artist 2", "image": "artist2.jpg"},
     # ]
+    
     promptSongs = "Show me songs that match this query: " + query
     
     try:
