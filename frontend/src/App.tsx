@@ -112,7 +112,7 @@ function App() {
           
           {/* <Route path="logout" element={<Logout />} /> */}
           {/* <Route path='/discover' element={<Discover />} /> */}
-          {/* <Route path='/this-or-that' element={<ThisOrThat />} /> */}
+          <Route path='/this-or-that' element={<ThisOrThat />} />
         </Routes>
         {/* {token && <WebPlayback token={token} />} */}
         <div className="player-container">
