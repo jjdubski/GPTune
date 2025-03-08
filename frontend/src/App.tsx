@@ -10,6 +10,7 @@ import SideMenu from './components/SideMenu/SideMenu.tsx'
 import Search from './pages/Search.tsx'
 import SpotifyPlayer from 'react-spotify-web-playback';
 import PlaylistDetails from './pages/PlaylistDetails.tsx'
+import ThisOrThat from './pages/ThisorThat'
 
 
 function App() { 
@@ -108,6 +109,7 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/playlist/:playlistID" element={<PlaylistDetails />} />
           <Route path="/add-to-playlist" element={<AddtoPlaylist />} />
+          <Route path ="/this-or-that" element={<ThisOrThat />} />
 
           
           {/* <Route path="logout" element={<Logout />} /> */}
