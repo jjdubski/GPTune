@@ -241,7 +241,7 @@ def addSongToPlaylist(request):
 def thisOrThat(request):
     likedSongs = Playlist.objects.get(playlistID="liked_songs")
     playlists = Playlist.objects.all()
-    gptRecomendations = prompt_for_song(likedSongs, 1)
+    gptRecomendations = prompt_for_song(likedSongs, 1)#change to whatever the current selected playlist is
     print(gptRecomendations)
     
     playlists_list = list(playlists.values())
