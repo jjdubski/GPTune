@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from playlists.models import Playlist
 from songs.models import Song
-from spotipy import SpotifyOAuth
+
 from utils.spotifyClient import sp
 from utils.openai_client import client, prompt_for_song
 from utils.openai_client import generate_song_suggestions, promptForArtists
@@ -111,6 +111,7 @@ def getRecommendations(request):
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
     return JsonResponse({"error": "Invalid request method"}, status=405)
 #below is the function to search page user 
+
 def getAISongRecommendations(request):
     search_query = request.GET.get('query', '')
     
@@ -359,9 +360,7 @@ def find_new_song(title, artist, tracks=[]):
             track_id = None
     return track_id
 
-
 #function to return list of songs
-
 def login(request):
     # Redirect user to Spotify authorization URL
     auth_url = sp.auth_manager.get_authorize_url()
@@ -476,8 +475,6 @@ def getToken(request):
     else:
         return JsonResponse({"error": "No token found"}, status=404)
 
-    
-
 def getUser(request):
     tokenInfo = sp.auth_manager.get_cached_token()
     if tokenInfo:
@@ -488,9 +485,6 @@ def getUser(request):
         return JsonResponse({"error": "No token found"})
     
 def getLikedSongs():
-    # if "spotify_token" not in request.session:
-    #     return JsonResponse({"error": "User must be logged in to Spotify"}, status=401)
-    
     raw_liked_songs = []
     liked_songs = []
     limit = 100 # you can change this to any number
@@ -523,14 +517,11 @@ def getLikedSongs():
         track_id = track['id']
         track_name = track['name']
         album_data = track['album']
-        # album_id = album_data['id']
         album_name = album_data['name']
         artist_data = track['artists'][0]
-        # artist_id = artist_data['id']
         artist_name = artist_data['name']
         uri = track.get('uri','')
         
-
         # Check if the song already exists
         if not Song.objects.filter(trackID=track_id).exists():
             # Create a new song
@@ -570,8 +561,6 @@ def getLikedSongs():
     return JsonResponse({"message": "Saved songs imported successfully"}, status=201)
 
 def get_uris(request):  # Use snake_case naming
-
-    # Fetch a list of song URIs from Spotify or your database
     try:
         # Example: Fetching user's top 10 tracks from Spotify
         results = sp.current_user_top_tracks(limit=10)
@@ -582,4 +571,12 @@ def get_uris(request):  # Use snake_case naming
     except Exception as e:
         logger.error(f"Error fetching URIs: {str(e)}")
         return JsonResponse({'error': f"Failed to fetch URIs: {str(e)}"}, status=500)
+    
+# def addLikedSongs(request):
+#     try:
+#         sp.current_user_saved_tracks_add([request.GET.get('trackID')])
+#         return JsonResponse({"message": "Song added to liked songs"}, status=201)
+#     except Exception as e:
+#         logger.error(f"Error adding song to liked songs: {str(e)}")
+#         return JsonResponse({'error': f"Failed to add song to liked songs: {str(e)}"}, status=500)
 

@@ -223,8 +223,10 @@ def addSongToPlaylist(request):
         # Check if either playlist_id or track_uri is missing
         if not playlist_id or not track_id:
             return JsonResponse({'error': 'Missing playlistID or song URI'}, status=400)
-
-        sp.playlist_add_items(playlist_id, [track_id])
+        if(playlist_id == "liked_songs"):
+            sp.current_user_saved_tracks_add(tracks=[track_id])
+        else:
+            sp.playlist_add_items(playlist_id, [track_id])
 
         return JsonResponse({'message': 'Song added successfully'}, status=200)
     
@@ -234,3 +236,4 @@ def addSongToPlaylist(request):
         return JsonResponse({'error': f'Missing required field: {str(e)}'}, status=400)
     except Exception as e:
         return JsonResponse({'error': f"Failed to add song: {str(e)}"}, status=500)
+
