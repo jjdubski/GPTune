@@ -7,20 +7,25 @@ interface Song {
     title: string;
     artist: string;
     album: string;
-    releaseDate: string;
+    // releaseDate: string;
     image: string;
     uri: string; 
 }
 
 interface SongListProps {
+    tracks?: Song[];
     playlistID?: string;
 }
 
-const SongList: React.FC<SongListProps> = ({ playlistID }) => {
+const SongList: React.FC<SongListProps> = ({ playlistID, tracks }) => {
     const [songs, setSongs] = useState<Song[]>([])  
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
+        if (tracks) {
+            setSongs(tracks)
+            return
+        }
         const url = playlistID ? `http://localhost:8000/playlistAPI/getPlaylistSongs/${playlistID}/` 
         : 'http://localhost:8000/songAPI/songs/?format=json';
 
@@ -40,7 +45,7 @@ const SongList: React.FC<SongListProps> = ({ playlistID }) => {
                 console.error('Error fetching Songs:', error)
                 setError('Failed to fetch Songs. Please try again later.' + error)
             })
-    }, [playlistID])
+    }, [playlistID, tracks])
     
     return (
         <div>

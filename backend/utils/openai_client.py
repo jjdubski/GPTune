@@ -1,4 +1,5 @@
 import os
+from django.http import JsonResponse
 import openai
 import logging
 import time
@@ -43,8 +44,8 @@ def prompt_for_song(prompt, num_runs):
             )
             output = response.choices[0].message.content
             if not output.strip():
-                print("Error: OpenAI returned an empty response!")
-                print("Raw response:", response)
+                # print("Error: OpenAI returned an empty response!")
+                # print("Raw response:", response)
                 raise ValueError("Received empty response from GPT")
             return output  
         except Exception as e:
@@ -86,7 +87,7 @@ def promptForArtists(prompt, numArtists=6):
             )
 
             # Print raw response for debugging
-            print(response)
+            # print(response)
 
             # Extract response content correctly based on new API format
             output = response.choices[0].message.content.strip()
@@ -94,7 +95,7 @@ def promptForArtists(prompt, numArtists=6):
             if not output:
                 raise ValueError("Received empty response from OpenAI API")
 
-            print(output)
+            # print(output)
             # Attempt to parse the response as JSON
             try:
                 artist_list = json.loads(output)
