@@ -1,4 +1,4 @@
-.search-page {
+/* .search-page {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -11,7 +11,7 @@
     min-height: 100vh;
     padding: 20px;
     font-family: Arial, sans-serif;
-}
+} */
 /* Top Bar */
 .top-bar {
     width: 100%;
@@ -21,9 +21,10 @@
     padding: 10px 20px;
 }
 
-.search-page-container {
+.search-page {
     display: flex;
     width: 100%;
+    height: 100vh;
     flex-direction: row;
     position: fixed;
     top: 0;

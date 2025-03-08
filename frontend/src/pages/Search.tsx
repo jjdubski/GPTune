@@ -13,7 +13,7 @@ interface Song {
     title: string;
     artist: string;
     album: string;
-    releaseDate: string;
+    // releaseDate: string;
     image: string;
     uri: string; 
 }
@@ -27,23 +27,14 @@ interface Artist {
     url : string;
 }
 
-interface Song {
-    id: number;
-    trackID: string;
-    title: string;
-    artist: string;
-    album: string;
-    releaseDate: string;
-    image: string;
-    url: string; 
-}
-
 const Search: React.FC = () => {
     const [query, setQuery] = useState<string>(''); 
     const [songs, setSongs] = useState<any[]>([]); 
     const [artists, setArtists] = useState<any[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingSongs, setIsLoadingSongs] = useState(false);
+    const [isLoadingArtists, setIsLoadingArtists] = useState(false);
     
 
     const [currentUser, setCurrentUser] = useState<{ email: string; username: string; image: string }>({
@@ -53,6 +44,9 @@ const Search: React.FC = () => {
     });
 
     const fetchSongsAndArtists = async (query: string) => {
+        // setError(null);
+        setIsLoadingSongs(true);
+        setIsLoadingArtists(true);
         try {
             const response = await fetch(`http://localhost:8000/musicAPI/search?query=${encodeURIComponent(query)}`, {
                 method: "GET",
@@ -64,14 +58,34 @@ const Search: React.FC = () => {
             }
     
             const data = await response.json();
-            console.log("API Responce: ", data)
-            setSongs(data.songs || []);
-            setArtists(data.artists || []);
+            console.log("API Response: ", data)
+            if (response.ok) {
+                const songList: Song[] = Object.values(data.songs as { 
+                        trackID: string; 
+                        title: string; 
+                        artist: string;
+                        album: string; 
+                        image: string; 
+                        uri:string;
+                    }[]).map((item) => ({
+                        trackID: item.trackID,
+                        title: item.title,
+                        artist: item.artist,
+                        album: item.album,
+                        image: item.image,
+                        uri: item.uri
+                }));
+                setSongs(songList);
+                setArtists(data.artists || []);
+            } else {
+                console.error('Error:', data);
+                setError('Please try a different prompt.');
+            }
+            setIsLoadingSongs(false);
+            setIsLoadingArtists(false);
         } catch (error) {
             console.error("Error fetching music data:", error);
             setError("Failed to fetch music data. Please try again later.");
-        } finally {
-            setIsLoading(false);
         }
     };
     
@@ -82,6 +96,7 @@ const Search: React.FC = () => {
             fetchSongsAndArtists(storedQuery);
             localStorage.removeItem("searchQuery");  // Clear after fetching
         }
+        setIsLoading(false);
     }, []);
     
     useEffect(() => {
@@ -98,8 +113,15 @@ const Search: React.FC = () => {
             });
     }, []);
 
+
+
+    // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setQuery(event.target.value);
+    // };
+
     const handleSearch = (query: string) => {
         setQuery(query);
+        setError(null);
         localStorage.setItem("searchQuery", query);
         fetchSongsAndArtists(query);
     };
@@ -109,6 +131,9 @@ const Search: React.FC = () => {
     };
 
     return (
+        isLoading ? (
+            <></>
+        ) : (
         <div className="search-page">
             {currentUser.email ? (
                 <User username={currentUser.username} image={currentUser.image} />
@@ -118,43 +143,56 @@ const Search: React.FC = () => {
                 </div>
             )}
 
-            <div className="search-page-container">
+            {/* Main Content */}
+            {/* <div className="search-page-container"> */}
+                {/* Left Section: Song List */}
                 <div className="song-list-section">
                     <div className="song-list-section-top">
-                        <RefreshButton onClick={handleRefresh} />
-                        <h2 className="song-list-section-title">"songs for a road trip"</h2>
-                        <RefreshButton onClick={handleRefresh} />
+                        <RefreshButton styles={{opacity: 0}} onRefresh={() => {}} /> { /* This one is not displayed */}
+                        <h2 className="song-list-section-title">Songs matching: "{query}"</h2>
+                        <RefreshButton onRefresh={handleRefresh} />
                     </div>
                     <div className="scroll">
+                      
+                    {error ? (
+                        <></>
+                    ) : isLoadingSongs ? (
+                        <p>Loading Songs...</p>
+                    ) : (
                         <SongList tracks={songs} />
+                    )}
+
                     </div>
                 </div>
                 <div className="artist-section">
                     <h2 className="above-prompt">Not what you are looking for? Enter a new prompt.</h2>
                     <SearchBar onSearch={handleSearch} />
-                    <h2 className="popular-artists-title">Popular Artists <span className="small-text">* based on your prompt</span></h2>
-                    <div className="artist-grid">
-                        {error ? (
-                            <p className="error-text">{error}</p>
-                        ) : artists.length === 0 ? (
-                            <p className="empty-text">No artists found</p>
-                        ) : (
-                            artists.map((artist, index) => (
-                                <Artist
-                                    key={index}
-                                    name={artist.name}
-                                    image={artist.image}
-                                    genres={artist.genres}
-                                    popularity={artist.popularity}
-                                    url={artist.url}
-                                />
-                            ))
-                        )}
-                    </div>
+                    {/* <SearchBar onSearch={() => console.log('Search button clicked!')} /> */}
+                        <h2 className="popular-artists-title">Popular Artists <span className="small-text">* based on your prompt</span></h2>
+                        <div className="artist-grid">
+                            {error ? (
+                                <p className="error-text" style={{ color: 'red' }}>{error}</p>
+                            ) : isLoadingArtists ? (
+                                <p>Loading Artists...</p>
+                            ) : artists.length === 0 ? (
+                                <p className="empty-text">No artists found</p>
+                            ) : (
+                                artists.map((artist, index) => (
+                                    <Artist
+                                        key={index}
+                                        name={artist.name}
+                                        image={artist.image}
+                                        // genres={artist.genres}
+                                        // popularity={artist.popularity}
+                                        url = {artist.url}
+                                    />
+                                ))
+                            )}
+                        </div>
                 </div>
-            </div>
+            {/* </div> */}
         </div>
-    );
+    )); 
 };
 
 export default Search;

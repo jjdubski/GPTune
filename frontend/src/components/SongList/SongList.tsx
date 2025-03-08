@@ -7,7 +7,7 @@ interface Song {
     title: string;
     artist: string;
     album: string;
-    releaseDate: string;
+    // releaseDate: string;
     image: string;
     uri: string; 
 }
