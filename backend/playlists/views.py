@@ -8,6 +8,7 @@ from .serializers import PlaylistSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from utils.spotifyClient import sp
+from utils.openai_client import prompt_for_song
 import logging
 
 # Create your views here.
@@ -237,3 +238,12 @@ def addSongToPlaylist(request):
     except Exception as e:
         return JsonResponse({'error': f"Failed to add song: {str(e)}"}, status=500)
 
+def thisOrThat(request):
+    likedSongs = Playlist.objects.get(playlistID="liked_songs")
+    playlists = Playlist.objects.all()
+    gptRecomendations = prompt_for_song(likedSongs, 1)
+    print(gptRecomendations)
+    
+    playlists_list = list(playlists.values())
+    likedSongsList = list(likedSongs.songs.values())
+    return JsonResponse({"playlists": playlists_list, "gptRecomendations" : gptRecomendations, "likedSongs": likedSongsList}, status=200)
