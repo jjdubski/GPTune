@@ -1,4 +1,4 @@
-.song-card {
+.song-selector {
     display: flex;
     align-items: center;
     background-color: #1a1a1a;
@@ -10,11 +10,11 @@
     transition: background 0.3s ease-in-out;
 }
 
-.song-card:hover {
+.song-selector:hover {
     background-color: #2a2a2a;
 }
 
-.song-image-container {
+.song-selector-image-container {
     flex-shrink: 0;
     width: 50px;
     height: 50px;
@@ -22,28 +22,70 @@
     overflow: hidden;
 }
 
-.song-image {
+.song-selector-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.song-info {
-    margin-left: 10px;
-    flex-grow: 1;
-    color: white;
+
+.edit-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+}
+.edit-icon {
+    width: 20px; /* Adjust the size as needed */
+    height: 20px; /* Adjust the size as needed */
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
 }
 
-.song-title {
+.dropbtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    min-width: 180px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    padding: 10px 0;
+    z-index: 1;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown-song-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.dropdown-song-title {
     font-size: 14px;
-    font-weight: bold;
-    margin: 0;
+    font-weight: 500;
 }
-
-.song-artist {
-    font-size: 12px;
-    color: #bbb;
-    margin: 2px 0 0;
-}
-
-
