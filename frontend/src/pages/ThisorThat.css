@@ -1,14 +1,5 @@
 
 
-.song-card {
-    margin-top: 20px;
-    background-color: #faede4;
-    border-radius: 16px;
-    padding: 16px;
-    width: 250px;
-    text-align: center;
-}
-
 .action-buttons {
     display: flex;
     justify-content: center;
