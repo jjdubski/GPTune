@@ -61,10 +61,10 @@ def prompt_for_song(prompt, num_runs):
 def generate_discover_songs(prompt):
     """Fetch structured song recommendations specifically for the Discover Page."""
     message = f"""Give me 5 songs based on this theme: {prompt}.
-    Format the response as a JSON list with title, artist, and release year, like this:
+    Format the response as a JSON list with title, artist, and album like this:
     [
-        {{"title": "Song 1", "artist": "Artist 1", "release_year": "2024"}},
-        {{"title": "Song 2", "artist": "Artist 2", "release_year": "2024"}}
+        {{"title": "Song 1", "artist": "Artist 1", "album": "Album 1"}},
+        {{"title": "Song 2", "artist": "Artist 2", "album": "Album 2"}}
     ]
     Do not add extra text, explanations, or comments."""
 
@@ -79,13 +79,21 @@ def generate_discover_songs(prompt):
 
             output = response.choices[0].message.content.strip()
 
+            # Debugging: Print OpenAI raw output
+            print(f"RAW OpenAI Response: {output}")
+
+            # Direct JSON parsing
+            output = output.strip().strip("```json").strip("```").strip()
             try:
                 song_list = json.loads(output)
+                
+                # Debugging: Print parsed JSON
+                print(f"Parsed JSON: {song_list}")
+
                 if isinstance(song_list, list) and all(isinstance(song, dict) for song in song_list):
                     return song_list
                 else:
                     raise ValueError("Response is not a valid JSON list")
-
             except json.JSONDecodeError:
                 print(f"Error parsing JSON: {output}")
                 return []
@@ -101,18 +109,26 @@ def generate_discover_songs(prompt):
 
 #below is function to user search on search 
 def generate_song_suggestions(prompt):
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": "You are an expert music recommendation assistant."},#sets the model’s behavior to focus on music recommendations
-            {"role": "user", "content": f"Recommend some songs based on the theme: {prompt}"} #inserts the provided prompt into the request
-        ],
-        temperature=0.7,
-        max_tokens=50
-    )
-
-    suggestions = response['choices'][0]['message']['content'].split("\n")
-    return [s.strip() for s in suggestions if s.strip()]
+    message = f"""Recommend some songs based on the theme: {prompt}.
+    Format the response as a JSON list with title, artist, and album."""
+    
+    retries = 5
+    for attempt in range(retries):
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[{"role": "user", "content": message}],
+                temperature=0.7
+            )
+            output = response.choices[0].message.content.strip()
+            return process_json(output)
+        except Exception as e:
+            print(f"GPT Error: {e}")
+            if "rate_limit_exceeded" in str(e):
+                time.sleep(30)
+            else:
+                break
+    return []
 
 
 def promptForArtists(prompt, numArtists=6):
