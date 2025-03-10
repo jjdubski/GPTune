@@ -20,6 +20,7 @@ const ThisorThat: React.FC = () => {
     const hasFetchedSongs = React.useRef(false);
 
     useEffect(() => {
+
         const fetchPlaylists = async () => {
             if (!selectedPlaylistID) {
                 return;
@@ -56,18 +57,16 @@ const ThisorThat: React.FC = () => {
     };
 
     return (
-        <div className="this-or-that-wrapper">
+        <div className="this-or-that-page">
             <div className="this-or-that-container">
                 <div className="this-or-that-content">
-                    <h1>This or That</h1>
-
+                    <h1>Showing Songs Like</h1>
                     <SongSelector
                         title={playlistSongs[currentIndex]?.title || "No Songs"}
                         artist={playlistSongs[currentIndex]?.artist || ""}
                         image={playlistSongs[currentIndex]?.image || ""}
                         spotifyUrl={playlistSongs[currentIndex]?.uri || ""}
-                        songs={playlistSongs}
-                    />
+                        songs={playlistSongs} />
 
                     {playlistSongs.length > 0 && (
                         <>

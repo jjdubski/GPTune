@@ -1,7 +1,47 @@
+.song-card {
+    background-color: #FFEDDF;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 30px;
+    /* width: clamp(200px, 40%, 300px); */
+    width: 100%;
+    max-width: 300px;
+    height: fit-content;
+    /* aspect-ratio: 1 / 1; Ensures a square shape */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; /* Prevents content from stretching */
+    /* overflow: hidden; Ensures nothing overflows */
+    flex-grow: 1;
+}
 
+.song-card-image {
+    max-width: 200px;
+    border-radius: 10px;
+    aspect-ratio: 1 / 1; /* Ensures the image is a square */
+}
 
-.song-album {
-    font-size: 12px;
+.song-card-info {
+    text-align: center; /* Centers text */
+    color: #000;
+    font-size: 14px;
+    
+}
+
+.song-card-album {
+    font-size: 1em ;
     color: #666;
+    margin: 2px 0;
+}
+
+.song-card-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 5px 0;
+}
+.song-card-artist {
+    font-size: 1em;
+    color: #333;
     margin: 2px 0;
 }

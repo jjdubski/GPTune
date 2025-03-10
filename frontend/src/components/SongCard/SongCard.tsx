@@ -12,11 +12,11 @@ interface SongCardProps {
 const SongCard: React.FC<SongCardProps> = ({ title, artist, album, image,  }) => {
     return (
         <div className="song-card">
-            <img src={image} alt={`${title} album cover`} className="song-image" />
-            <div className="song-info">
-                <p className="song-title">{title}</p>
-                <p className="song-artist">{artist}</p>
-                <p className="song-album">{album}</p>
+            <img src={image} alt={`${title} album cover`} className="song-card-image" />
+            <div className="song-card-info">
+                <p className="song-card-title">{title}</p>
+                <p className="song-card-artist">{artist}</p>
+                <p className="song-card-album">{album}</p>
             </div>
             {/* <button className="next-song-btn" onClick={onNext}>✅</button>  */}
         </div>
