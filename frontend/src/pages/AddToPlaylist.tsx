@@ -174,7 +174,11 @@ const AddToPlaylist: React.FC = () => {
                 <div className="playlist-section">
                     <h1 className="playlist-section-title">Select Playlist</h1>
                     <div className="scroll">
-                        <PlaylistList onSelectPlaylist={handleSelectPlaylist} selectedPlaylistID={selectedPlaylistID}/>
+                        <PlaylistList 
+                            onSelectPlaylist={handleSelectPlaylist} 
+                            selectedPlaylistID={selectedPlaylistID} 
+                            highlightSelected={true} // Pass a prop to highlight the selected playlist
+                        />
                     </div>
                 </div>
                 <div className="add-songs-container">
