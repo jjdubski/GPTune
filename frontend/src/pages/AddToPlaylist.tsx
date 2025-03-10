@@ -28,6 +28,8 @@ const AddToPlaylist: React.FC = () => {
     const [selectedPlaylistID, setSelectedPlaylistID] = useState<string>('');
     const [selectedSongID, setSelectedSongID] = useState<string>('');
     const hasFetchedSongs = useRef(false);
+    const [popupMessage, setPopupMessage] = useState<string | null>(null);
+    const [popupType, setPopupType] = useState<'success' | 'error' | null>(null);
 
     // checks if user is logged in, redirects to login page if not
     useEffect(() => {
@@ -45,6 +47,18 @@ const AddToPlaylist: React.FC = () => {
                 setIsLoading(false);
             });
     }, []);
+    
+        // Function to show messages
+        const showPopup = (message: string, type: 'success' | 'error') => {
+            setPopupMessage(message);
+            setPopupType(type);
+            
+            // Auto-hide message after 3 seconds
+            setTimeout(() => {
+                setPopupMessage(null);
+                setPopupType(null);
+            }, 3000);
+        };
 
     // Fetches recommended songs based on selected playlist songs 
     const generateSongs = useCallback(async () => {
@@ -155,12 +169,16 @@ const AddToPlaylist: React.FC = () => {
 
                 if (response.ok) {
                     console.log(`Song ${trackID} added successfully.`);
+                                    showPopup("Song added to playlist!", "success");
                     // setPlaylistSongs([...playlistSongs, { trackID, title: "Unknown", artist: "Unknown", album: "Unknown", image: "", uri: "" }]); // Temporary UI update
                 } else {
                     console.error("Failed to add song:", await response.text());
+                    const errorMessage = await response.text();
+                    showPopup(`Failed to add song: ${errorMessage}`, "error");
                 }
             } catch (error) {
                 console.error("Error adding song:", error);
+                showPopup("Error adding song. Please try again.", "error");
             }
 
             // Generate a new song recommendation
@@ -213,6 +231,11 @@ const AddToPlaylist: React.FC = () => {
             <></>
         ) : (
             <div className="add-to-playlist-container">
+                {popupMessage && (
+                <div className={`popup-message ${popupType}`}>
+                    {popupMessage}
+                </div>
+                )}
                 <div className="playlist-section">
                     <h1 className="playlist-section-title">Select Playlist</h1>
                     <div className="scroll">
