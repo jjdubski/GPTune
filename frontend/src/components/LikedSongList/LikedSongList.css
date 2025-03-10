@@ -1,0 +1,72 @@
+.liked-songs-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #2f4a2f; /* Dark green */
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 350px;
+}
+
+.liked-songs-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.liked-songs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.liked-song-item {
+    display: flex;
+    align-items: center;
+    background-color: #3a5a3a;
+    padding: 10px;
+    border-radius: 8px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.liked-song-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+}
+
+.liked-song-info {
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+.liked-song-title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.liked-song-artist,
+.liked-song-album {
+    font-size: 14px;
+    color: #ddd;
+}
+
+.remove-song-btn {
+    background: none;
+    border: 2px solid #fff;
+    color: white;
+    font-size: 20px;
+    padding: 5px 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.remove-song-btn:hover {
+    background-color: #d9534f;
+    color: white;
+}

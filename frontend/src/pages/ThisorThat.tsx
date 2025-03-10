@@ -1,35 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import SongSelector from '../components/SongSelector/SongSelector';
-import Song from '../components/Song/Song';
+import SongCard from '../components/SongCard/SongCard';
 import './ThisorThat.css';
+import LikedSongList from '../components/LikedSongList/LikedSongList';
 
 interface Song {
     trackID: string;
     title: string;
     artist: string;
     album: string;
-    // releaseDate: string;
     image: string;
-    uri: string; 
+    uri: string;
 }
 
 const ThisorThat: React.FC = () => {
-    const song = {
-        title: "Song Title",
-        artist: "Artist Name",
-        image: "https://via.placeholder.com/150", // Replace with actual image URL
-        spotifyUrl: "https://open.spotify.com" // Replace with actual Spotify URL
-    };
-    
     const [playlistSongs, setPlaylistSongs] = useState<Song[]>([]);
     const [selectedPlaylistID, setSelectedPlaylistID] = useState<string | null>("liked_songs");
+    const [currentIndex, setCurrentIndex] = useState(0);
     const hasFetchedSongs = React.useRef(false);
 
-
     useEffect(() => {
+
         const fetchPlaylists = async () => {
-            if(!selectedPlaylistID){
-                return
+            if (!selectedPlaylistID) {
+                return;
             }
             try {
                 const response = await fetch(`http://localhost:8000/playlistAPI/getPlaylistSongs/${selectedPlaylistID}`);
@@ -38,33 +32,70 @@ const ThisorThat: React.FC = () => {
                 }
                 const data = await response.json();
                 setPlaylistSongs(Array.isArray(data) ? data : []);
-            }
-            catch (error) {
+                setCurrentIndex(0);
+            } catch (error) {
                 console.error('Error fetching Playlist songs:', error);
             }
-            hasFetchedSongs.current = false; // Allow new recommendations
-        }
-        
+            hasFetchedSongs.current = false;
+        };
+
         fetchPlaylists();
     }, [selectedPlaylistID]);
 
     const handleSelectPlaylist = (playlistID: string) => {
-        setPlaylistSongs([]); // Reset songs when switching playlists
+        setPlaylistSongs([]);
         setSelectedPlaylistID(playlistID);
+        setCurrentIndex(0);
     };
 
+    const handleNextSong = () => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % playlistSongs.length);
+    };
+
+    const handlePrevSong = () => {
+        setCurrentIndex((prevIndex) => (prevIndex - 1 + playlistSongs.length) % playlistSongs.length);
+    };
 
     return (
-        <div>
-            <h1>This or That</h1>
-            {/* <button onClick={() => handleSelectPlaylist("liked_songs")} >playlist</button> */}
-            <SongSelector 
-                title={song.title} 
-                artist={song.artist} 
-                image={song.image} 
-                spotifyUrl={song.spotifyUrl} 
-                songs= {playlistSongs} // Pass the song as a list for dropdown
-            />
+        <div className="this-or-that-page">
+            <div className="this-or-that-container">
+                <div className="this-or-that-content">
+                    <h1>Showing Songs Like</h1>
+                    <SongSelector
+                        title={playlistSongs[currentIndex]?.title || "No Songs"}
+                        artist={playlistSongs[currentIndex]?.artist || ""}
+                        image={playlistSongs[currentIndex]?.image || ""}
+                        spotifyUrl={playlistSongs[currentIndex]?.uri || ""}
+                        songs={playlistSongs} />
+
+                    {playlistSongs.length > 0 && (
+                        <>
+                            <SongCard
+                                trackID={playlistSongs[currentIndex].trackID}
+                                title={playlistSongs[currentIndex].title}
+                                artist={playlistSongs[currentIndex].artist}
+                                album={playlistSongs[currentIndex].album}
+                                image={playlistSongs[currentIndex].image}
+                                uri={playlistSongs[currentIndex].uri}
+                            />
+
+                            <div className="action-buttons">
+                                <button className="exit-btn" onClick={handlePrevSong}>
+                                    <img src="/exit.png" alt="Exit" />
+                                </button>
+                                <button className="check-btn" onClick={handleNextSong}>
+                                    <img src="/check.png" alt="Check" />
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </div>
+            </div>
+
+            {/* Liked Songs on the Right Side */}
+            <div className="liked-songs-sidebar">
+                <LikedSongList/>
+            </div>
         </div>
     );
 };
