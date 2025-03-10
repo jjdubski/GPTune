@@ -43,6 +43,6 @@ div {
     color: white; /*all text is white*/
 }
 
-.playlist:hover {
+.playlist:hover, .selected-playlist {
     background-color: var(--secondary);  /* changes to signify its being hovered over*/
 }

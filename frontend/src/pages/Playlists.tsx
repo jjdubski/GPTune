@@ -86,7 +86,7 @@ const Playlists: React.FC = () => {
                 <div className="playlists-grid">
                     {playlists.map(playlist => (
                         <Playlist
-                            playlistID = {playlist.playlistID}
+                            playlistID = {playlist.playlistID.toString()}
                             title={playlist.name}
                             image={playlist.image}
                         />

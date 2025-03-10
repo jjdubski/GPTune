@@ -5,6 +5,9 @@ import errno
 import logging
 from spotipy import Spotify, CacheHandler
 from spotipy.oauth2 import SpotifyOAuth
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 
 # Set up custom cache handler
 class CustomCacheHandler(CacheHandler):
@@ -67,3 +70,25 @@ auth_manager = SpotifyOAuth(
 )
 # token = auth_manager.get_access_token()
 sp = Spotify(auth_manager=auth_manager)
+
+@api_view(['GET'])
+def get_current_playback(request):
+    try:
+        playback_state = sp.current_playback()
+        if playback_state and playback_state['is_playing']:
+            current_track = playback_state['item']
+            return JsonResponse({
+                'is_playing': True,
+                'track': {
+                    'trackID': current_track['id'],
+                    'title': current_track['name'],
+                    'artist': current_track['artists'][0]['name'],
+                    'album': current_track['album']['name'],
+                    'image': current_track['album']['images'][0]['url'],
+                    'uri': current_track['uri']
+                }
+            })
+        else:
+            return JsonResponse({'is_playing': False})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

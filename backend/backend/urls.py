@@ -18,7 +18,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from . import views 
+from . import views
+import utils
 
 urlpatterns = [
     # Links to songs and playlists on backend
@@ -36,7 +37,8 @@ urlpatterns = [
     path('musicAPI/search', views.search_songs, name='search_songs'),
     path('getToken/', views.getToken, name='getToken'),
     path('getUser/', views.getUser, name='getUser'),
-    path('getUris/', views.get_uris, name='get_uris'),  
+    path('getUris/', views.get_uris, name='get_uris'),
+    path('getCurrentPlayback/', utils.spotifyClient.get_current_playback, name='getCurrentPlayback'),  
 ]
 
 # if settings.DEBUG:

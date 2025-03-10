@@ -7,6 +7,3 @@
 .playlist:last-of-type{
     margin-bottom: 0;
 }
-.playlist-item-selected {
-    background-color: #f0f0f0; /* Change this color to your desired highlight color */
-}

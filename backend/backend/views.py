@@ -83,12 +83,14 @@ def getRecommendations(request):
             prompt = data.get("prompt", "")
             num_runs = data.get("num_runs", 5)
             userInfo = data.get("userInfo", "False")
+            songsInPlaylist = data.get("songsInPlaylist", [])
+
             if userInfo == "True":
                 user_info = get_user_info()
             else:
                 user_info = None
             # print("\n\nuser_info:",user_info)
-            response = run_prompt (prompt, num_runs, user_info)
+            response = run_prompt (prompt, num_runs, user_info, songsInPlaylist)
             
             # Log the raw AI response
             logger.info(f"Raw OpenAI Response: {response}")
@@ -126,15 +128,15 @@ def getAISongRecommendations(request):
         # Search for songs in Spotify based on AI suggestions
         results = sp.search(q=suggestion, type="track", limit=3)
         
-        for track in results['tracks']['items']:
-            recommendations.append({
-                'name': track['name'],
-                'artist': track['artists'][0]['name'],
-                'album': track['album']['name'],
-                'spotify_url': track['external_urls']['spotify'],
-                'preview_url': track.get('preview_url', None),
-                'uri' : track['uri']
-            })
+    for track in results['tracks']['items']:
+        recommendations.append({
+            'name': track['name'],
+            'artist': track['artists'][0]['name'],
+            'album': track['album']['name'],
+            'spotify_url': track['external_urls']['spotify'],
+            'preview_url': track.get('preview_url', None),
+            'uri' : track['uri']
+        })
 
     return JsonResponse({'recommendations': recommendations})
 
@@ -235,7 +237,7 @@ def search_songs(request):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
-def generate_response(prompt, num_runs=10):
+def generate_response(prompt, num_runs=10, songsInPlaylist=[]):
     # global response_index 
     # print(f"Response {response_index}: ")
     output = prompt_for_song(prompt, num_runs)
@@ -253,6 +255,9 @@ def generate_response(prompt, num_runs=10):
             title = song["title"].strip()
             # Determine if song is valid and return track ID
             track_id = find_new_song(title, artist, track_ids)
+            if track_id in songsInPlaylist:
+                # print(f"\t\tTrack already in playlist, skipping.")
+                track_id = None
             if track_id:
                 ban_list.add(title+"-"+artist)
             else:
@@ -276,6 +281,10 @@ def generate_response(prompt, num_runs=10):
                     print(f"Error parsing track info: {track_info}")
                     continue
                 track_id = find_new_song(track_title, track_artist, track_ids)
+                if track_id in songsInPlaylist:
+                    # print(f"\t\tTrack already in playlist, skipping.")
+                    track_id = None
+                    continue
                 if track_id:
                     ban_list.add(track_title+"-"+track_artist)
                 else:
@@ -285,7 +294,7 @@ def generate_response(prompt, num_runs=10):
     return track_ids
 
 
-def run_prompt(prompt, num_runs, user_info):
+def run_prompt(prompt, num_runs, user_info, songsInPlaylist):
     if user_info is None or user_info != "True":
         return generate_response(prompt, num_runs)
     
@@ -300,7 +309,7 @@ def run_prompt(prompt, num_runs, user_info):
 
     prompt += f"\nCountry: {user_info ['country']},"
 
-    return generate_response(prompt, num_runs)
+    return generate_response(prompt, num_runs, songsInPlaylist)
 
 def process_json(output):
     """Cleans and parses OpenAI's JSON response."""
@@ -423,6 +432,8 @@ def callback(request):
         return JsonResponse({"error": "Authentication failed"}, status=500)
 
 def populateSongs():
+    # Clear all existing songs before pulling new ones
+    Song.objects.all().delete()
     try:
         results = sp.current_user_top_tracks()
         songs = results['items']
@@ -447,6 +458,8 @@ def populateSongs():
         return False
     
 def populatePlaylist():
+    # Clear all existing playlists before pulling new ones
+    Playlist.objects.all().delete()
     try:
         results = sp.current_user_playlists()
         playlists = results['items']

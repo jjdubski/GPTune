@@ -11,10 +11,10 @@ interface Playlist {
 interface PlaylistListProps {
     onSelectPlaylist: (playlistID: string) => void;
     selectedPlaylistID?: string;
-    highlightSelected?: boolean;
+    // highlightSelected?: boolean;
 }
 
-    const PlaylistList: React.FC<PlaylistListProps> = ({ onSelectPlaylist, selectedPlaylistID, highlightSelected}) => {
+const PlaylistList: React.FC<PlaylistListProps> = ({ onSelectPlaylist, selectedPlaylistID}) => {
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -32,7 +32,6 @@ interface PlaylistListProps {
                 const data = await response.json();
                 setPlaylists(Array.isArray(data) ? data : []);
                 hasFetchedPlaylists.current = true;
-
                 setError(null);
                 setIsLoading(false);
             } catch (error) {
@@ -57,7 +56,6 @@ interface PlaylistListProps {
                     .sort((a, b) => (a.playlistID === 'liked_songs' ? -1 : b.playlistID === 'liked_songs' ? 1 : 0))
                     .map(playlist => (
                         <div
-                            className={`${selectedPlaylistID === playlist.playlistID ? 'playlist-item playlist-item-selected' : 'playlist-item'}`}
                             key={playlist.playlistID}
                             onClick={() => onSelectPlaylist(playlist.playlistID)}
                         >

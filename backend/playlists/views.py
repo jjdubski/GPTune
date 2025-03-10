@@ -8,6 +8,7 @@ from .serializers import PlaylistSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from utils.spotifyClient import sp
+from django.views.decorators.csrf import csrf_exempt
 from utils.openai_client import prompt_for_song
 import logging
 from backend.views import process_json, find_new_song, unknown_songs
@@ -175,6 +176,7 @@ def getPlaylistSongs(request, playlist_id):
             songList = []
             for song in songs:
                 songList.append({
+                    'trackID': song.trackID,
                     'title': song.title,
                     'artist': song.artist,
                     'album': song.album,
@@ -189,6 +191,7 @@ def getPlaylistSongs(request, playlist_id):
             for song in songs:
                 track = song['track']
                 songList.append({
+                    'trackID': track['id'],
                     'title': track['name'],
                     'artist': track['artists'][0]['name'],
                     'album': track['album']['name'],
@@ -236,7 +239,7 @@ def addSongToPlaylist(request):
         return JsonResponse({'error': f'Missing required field: {str(e)}'}, status=400)
     except Exception as e:
         return JsonResponse({'error': f"Failed to add song: {str(e)}"}, status=500)
-    
+
 def generate_response(prompt, num_runs=1):
     # global response_index 
     # print(f"Response {response_index}: ")
@@ -289,8 +292,38 @@ def generate_response(prompt, num_runs=1):
     image = rawSong['album']['images'][0]['url'] if rawSong['album']['images'] else None
     title = rawSong['name']
     artist = rawSong['artists'][0]['name']
+    album = rawSong['album']['name']
     uri = rawSong['uri']
-    return {"title": title, "artist": artist, "image": image, "uri": uri}
+    newSong = {
+        "trackID": track_id,
+        "title": title,
+        "artist": artist,
+        "album": album,
+        "image": image,
+        "uri": uri
+    }
+    return newSong
+
+@csrf_exempt
+def generateSong(request):
+    if request.method != "POST":
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+    try:
+        data = json.loads(request.body)
+        prompt = data.get('prompt', '')
+        num_runs = data.get('num_runs', 1)
+
+        if not prompt:
+            return JsonResponse({'error': 'Missing prompt'}, status=400)
+
+        response = generate_response(prompt, num_runs)
+        return JsonResponse(response, status=200)
+
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': f"Failed to generate song: {str(e)}"}, status=500)
 
 def thisOrThat(request):
     likedSongs = Playlist.objects.get(playlistID="liked_songs")
