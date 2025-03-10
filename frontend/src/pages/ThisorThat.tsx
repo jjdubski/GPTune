@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SongSelector from '../components/SongSelector/SongSelector';
 import SongCard from '../components/Songcard/SongCard';
-import Song from '../components/Song/Song';
 import './ThisorThat.css';
-import SideMenu from '../components/SideMenu/SideMenu';
-import { Link } from 'react-router-dom';
 
 interface Song {
     trackID: string;
