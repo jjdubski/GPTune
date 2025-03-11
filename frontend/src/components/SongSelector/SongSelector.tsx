@@ -3,9 +3,6 @@ import './SongSelector.css';
 import editIcon from "/edit.png"; 
 import Song from '../Song/Song';
 
-
-
-
 interface Song {
     trackID: string;
     title: string;
@@ -16,8 +13,6 @@ interface Song {
     uri: string; 
 }
 
-
-
 interface SongSelectorProps {
     title: string;
     artist: string;
@@ -27,17 +22,12 @@ interface SongSelectorProps {
 
 const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spotifyUrl, songs }) => {
     const [isOpen, setIsOpen] = useState(false);
-
-
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
-
     const handleClick = () => {
         window.open(spotifyUrl, '_blank'); 
     };
-    
-
 
     return (
         <div className="song-selector">
