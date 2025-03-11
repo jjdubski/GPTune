@@ -47,14 +47,44 @@ const ThisorThat: React.FC = () => {
         setSelectedPlaylistID(playlistID);
         setCurrentIndex(0);
     };
-
-    const handleNextSong = () => {
+    const handleNextSong = async () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % playlistSongs.length);
+
+        try {
+            const response = await fetch('http://localhost:8000/playlistAPI/generateSong/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    prompt: `give me one more song similar to ${playlistSongs.map(song => song.title).join(", ")}`,
+                    num_runs: 1
+                })
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                const newSong: Song = {
+                    trackID: data.trackID,
+                    title: data.title,
+                    artist: data.artist,
+                    album: data.album,
+                    image: data.image,
+                    uri: data.uri
+                };
+                setPlaylistSongs((prevSongs) => [...prevSongs, newSong]);
+            } else {
+                console.error('Error:', data);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     const handlePrevSong = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + playlistSongs.length) % playlistSongs.length);
     };
+
 
     return (
         <div className="this-or-that-page">
