@@ -1,0 +1,53 @@
+/* Discover Page */
+.discover-container {
+    text-align: center;
+    background-color: #132015;
+    color: #F5F5DC;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.discover-title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    letter-spacing: 5px;
+}
+
+/* Categories Section */
+.categories {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Individual Category */
+.category {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30%;
+}
+
+.category-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 2px solid #000;
+    margin-bottom: 10px;
+}
+
+/* Section Colors */
+.new { background-color: #4CAF50; }       /* Green */
+.trending { background-color: #FFA500; } /* Orange */
+.classics { background-color: #008080; } /* Teal */
+
+.song-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}

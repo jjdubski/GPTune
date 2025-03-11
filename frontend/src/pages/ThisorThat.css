@@ -1,0 +1,51 @@
+.this-or-that-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    height: 80vh;
+    width: 100%;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.exit-btn, .check-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.exit-btn img, .check-btn img {
+    width: 75px;
+    height: 75px;
+}
+
+.exit-btn:hover, .check-btn:hover {
+    transform: scale(1.1);
+}
+
+.this-or-that-page {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+
+
+.this-or-that-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}

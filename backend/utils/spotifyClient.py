@@ -5,6 +5,9 @@ import errno
 import logging
 from spotipy import Spotify, CacheHandler
 from spotipy.oauth2 import SpotifyOAuth
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 
 # Set up custom cache handler
 class CustomCacheHandler(CacheHandler):
@@ -61,9 +64,31 @@ auth_manager = SpotifyOAuth(
     client_id=os.getenv("DJANGO_APP_SPOTIFY_CLIENT_ID"),
     client_secret=os.getenv("DJANGO_APP_SPOTIFY_SECRET"),
     redirect_uri="http://localhost:8000/callback",
-    scope="user-library-read user-read-email user-top-read user-read-private user-follow-read playlist-read-private playlist-read-collaborative app-remote-control streaming user-read-currently-playing user-modify-playback-state user-read-playback-state playlist-modify-private playlist-modify-public",
+    scope="user-library-read user-read-email user-top-read user-read-private user-follow-read playlist-read-private playlist-read-collaborative app-remote-control streaming user-read-currently-playing user-modify-playback-state user-read-playback-state playlist-modify-private playlist-modify-public user-library-modify",
     cache_handler=CustomCacheHandler()    
     # cache_handler=CustomCacheHandler(cache_path=".cache")
 )
 # token = auth_manager.get_access_token()
 sp = Spotify(auth_manager=auth_manager)
+
+@api_view(['GET'])
+def get_current_playback(request):
+    try:
+        playback_state = sp.current_playback()
+        if playback_state and playback_state['is_playing']:
+            current_track = playback_state['item']
+            return JsonResponse({
+                'is_playing': True,
+                'track': {
+                    'trackID': current_track['id'],
+                    'title': current_track['name'],
+                    'artist': current_track['artists'][0]['name'],
+                    'album': current_track['album']['name'],
+                    'image': current_track['album']['images'][0]['url'],
+                    'uri': current_track['uri']
+                }
+            })
+        else:
+            return JsonResponse({'is_playing': False})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

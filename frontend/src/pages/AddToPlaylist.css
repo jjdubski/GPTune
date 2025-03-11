@@ -73,6 +73,7 @@
     text-align: center;
     padding: 10px;
 }
+
 .add-songs-container {
     display: flex;
     flex-direction: column;

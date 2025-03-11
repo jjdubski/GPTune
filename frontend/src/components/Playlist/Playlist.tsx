@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './Playlist.css';
-
 
 interface PlaylistProps {
     playlistID: string;
@@ -9,8 +8,6 @@ interface PlaylistProps {
     selectedPlaylistID?: string;
 }
 
-
-
 const Playlist: React.FC<PlaylistProps> = ({ playlistID, title, image, selectedPlaylistID}) => {
 
     const handleClick = () => {
@@ -18,18 +15,9 @@ const Playlist: React.FC<PlaylistProps> = ({ playlistID, title, image, selectedP
     };
 
     const isSelected = selectedPlaylistID === playlistID;
-
-    useEffect(() => {
-        const playlistElement = document.querySelector(`.playlist`) as HTMLElement;
-        if (playlistElement && isSelected) {
-            playlistElement.style.backgroundColor = 'bright green';
-        } else if (playlistElement) {
-            playlistElement.style.backgroundColor = '';
-        }
-    }, [selectedPlaylistID, playlistID, isSelected]);
-
+    
     return (
-        <div className='playlist' onClick={handleClick}>
+        <div className={`playlist ${isSelected ? 'selected-playlist' : ''}`} onClick={handleClick}>
             <img src={image} alt={`${title}`} />
             <div className='playlist-info'>
                 <p>{title || 'Unknown'}</p>

@@ -19,12 +19,14 @@ interface Song {
 interface AddSongProps{
   song: Song
   onAddSong: (trackID: string) => void;
+  selectedSongID?: string;  
 }
 
 
 
-const AddSong: React.FC<AddSongProps> = ({ song, onAddSong }) => {
+const AddSong: React.FC<AddSongProps> = ({ song, onAddSong, selectedSongID }) => {
   const [isLoading, setIsLoading] = useState(true);
+  // const [playingSongID, setPlayingSongID] = useState<string | null>(null);
 
   // const onAddToPlaylist = async () => {
   //   // if (!selectedPlaylist) {
@@ -81,11 +83,36 @@ const AddSong: React.FC<AddSongProps> = ({ song, onAddSong }) => {
     }
   };
 
+  // This seems more complicated than I thought oops - Jake
+  // // Fetch current playback state
+  // const fetchCurrentPlayback = async () => {
+  //   try {
+  //       const response = await fetch('http://localhost:8000/getCurrentPlayback/');
+  //       const data = await response.json();
+  //       if (data.is_playing) {
+  //           setPlayingSongID(data.track.trackID);
+  //       } else {
+  //           setPlayingSongID(null);
+  //       }
+  //   } catch (error) {
+  //       console.error('Error fetching current playback:', error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchCurrentPlayback();
+  // }, []);
+
+  // const isPlaying = song.trackID === playingSongID;
+
+  const isSelected = song.trackID === selectedSongID;
+
+
   return (
     isLoading ? ( 
       <></> 
     ) : 
-    <div className="add-song" onClick={changeSong}>
+    <div className={`add-song ${isSelected ? 'selected' : ''}`} onClick={changeSong}>
       <img className="song-image" src={song.image} alt={song.title} />
       <div className="song-info">
         <p className="song-title">{song.title}</p>

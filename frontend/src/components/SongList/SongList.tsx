@@ -48,7 +48,7 @@ const SongList: React.FC<SongListProps> = ({ playlistID, tracks }) => {
     }, [playlistID, tracks])
     
     return (
-        <div>
+        <div className='song-list'>
             {error ? (
                 <p style={{ color: 'red' }}>{error}</p>
             ) : songs.length === 0 ? (

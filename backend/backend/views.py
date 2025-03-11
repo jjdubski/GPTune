@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from playlists.models import Playlist
 from songs.models import Song
-from spotipy import SpotifyOAuth
+
 from utils.spotifyClient import sp
 from utils.openai_client import client, prompt_for_song
 from utils.openai_client import generate_song_suggestions, promptForArtists
@@ -84,12 +84,14 @@ def getRecommendations(request):
             prompt = data.get("prompt", "")
             num_runs = data.get("num_runs", 5)
             userInfo = data.get("userInfo", "False")
+            songsInPlaylist = data.get("songsInPlaylist", [])
+
             if userInfo == "True":
                 user_info = get_user_info()
             else:
                 user_info = None
             # print("\n\nuser_info:",user_info)
-            response = run_prompt (prompt, num_runs, user_info)
+            response = run_prompt (prompt, num_runs, user_info, songsInPlaylist)
             
             # Log the raw AI response
             logger.info(f"Raw OpenAI Response: {response}")
@@ -139,6 +141,7 @@ def get_discover_songs(request):
 
 
 #below is the function to search page user 
+
 def getAISongRecommendations(request):
     search_query = request.GET.get('query', '')
     
@@ -153,15 +156,15 @@ def getAISongRecommendations(request):
         # Search for songs in Spotify based on AI suggestions
         results = sp.search(q=suggestion, type="track", limit=3)
         
-        for track in results['tracks']['items']:
-            recommendations.append({
-                'name': track['name'],
-                'artist': track['artists'][0]['name'],
-                'album': track['album']['name'],
-                'spotify_url': track['external_urls']['spotify'],
-                'preview_url': track.get('preview_url', None),
-                'uri' : track['uri']
-            })
+    for track in results['tracks']['items']:
+        recommendations.append({
+            'name': track['name'],
+            'artist': track['artists'][0]['name'],
+            'album': track['album']['name'],
+            'spotify_url': track['external_urls']['spotify'],
+            'preview_url': track.get('preview_url', None),
+            'uri' : track['uri']
+        })
 
     return JsonResponse({'recommendations': recommendations})
 
@@ -262,7 +265,7 @@ def search_songs(request):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
-def generate_response(prompt, num_runs=10):
+def generate_response(prompt, num_runs=10, songsInPlaylist=[]):
     # global response_index 
     # print(f"Response {response_index}: ")
     output = prompt_for_song(prompt, num_runs)
@@ -280,6 +283,9 @@ def generate_response(prompt, num_runs=10):
             title = song["title"].strip()
             # Determine if song is valid and return track ID
             track_id = find_new_song(title, artist, track_ids)
+            if track_id in songsInPlaylist:
+                # print(f"\t\tTrack already in playlist, skipping.")
+                track_id = None
             if track_id:
                 ban_list.add(title+"-"+artist)
             else:
@@ -303,6 +309,10 @@ def generate_response(prompt, num_runs=10):
                     print(f"Error parsing track info: {track_info}")
                     continue
                 track_id = find_new_song(track_title, track_artist, track_ids)
+                if track_id in songsInPlaylist:
+                    # print(f"\t\tTrack already in playlist, skipping.")
+                    track_id = None
+                    continue
                 if track_id:
                     ban_list.add(track_title+"-"+track_artist)
                 else:
@@ -312,7 +322,7 @@ def generate_response(prompt, num_runs=10):
     return track_ids
 
 
-def run_prompt(prompt, num_runs, user_info):
+def run_prompt(prompt, num_runs, user_info, songsInPlaylist):
     if user_info is None or user_info != "True":
         return generate_response(prompt, num_runs)
     
@@ -327,7 +337,7 @@ def run_prompt(prompt, num_runs, user_info):
 
     prompt += f"\nCountry: {user_info ['country']},"
 
-    return generate_response(prompt, num_runs)
+    return generate_response(prompt, num_runs, songsInPlaylist)
 
 def process_json(output):
     """Cleans and parses OpenAI's JSON response."""
@@ -387,9 +397,7 @@ def find_new_song(title, artist, tracks=[]):
             track_id = None
     return track_id
 
-
 #function to return list of songs
-
 def login(request):
     # Redirect user to Spotify authorization URL
     auth_url = sp.auth_manager.get_authorize_url()
@@ -452,6 +460,8 @@ def callback(request):
         return JsonResponse({"error": "Authentication failed"}, status=500)
 
 def populateSongs():
+    # Clear all existing songs before pulling new ones
+    Song.objects.all().delete()
     try:
         results = sp.current_user_top_tracks()
         songs = results['items']
@@ -476,6 +486,8 @@ def populateSongs():
         return False
     
 def populatePlaylist():
+    # Clear all existing playlists before pulling new ones
+    Playlist.objects.all().delete()
     try:
         results = sp.current_user_playlists()
         playlists = results['items']
@@ -504,8 +516,6 @@ def getToken(request):
     else:
         return JsonResponse({"error": "No token found"}, status=404)
 
-    
-
 def getUser(request):
     tokenInfo = sp.auth_manager.get_cached_token()
     if tokenInfo:
@@ -516,9 +526,6 @@ def getUser(request):
         return JsonResponse({"error": "No token found"})
     
 def getLikedSongs():
-    # if "spotify_token" not in request.session:
-    #     return JsonResponse({"error": "User must be logged in to Spotify"}, status=401)
-    
     raw_liked_songs = []
     liked_songs = []
     limit = 100 # you can change this to any number
@@ -551,14 +558,11 @@ def getLikedSongs():
         track_id = track['id']
         track_name = track['name']
         album_data = track['album']
-        # album_id = album_data['id']
         album_name = album_data['name']
         artist_data = track['artists'][0]
-        # artist_id = artist_data['id']
         artist_name = artist_data['name']
         uri = track.get('uri','')
         
-
         # Check if the song already exists
         if not Song.objects.filter(trackID=track_id).exists():
             # Create a new song
@@ -598,8 +602,6 @@ def getLikedSongs():
     return JsonResponse({"message": "Saved songs imported successfully"}, status=201)
 
 def get_uris(request):  # Use snake_case naming
-
-    # Fetch a list of song URIs from Spotify or your database
     try:
         # Example: Fetching user's top 10 tracks from Spotify
         results = sp.current_user_top_tracks(limit=10)
@@ -610,4 +612,12 @@ def get_uris(request):  # Use snake_case naming
     except Exception as e:
         logger.error(f"Error fetching URIs: {str(e)}")
         return JsonResponse({'error': f"Failed to fetch URIs: {str(e)}"}, status=500)
+    
+# def addLikedSongs(request):
+#     try:
+#         sp.current_user_saved_tracks_add([request.GET.get('trackID')])
+#         return JsonResponse({"message": "Song added to liked songs"}, status=201)
+#     except Exception as e:
+#         logger.error(f"Error adding song to liked songs: {str(e)}")
+#         return JsonResponse({'error': f"Failed to add song to liked songs: {str(e)}"}, status=500)
 

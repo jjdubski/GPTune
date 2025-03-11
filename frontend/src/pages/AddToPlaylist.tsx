@@ -4,7 +4,6 @@ import AddSong from '../components/AddSong/AddSong';
 import PlaylistList from '../components/PlaylistList/PlaylistList';
 import Song from '../components/Song/Song';
 import RefreshButton from '../components/RefreshButton/RefreshButton';
-import Playlist from '../components/Playlist/Playlist';
 
 interface Song {
     trackID: string;
@@ -26,7 +25,8 @@ const AddToPlaylist: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [playlistSongs, setPlaylistSongs] = useState<Song[]>([]);
     const [recommendedSongs, setRecommendedSongs] = useState<Song[]>([]);
-    const [selectedPlaylistID, setSelectedPlaylistID] = useState<string | null>(null);
+    const [selectedPlaylistID, setSelectedPlaylistID] = useState<string>('');
+    const [selectedSongID, setSelectedSongID] = useState<string>('');
     const hasFetchedSongs = useRef(false);
 
     // checks if user is logged in, redirects to login page if not
@@ -52,9 +52,11 @@ const AddToPlaylist: React.FC = () => {
         const requestData = {
             prompt: `give me songs similar to ${playlistSongs.map(song => song.title).join(", ")}`,
             num_runs: 5,
-            userInfo: "False"
+            userInfo: "False",
+            songsInPlaylist: playlistSongs.map(song => song.trackID)
         };
         console.log("requestData:",requestData);
+        console.log("playlistSongs:",playlistSongs);
         try {
             const res = await fetch('http://127.0.0.1:8000/getRecommendations/', {
                 method: 'POST',
@@ -127,26 +129,30 @@ const AddToPlaylist: React.FC = () => {
     // Updates selectedPlaylistID and resets songs
     const handleSelectPlaylist = (playlistID: string) => {
         setPlaylistSongs([]); // Reset songs when switching playlists
+        setRecommendedSongs([]);
         setSelectedPlaylistID(playlistID);
     };
 
-    // Adds song to selected playlist
     const handleAddSong = async (trackID: string) => {
         if (playlistSongs.some(song => song.trackID === trackID)) {
             console.log("Song already in playlist.");
             return;
         }
+
+        // Remove the song from the recommended songs list
+        setRecommendedSongs(prevSongs => prevSongs.filter(song => song.trackID !== trackID));
+
         const addSong = async () => {
             try {
                 const response = await fetch("http://localhost:8000/playlistAPI/addSongToPlaylist", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        trackID: trackID ,  // Sending trackID as the 'uri' cuz thats what backend expects. Spotipy can take ether
+                        trackID: trackID,  // Sending trackID as the 'uri' cuz thats what backend expects. Spotipy can take ether
                         playlistID: selectedPlaylistID  // Sending playlistID in the expected structure
                     }),
                 });
-        
+
                 if (response.ok) {
                     console.log(`Song ${trackID} added successfully.`);
                     // setPlaylistSongs([...playlistSongs, { trackID, title: "Unknown", artist: "Unknown", album: "Unknown", image: "", uri: "" }]); // Temporary UI update
@@ -156,7 +162,40 @@ const AddToPlaylist: React.FC = () => {
             } catch (error) {
                 console.error("Error adding song:", error);
             }
+
+            // Generate a new song recommendation
+            try {
+                const res = await fetch('http://127.0.0.1:8000/playlistAPI/generateSong/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        prompt: `give me one more song similar to ${playlistSongs.map(song => song.title).join(", ")}`,
+                        num_runs: 1,
+                        userInfo: "False"
+                    })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    const newSong: Song = {
+                        trackID: data.trackID,
+                        title: data.title,
+                        artist: data.artist,
+                        album: data.album,
+                        image: data.image,
+                        uri: data.uri
+                    };
+                    setRecommendedSongs(prevSongs => [...prevSongs, newSong]);
+                } else {
+                    console.error('Error:', data);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
         };
+
         addSong();
     };
 
@@ -166,6 +205,8 @@ const AddToPlaylist: React.FC = () => {
         hasFetchedSongs.current = false;  // Set hasFetched to false
         setRecommendedSongs([])
         generateSongs();  // Call your generateSongs function
+        setSelectedPlaylistID('loading');
+        setSelectedSongID('');  // Reset selected song
     };
     return (
         isLoading ? (
@@ -175,15 +216,19 @@ const AddToPlaylist: React.FC = () => {
                 <div className="playlist-section">
                     <h1 className="playlist-section-title">Select Playlist</h1>
                     <div className="scroll">
-                        <PlaylistList onSelectPlaylist={handleSelectPlaylist} selectedPlaylistID={selectedPlaylistID}/>
+                        <PlaylistList 
+                            onSelectPlaylist={handleSelectPlaylist} 
+                            selectedPlaylistID={selectedPlaylistID} 
+                            // highlightSelected={true} // Pass a prop to highlight the selected playlist
+                        />
                     </div>
                 </div>
                 <div className="add-songs-container">
-                <div className="add-songs-header">
-                    <h1 className="add-songs-title">Recommended Songs</h1>
-                    <script>console.log("Selected PlaylistID: ", selectedPlaylistID)</script> 
-                    {selectedPlaylistID && <RefreshButton onRefresh={handleRefresh} />}
-                </div>
+                    <div className="add-songs-header">
+                        <h1 className="add-songs-title">Recommended Songs</h1>
+                        {/* <script>console.log("Selected PlaylistID: ", selectedPlaylistID)</script>  */}
+                        {selectedPlaylistID && <RefreshButton onRefresh={handleRefresh} />}
+                    </div>
                     <div className="scroll">
                         {recommendedSongs.length > 0 ? (
                             recommendedSongs.map((song, index) => {
@@ -191,13 +236,23 @@ const AddToPlaylist: React.FC = () => {
                                     console.error(`Skipping invalid song at index ${index}:`, song);
                                     return null; // Skip rendering if song is invalid
                                 }
-                                return <AddSong key={song.trackID} song={song} onAddSong={handleAddSong}/>
+                                return (
+                                    <AddSong 
+                                        key={song.trackID} 
+                                        song={song} 
+                                        onAddSong={handleAddSong} 
+                                        selectedSongID={selectedSongID}
+                                    />
+                                );  
                         })
                             
-                        ) : selectedPlaylistID ? (
-                            <p>Loading recommendations...</p>
                         ) : (
-                            <p>Please select a playlist on the left for recommendations.</p>
+                            <p>
+                                {selectedPlaylistID 
+                                    ? 'Loading recommendations...' 
+                                    : 'Please select a playlist on the left for recommendations.'
+                                }
+                            </p>
                         )} 
                     </div>
                 </div>
