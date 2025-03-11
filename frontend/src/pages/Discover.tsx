@@ -21,10 +21,11 @@ const Discover: React.FC = () => {
     const fetchSongs = useCallback(async (category: string, setSongs: React.Dispatch<React.SetStateAction<Song[]>>) => {
         if (hasFetchedSongs.current) return;
 
+        console.log(`Fetching ${category} songs...`); //just for debug
         const requestData = {
-            prompt: `Give me the most popular ${category} songs`,
+            prompt: `Give me songs that are in ${category} category, you are an AI recommendation bot. Recommend unique songs.`,
             num_runs: 5,
-            userInfo: "False"
+            userInfo: "True"
         };
 
         try {
