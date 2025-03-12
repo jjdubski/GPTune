@@ -62,7 +62,13 @@ const SongList: React.FC<SongListProps> = ({ playlistID, tracks }) => {
                         <p>Artist: {song.artist}</p>
                         <p>Album: {song.album}</p>
                         <p>Release Date: {song.releaseDate}</p> */}
-                        <Song trackID={song.trackID} title={song.title} artist={song.artist} album={song.album} image={song.image} uri={song.uri}/>
+                        <Song trackID={song.trackID} 
+                            title={song.title} 
+                            artist={song.artist} 
+                            album={song.album} 
+                            image={song.image} 
+                            uri={song.uri}
+                        />
                     </div>
                 ))
             )}

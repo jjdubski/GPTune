@@ -215,6 +215,7 @@ const ThisorThat: React.FC = () => {
                                 artist={currentSong?.artist || ""}
                                 album={currentSong?.album  || ""}
                                 image={currentSong?.image || ""}
+                                uri = {currentSong?.uri || ""}
                             />
 
                             <div className="action-buttons">
