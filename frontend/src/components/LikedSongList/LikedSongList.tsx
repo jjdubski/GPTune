@@ -10,6 +10,10 @@ interface Song {
     uri: string;
 }
 
+
+
+
+
 const LikedSongList: React.FC = () => {
     const [likedSongs, setLikedSongs] = useState<Song[]>([]);
 
@@ -44,7 +48,7 @@ const LikedSongList: React.FC = () => {
                                 <p className="liked-song-album">{song.album}</p>
                             </div>
                             <button className="remove-song-btn">
-                                <span className="remove-icon">➖</span>
+                                <img src="/remove-song-btn.png" alt="Remove" className="remove-icon" />
                             </button>
                         </div>
                     ))

@@ -7,6 +7,7 @@
     padding: 20px;
     border-radius: 10px;
     width: 350px;
+    height: 100vh;
 }
 
 .liked-songs-title {
@@ -55,18 +56,32 @@
     font-size: 14px;
     color: #ddd;
 }
+/* }
 
 .remove-song-btn {
     background: none;
     border: 2px solid #fff;
     color: white;
-    font-size: 20px;
-    padding: 5px 10px;
-    border-radius: 50%;
+    font-size: 3rem;
+    padding: 5px 5px;
+    border-radius: 100%;
     cursor: pointer;
-}
+} */
 
-.remove-song-btn:hover {
-    background-color: #d9534f;
-    color: white;
+
+.remove-icon {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    background-color : transparent;
+
+
+
+}
+.remove-song-btn {
+    background: none;
+    cursor: pointer;
+    border-radius: 0;
+    padding: 0%;
+    border: none;
 }
