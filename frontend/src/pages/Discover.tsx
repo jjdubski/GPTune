@@ -68,6 +68,7 @@ const Discover: React.FC = () => {
 
     // Fetch genre and subgenre from GPT
     const fetchGenreAndSubgenre = useCallback(async () => {
+
         const storedData = localStorage.getItem("GOTD_GENRE");
         const now = new Date().getTime();
     
@@ -85,18 +86,14 @@ const Discover: React.FC = () => {
     
         try {
             const res = await fetch('http://127.0.0.1:8000/getGenreAndSubgenre/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: "Pick a musical genre and one of its subgenres." })
+                method: 'GET',  // ✅ FIXED: Changed to GET
+                headers: { 'Content-Type': 'application/json' }
             });
-
+    
             const data = await res.json();
             if (res.ok && data.genre && data.subgenre) {
                 console.log(`Fetched new genre: ${data.genre} - ${data.subgenre}`);
-                localStorage.setItem(
-                    "GOTD_GENRE",
-                    JSON.stringify({ genre: data.genre, subgenre: data.subgenre, timestamp: now })
-                );
+                localStorage.setItem("GOTD_GENRE", JSON.stringify({ ...data }));
                 setGenre(data.genre);
                 setSubgenre(data.subgenre);
                 return { genre: data.genre, subgenre: data.subgenre };
@@ -109,52 +106,43 @@ const Discover: React.FC = () => {
     
         return { genre: "Rock", subgenre: "Alternative Rock" }; // Fallback
     }, []);
-
+    
     // Fetch genre of the day
     const fetchGOTD = useCallback(async (genre: string, subgenre: string, setSongs: React.Dispatch<React.SetStateAction<Song[]>>) => {
-        if (hasFetchedSongs.current) return;
-
-        console.log(`Fetching GOTD songs for ${genre} -> ${subgenre}...`); // Debugging
-
+        console.log(`Fetching GOTD songs for ${genre} -> ${subgenre}...`);
         const requestData = {
             prompt: `Recommend unique songs from the ${subgenre} subgenre of ${genre}. You are an AI recommendation bot. Recommend unique songs.`,
             num_runs: 5,
             userInfo: "True"
         };
-
+    
         try {
             const res = await fetch('http://127.0.0.1:8000/getRecommendations/', {
-                method: 'POST',
+                method: 'POST',  // ✅ FIXED: Using POST
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestData)
+                body: JSON.stringify(requestData)  // ✅ FIXED: Ensure request body is sent
             });
-
+    
             const data = await res.json();
-            if (res.ok) {
-                const songList: Song[] = Object.values(data.songs as { 
-                    trackID: string; 
-                    title: string; 
-                    artist: string;
-                    album: string; 
-                    image: string; 
-                    uri: string;
-                }[]).map((item) => ({
+            console.log("GOTD API Response:", data);
+    
+            if (res.ok && data.songs) {
+                const songList: Song[] = Object.values(data.songs).map((item) => ({
                     trackID: item.trackID,
                     title: item.title,
                     artist: item.artist,
                     album: item.album,
-                    image: item.image,
+                    image: item.image,  
                     uri: item.uri
                 }));
-
+    
                 setSongs(songList);
-                setGenre(genre);
-                setSubgenre(subgenre);
+                console.log("Fetched GOTD Songs:", songList);
             } else {
-                console.error(`Error fetching songs:`, data);
+                console.error(`Error fetching GOTD songs:`, data);
             }
         } catch (error) {
-            console.error(`Error fetching songs:`, error);
+            console.error(`Error fetching GOTD songs:`, error);
         }
     }, []);
 
@@ -162,15 +150,17 @@ const Discover: React.FC = () => {
     useEffect(() => {
         fetchSongs("new", setNewSongs);
         fetchSongs("trending", setTrendingSongs);
-
         fetchGenreAndSubgenre().then(({ genre, subgenre }) => {
             if (genre && subgenre) {
+                console.log(`Fetching songs for ${genre} - ${subgenre}...`);
+                setGenre(genre);
+                setSubgenre(subgenre);
                 fetchGOTD(genre, subgenre, setGOTDSongs);
             }
         });
-
+    
         hasFetchedSongs.current = true;
-    }, [fetchSongs]);
+    }, []);
     
     return (
         <div className="discover-container">
@@ -196,3 +186,4 @@ const Discover: React.FC = () => {
 };
 
 export default Discover;
+

@@ -39,6 +39,8 @@ urlpatterns = [
     path('getToken/', views.getToken, name='getToken'),
     path('getUser/', views.getUser, name='getUser'),
     path('getUris/', views.get_uris, name='get_uris'),
+    path('getGenreAndSubgenre/', views.getGenreAndSubgenre, name='getGenreAndSubgenre'),
+    path('getSongsForGenre/', views.getSongsForGenre, name='getSongsForGenre'),
     path('getCurrentPlayback/', utils.spotifyClient.get_current_playback, name='getCurrentPlayback'),  
 ]
 

@@ -1,11 +1,14 @@
 import logging
 import os
 import json
+import time
 import spotipy
 from django.http import HttpResponse, JsonResponse
 from datetime import datetime
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
+from django.core.cache import cache
+
 
 from playlists.models import Playlist
 from songs.models import Song
@@ -76,6 +79,97 @@ def index(request):
     # print(len(currentUser['images']))
     return JsonResponse(data)
 
+
+
+#Implement getGenreAndSubgenre
+GENRES = {
+    "Rock": ["Alternative Rock", "Classic Rock", "Indie Rock"],
+    "Pop": ["Synthpop", "Electropop", "Teen Pop"],
+    "Jazz": ["Smooth Jazz", "Bebop", "Swing"],
+    "Hip-Hop": ["Trap", "Boom Bap", "Lo-Fi"],
+    "Classical": ["Baroque", "Romantic", "Contemporary"],
+}
+
+def get_genre_of_the_day():
+    """Retrieve or generate today's genre and subgenre."""
+    cached_data = cache.get("GOTD_GENRE")
+    now = int(time.time())  # Current timestamp
+
+    if cached_data:
+        genre_data = json.loads(cached_data)
+        timestamp = genre_data.get("timestamp", 0)
+
+        if now - timestamp < 86400:  # 24 hours in seconds
+            return genre_data  # Return cached genre
+
+    # Pick a new genre and subgenre
+    genre = random.choice(list(GENRES.keys()))
+    subgenre = random.choice(GENRES[genre])
+
+    # Cache the new selection
+    genre_data = {"genre": genre, "subgenre": subgenre, "timestamp": now}
+    cache.set("GOTD_GENRE", json.dumps(genre_data), timeout=86400)  # Store for 24 hours
+
+    return genre_data
+
+@csrf_exempt
+def getGenreAndSubgenre(request):
+    if request.method == "GET": 
+        try:
+            # Check if genre is cached
+            stored_data = cache.get("GOTD_GENRE")
+            if stored_data:
+                return JsonResponse(json.loads(stored_data))  
+
+            # Fetch new genre if not cached
+            genre_prompt = "Pick a **musical genre** and one of its **subgenres**. Do NOT return a song."
+            genre_response = generate_discover_songs(genre_prompt)
+
+            # Ensure the response contains valid genre data
+            if isinstance(genre_response, list) and len(genre_response) > 0:
+                genre_data = genre_response[0]
+                genre = genre_data.get("genre", "Rock")
+                subgenre = genre_data.get("subgenre", "Alternative Rock")
+            else:
+                genre = "Rock"
+                subgenre = "Alternative Rock"
+
+            # Store in cache
+            genre_info = {"genre": genre, "subgenre": subgenre, "timestamp": time.time()}
+            cache.set("GOTD_GENRE", json.dumps(genre_info), timeout=86400)  
+
+            return JsonResponse(genre_info)
+
+        except Exception as e:
+            return JsonResponse({"error": f"Failed to fetch genre: {str(e)}"}, status=500)
+
+    return JsonResponse({"error": "Invalid request method"}, status=400)
+
+
+
+#Implement getSongsForGenre
+def getSongsForGenre(request):
+    """Fetch songs based on the Genre of the Day."""
+    genre_data = get_genre_of_the_day()
+    genre, subgenre = genre_data["genre"], genre_data["subgenre"]
+
+    # Generate a prompt for OpenAI
+    prompt = f"Recommend 5 songs from the {subgenre} subgenre of {genre}. Make sure they are unique and representative of the genre."
+
+    try:
+        song_list = generate_discover_songs(prompt)
+
+        return JsonResponse({
+            "genre": genre,
+            "subgenre": subgenre,
+            "songs": song_list
+        })
+    except Exception as e:
+        return JsonResponse({"error": f"Failed to fetch songs: {str(e)}"}, status=500)
+
+
+
+
 @csrf_exempt
 def getRecommendations(request):
     if request.method == "POST":
@@ -83,36 +177,37 @@ def getRecommendations(request):
             data = json.loads(request.body.decode("utf-8"))
             prompt = data.get("prompt", "")
             num_runs = data.get("num_runs", 5)
-            userInfo = data.get("userInfo", "False")
-            songsInPlaylist = data.get("songsInPlaylist", [])
 
-            if userInfo == "True":
-                user_info = get_user_info()
-            else:
-                user_info = None
-            # print("\n\nuser_info:",user_info)
-            response = run_prompt (prompt, num_runs, user_info, songsInPlaylist)
-            
-            # Log the raw AI response
-            logger.info(f"Raw OpenAI Response: {response}")
+            if not prompt:
+                return JsonResponse({"error": "Missing prompt"}, status=400)
+
+            response = run_prompt(prompt, num_runs, None, [])
+
+            if not response:
+                return JsonResponse({"error": "No songs found"}, status=500)
+
             songs = {}
             for trackID in response:
-                trackInfo = sp.track(trackID)
-                #print(trackInfo,"\n\n")
-                songs[trackID] = {
-                    "trackID" : trackID,
-                    "title": trackInfo['name'],
-                    "artist": trackInfo['artists'][0]['name'],
-                    "album": trackInfo['album']['name'],
-                    "image": trackInfo['album']['images'][0]['url'],
-                    "uri": trackInfo['uri']
-                }
-            # print (songs)
-            # Return the processed AI response inside the original structure
+                try:
+                    trackInfo = sp.track(trackID)
+                    songs[trackID] = {
+                        "trackID": trackID,
+                        "title": trackInfo['name'],
+                        "artist": trackInfo['artists'][0]['name'],
+                        "album": trackInfo['album']['name'],
+                        "image": trackInfo['album']['images'][0]['url'],
+                        "uri": trackInfo['uri']
+                    }
+                except Exception as e:
+                    print(f"Error fetching track info: {e}")
+            
             return JsonResponse({"songs": songs})
+
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
+    
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
 
 
 #below is the function for Disocver page 
@@ -120,20 +215,44 @@ def getRecommendations(request):
 def get_discover_songs(request):
     if request.method == "GET":
         try:
-            new_songs = generate_discover_songs("Give me 5 songs that were released in the past 5 months, make sure none repeat")
-            trending_songs = generate_discover_songs("Give me 5 most trending songs right now, make sure none repeat")
-            classic_songs = generate_discover_songs("Give me 5 songs that are older than 15 years and are deemed as classics, make sure none repeat")
+            # Fetch new songs
+            new_songs = generate_discover_songs("Give me 5 songs that were released in the past 5 months, make sure none repeat.")
+
+            # Fetch extra trending songs (so we have enough to filter from)
+            trending_songs = generate_discover_songs("Give me 10 most trending songs right now, make sure none repeat.")
+
+            # Convert new_songs list into a set of titles (case-insensitive) for filtering
+            new_song_titles = {song["title"].strip().lower() for song in new_songs}
+
+            # Remove songs from trending that also exist in new_songs
+            filtered_trending_songs = [
+                song for song in trending_songs if song["title"].strip().lower() not in new_song_titles
+            ]
+
+            # If filtering removed too many, fetch more trending songs dynamically
+            while len(filtered_trending_songs) < 5:
+                additional_songs = generate_discover_songs(
+                    "Give me 5 additional trending songs that do not exist in the new songs list."
+                )
+                for song in additional_songs:
+                    if song["title"].strip().lower() not in new_song_titles:
+                        filtered_trending_songs.append(song)
+                        if len(filtered_trending_songs) == 5:
+                            break  # Stop when we reach 5
+
+            # Trim to exactly 5 songs
+            filtered_trending_songs = filtered_trending_songs[:5]
 
             return JsonResponse({
                 "new": new_songs,
-                "trending": trending_songs,
-                "classics": classic_songs
+                "trending": filtered_trending_songs
             })
 
         except Exception as e:
             return JsonResponse({"error": f"Failed to fetch songs: {str(e)}"}, status=500)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
+
 
 
 
