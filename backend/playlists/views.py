@@ -351,6 +351,7 @@ def generateSong(request):
         if not prompt:
             return JsonResponse({'error': 'Missing prompt'}, status=400)
 
+        print(f"Prompt: {prompt}")
         response = generate_response(prompt, num_runs)
         return JsonResponse(response, status=200)
 
