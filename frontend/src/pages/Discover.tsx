@@ -68,6 +68,20 @@ const Discover: React.FC = () => {
 
     // Fetch genre and subgenre from GPT
     const fetchGenreAndSubgenre = useCallback(async () => {
+
+        const storedData = localStorage.getItem("GOTD_GENRE");
+        const now = new Date().getTime();
+    
+        if (storedData) {
+            const { genre, subgenre, timestamp } = JSON.parse(storedData);
+            if (now - timestamp < 24 * 60 * 60 * 1000) {
+                console.log(`Using stored genre: ${genre} - ${subgenre}`);
+                setGenre(genre);
+                setSubgenre(subgenre);
+                return { genre, subgenre };
+            }
+        }
+    
         console.log("Fetching new genre and subgenre...");
     
         try {
@@ -80,7 +94,6 @@ const Discover: React.FC = () => {
             if (res.ok && data.genre && data.subgenre) {
                 console.log(`Fetched new genre: ${data.genre} - ${data.subgenre}`);
                 localStorage.setItem("GOTD_GENRE", JSON.stringify({ ...data }));
-    
                 setGenre(data.genre);
                 setSubgenre(data.subgenre);
                 return { genre: data.genre, subgenre: data.subgenre };
@@ -97,7 +110,6 @@ const Discover: React.FC = () => {
     // Fetch genre of the day
     const fetchGOTD = useCallback(async (genre: string, subgenre: string, setSongs: React.Dispatch<React.SetStateAction<Song[]>>) => {
         console.log(`Fetching GOTD songs for ${genre} -> ${subgenre}...`);
-    
         const requestData = {
             prompt: `Recommend unique songs from the ${subgenre} subgenre of ${genre}. You are an AI recommendation bot. Recommend unique songs.`,
             num_runs: 5,
@@ -133,15 +145,11 @@ const Discover: React.FC = () => {
             console.error(`Error fetching GOTD songs:`, error);
         }
     }, []);
-    
-    
-    
 
     // Fetch all categories on component mount
     useEffect(() => {
         fetchSongs("new", setNewSongs);
         fetchSongs("trending", setTrendingSongs);
-    
         fetchGenreAndSubgenre().then(({ genre, subgenre }) => {
             if (genre && subgenre) {
                 console.log(`Fetching songs for ${genre} - ${subgenre}...`);
@@ -153,7 +161,6 @@ const Discover: React.FC = () => {
     
         hasFetchedSongs.current = true;
     }, []);
-    
     
     return (
         <div className="discover-container">
