@@ -227,8 +227,10 @@ def addSongToPlaylist(request):
         if not playlist_id or not track_id:
             return JsonResponse({'error': 'Missing playlistID or song URI'}, status=400)
         if(playlist_id == "liked_songs"):
+            Playlist.objects.get(playlistID="liked_songs").songs.add(Song.objects.get(trackID=track_id))
             sp.current_user_saved_tracks_add(tracks=[track_id])
         else:
+            Playlist.objects.get(playlistID=playlist_id).songs.add(Song.objects.get(trackID=track_id))
             sp.playlist_add_items(playlist_id, [track_id])
 
         return JsonResponse({'message': 'Song added successfully'}, status=200)
@@ -260,8 +262,10 @@ def removeSong(request):
         if not playlist_id or not track_id:
             return JsonResponse({'error': 'Missing playlistID or song URI'}, status=400)
         if(playlist_id == "liked_songs"):
+            Playlist.objects.get(playlistID="liked_songs").songs.remove(Song.objects.get(trackID=track_id))
             sp.current_user_saved_tracks_delete(tracks=[track_id])
         else:
+            Playlist.objects.get(playlistID=playlist_id).songs.remove(Song.objects.get(trackID=track_id))
             sp.playlist_remove_all_occurrences_of_items(playlist_id, [track_id])
         
         return JsonResponse({'message': 'Song removed successfully'}, status=200)
