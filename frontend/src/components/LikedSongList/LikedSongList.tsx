@@ -34,6 +34,15 @@ const LikedSongList: React.FC = () => {
         fetchLikedSongs();
     }, []);
     console.log(likedSongs)
+
+    useEffect(() => {
+        const removeSong = async () => {
+            
+        };
+
+        removeSong();
+    }, [likedSongs]);
+
     return (
         <div className="liked-songs-container">
             <h1 className="liked-songs-title">Liked Songs</h1>
@@ -47,7 +56,7 @@ const LikedSongList: React.FC = () => {
                                 <p className="liked-song-artist">{song.artist}</p>
                                 <p className="liked-song-album">{song.album}</p>
                             </div>
-                            <button className="remove-song-btn">
+                            <button className="remove-song-btn" >
                                 <img src="/remove-song-btn.png" alt="Remove" className="remove-icon" />
                             </button>
                         </div>

@@ -14,12 +14,30 @@ interface Song {
 }
 
 const ThisorThat: React.FC = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const [playlistSongs, setPlaylistSongs] = useState<Song[]>([]);
     const [selectedPlaylistID, setSelectedPlaylistID] = useState<string | null>("liked_songs");
     const [currentIndex, setCurrentIndex] = useState(0);
     const hasFetchedSongs = useRef(false);
     const hasFetchedSong = useRef(false);
     const [currentSong, setCurrentSong] = useState<Song | null>(null);
+
+    // checks if user is logged in, redirects to login page if not
+        useEffect(() => {
+            fetch('http://localhost:8000')
+                .then((res) => res.json())
+                .then((data) => {
+                    if (!data.user || !data.user.email) {
+                        window.location.href ="http://127.0.0.1:8000/login/"; // Redirect to login page
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
+        }, []);
     
     useEffect(() => {
         if(hasFetchedSong.current){
@@ -156,6 +174,13 @@ const ThisorThat: React.FC = () => {
 
 
     return (
+        isLoading ? (
+            //an idea maybe to add a loading gif
+            // <div className="loading">
+            //     <img src="/loading.gif" alt="Loading" />
+            // </div>
+            <></>
+        ) : (
         <div className="this-or-that-page">
             <div className="this-or-that-container">
                 <div className="this-or-that-content">
@@ -194,7 +219,8 @@ const ThisorThat: React.FC = () => {
                 <LikedSongList/>
             </div>
         </div>
+        )
     );
-};
+}
 
 export default ThisorThat;

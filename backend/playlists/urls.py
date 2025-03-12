@@ -14,4 +14,5 @@ urlpatterns = [
     path('addSongToPlaylist', views.addSongToPlaylist, name = "addSongToPlaylist"),
     path('thisorthat', views.thisOrThat, name = "thisOrThat"),
     path('generateSong/', views.generateSong, name = "generateSong"),
+    path('removeSong/', views.removeSong, name = "removeSong"),
 ]
