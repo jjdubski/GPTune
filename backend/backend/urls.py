@@ -35,9 +35,12 @@ urlpatterns = [
     path("getAISongRecommendations/", views.getAISongRecommendations, name='getAISongRecommendations'),
     path("getRecommendations/", views.getRecommendations, name='getRecommendations'),
     path('musicAPI/search', views.search_songs, name='search_songs'),
+    path('api/discover/', views.get_discover_songs, name='get_discover_songs'), # Disocver page 
     path('getToken/', views.getToken, name='getToken'),
     path('getUser/', views.getUser, name='getUser'),
     path('getUris/', views.get_uris, name='get_uris'),
+    path('getGenreAndSubgenre/', views.getGenreAndSubgenre, name='getGenreAndSubgenre'),
+    path('getSongsForGenre/', views.getSongsForGenre, name='getSongsForGenre'),
     path('getCurrentPlayback/', utils.spotifyClient.get_current_playback, name='getCurrentPlayback'),  
 ]
 
