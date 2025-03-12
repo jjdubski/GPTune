@@ -271,6 +271,7 @@ def removeSong(request):
     except KeyError as e:
         return JsonResponse({'error': f'Missing required field: {str(e)}'}, status=400)
     except Exception as e:
+        print(f"Error: {e}")
         return JsonResponse({'error': f"Failed to remove song: {str(e)}"}, status=500)
     
 
