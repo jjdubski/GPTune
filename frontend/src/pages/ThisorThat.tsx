@@ -90,7 +90,6 @@ const ThisorThat: React.FC = () => {
         setSelectedPlaylistID(playlistID);
         setCurrentIndex(0);
     };
-<<<<<<< HEAD
     const handleNextSong = async () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % playlistSongs.length);
 
@@ -122,7 +121,6 @@ const ThisorThat: React.FC = () => {
             }
         } catch (error) {
             console.error('Error:', error);
-=======
 
     const addToPlaylist = async() => {
         generateSong();
@@ -148,7 +146,6 @@ const ThisorThat: React.FC = () => {
         } catch (error) {
             console.error("Error adding song:", error);
             // showPopup("Error adding song. Please try again.", "error");
->>>>>>> 205a8524abb963767c58488fdb8013c10f4c2c3a
         }
     };
 

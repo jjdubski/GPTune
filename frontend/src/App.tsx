@@ -11,7 +11,7 @@ import Search from './pages/Search.tsx'
 import SpotifyPlayer from 'react-spotify-web-playback';
 import PlaylistDetails from './pages/PlaylistDetails.tsx'
 import ThisOrThat from './pages/ThisorThat'
-import Discover from './pages/Discover.tsx'
+import Discover from './pages/Discover'
 
 function App() { 
   const [token, setToken] = useState<string | null>(null)
