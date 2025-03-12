@@ -274,7 +274,6 @@ def removeSong(request):
         print(f"Error: {e}")
         return JsonResponse({'error': f"Failed to remove song: {str(e)}"}, status=500)
     
-
 def generate_response(prompt, num_runs=1):
     # global response_index 
     # print(f"Response {response_index}: ")

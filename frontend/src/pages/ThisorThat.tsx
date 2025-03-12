@@ -172,7 +172,6 @@ const ThisorThat: React.FC = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + playlistSongs.length) % playlistSongs.length);
     };
 
-
     return (
         isLoading ? (
             //an idea maybe to add a loading gif

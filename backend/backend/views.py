@@ -321,7 +321,6 @@ def generate_response(prompt, num_runs=10, songsInPlaylist=[]):
         # response_index += 1
     return track_ids
 
-
 def run_prompt(prompt, num_runs, user_info, songsInPlaylist):
     if user_info is None or user_info != "True":
         return generate_response(prompt, num_runs)
@@ -348,7 +347,6 @@ def process_json(output):
         print(f"Error parsing JSON response: {output}")
         return [{"title": "Unknown", "artist": "Unknown", "album": "Unknown"}]
     
-
 def get_user_info():
     tokenInfo = sp.auth_manager.get_cached_token()
     if tokenInfo:

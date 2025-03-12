@@ -10,10 +10,6 @@ interface Song {
     uri: string;
 }
 
-
-
-
-
 const LikedSongList: React.FC = () => {
     const [likedSongs, setLikedSongs] = useState<Song[]>([]);
 
