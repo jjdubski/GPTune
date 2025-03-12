@@ -185,6 +185,7 @@ const ThisorThat: React.FC = () => {
     const handleSelectSong = (song: Song) => {
         console.log("Selected song:", song);
         setSelectedSong(song);
+        generateSong();
     };
 
     return (
