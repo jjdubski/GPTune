@@ -6,14 +6,13 @@
     /* width: clamp(200px, 40%, 300px); */
     width: 100%;
     max-width: 300px;
-    height: fit-content;
+    height: auto;
     /* aspect-ratio: 1 / 1; Ensures a square shape */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between; /* Prevents content from stretching */
+    justify-content: center; /* Prevents content from stretching */
     /* overflow: hidden; Ensures nothing overflows */
-    flex-grow: 1;
 }
 
 .song-card-image {

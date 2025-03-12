@@ -152,6 +152,9 @@ const ThisorThat: React.FC = () => {
         }; 
     };
     const addToPlaylist = async() => {
+        if (currentSong) {
+            setPlaylistSongs((prevSongs) => [currentSong, ...prevSongs]);
+        }
         generateSong();
         try {
             const response = await fetch("http://localhost:8000/playlistAPI/addSongToPlaylist", {
@@ -234,7 +237,7 @@ const ThisorThat: React.FC = () => {
 
             {/* Liked Songs on the Right Side */}
             <div className="liked-songs-sidebar">
-                <LikedSongList/>
+                <LikedSongList songs={playlistSongs}/>
             </div>
         </div>
         )

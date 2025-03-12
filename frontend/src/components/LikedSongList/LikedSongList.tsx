@@ -10,8 +10,13 @@ interface Song {
     uri: string;
 }
 
-const LikedSongList: React.FC = () => {
+interface LikedSongListProps {
+    songs: Song[];
+}
+
+const LikedSongList: React.FC<LikedSongListProps> = ({ songs }) => {
     const [likedSongs, setLikedSongs] = useState<Song[]>([]);
+    const [songList, setSongList] = useState<Song[]>([]);
 
     useEffect(() => {
         const fetchLikedSongs = async () => {
@@ -78,15 +83,23 @@ const LikedSongList: React.FC = () => {
         } catch (error) {
             console.error('Error removing song:', error);
         }
-        
+        setSongList((prevSongs) => prevSongs.filter((song) => song.trackID !== trackID));
     };
+
+    useEffect(() => {
+        if (songs && songs.length > 0) {
+            setSongList(songs);
+        } else {
+            setSongList(likedSongs);
+        }
+    }, [songs, likedSongs]);
 
     return (
         <div className="liked-songs-container">
             <h1 className="liked-songs-title">Liked Songs</h1>
             <div className="liked-songs-list scroll">
-                {likedSongs.length > 0 ? (
-                    likedSongs.map((song) => (
+                {songList.length > 0 ? (
+                    songList.map((song) => (
                         <div key={song.trackID} className="liked-song-item">
                             <img src={song.image} alt={song.title} className="liked-song-image" />
                             <div className="liked-song-info">
