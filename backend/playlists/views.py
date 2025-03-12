@@ -227,8 +227,10 @@ def addSongToPlaylist(request):
         if not playlist_id or not track_id:
             return JsonResponse({'error': 'Missing playlistID or song URI'}, status=400)
         if(playlist_id == "liked_songs"):
+            Playlist.objects.get(playlistID="liked_songs").songs.add(Song.objects.get(trackID=track_id))
             sp.current_user_saved_tracks_add(tracks=[track_id])
         else:
+            Playlist.objects.get(playlistID=playlist_id).songs.add(Song.objects.get(trackID=track_id))
             sp.playlist_add_items(playlist_id, [track_id])
 
         return JsonResponse({'message': 'Song added successfully'}, status=200)
@@ -239,8 +241,44 @@ def addSongToPlaylist(request):
         return JsonResponse({'error': f'Missing required field: {str(e)}'}, status=400)
     except Exception as e:
         return JsonResponse({'error': f"Failed to add song: {str(e)}"}, status=500)
-
-def generate_response(prompt, num_runs=1):
+    
+@api_view(['POST'])
+def removeSong(request):
+    if request.method != "POST":
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+    
+    print(f"Request received: {request}")  # Log the entire request object
+    
+    try:
+        data = json.loads(request.body)
+        print(f"Request Body: {data}")  # Log the parsed request body
+        
+        playlist_id = data['playlistID']
+        track_id = data['trackID']
+        
+        print(f"Playlist ID: {playlist_id}")
+        print(f"Track ID: {track_id}")
+        
+        if not playlist_id or not track_id:
+            return JsonResponse({'error': 'Missing playlistID or song URI'}, status=400)
+        if(playlist_id == "liked_songs"):
+            Playlist.objects.get(playlistID="liked_songs").songs.remove(Song.objects.get(trackID=track_id))
+            sp.current_user_saved_tracks_delete(tracks=[track_id])
+        else:
+            Playlist.objects.get(playlistID=playlist_id).songs.remove(Song.objects.get(trackID=track_id))
+            sp.playlist_remove_all_occurrences_of_items(playlist_id, [track_id])
+        
+        return JsonResponse({'message': 'Song removed successfully'}, status=200)
+    
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+    except KeyError as e:
+        return JsonResponse({'error': f'Missing required field: {str(e)}'}, status=400)
+    except Exception as e:
+        print(f"Error: {e}")
+        return JsonResponse({'error': f"Failed to remove song: {str(e)}"}, status=500)
+    
+def generate_response(prompt, num_runs=1, songsInPlaylist=[]):
     # global response_index 
     # print(f"Response {response_index}: ")
     output = prompt_for_song(prompt, num_runs)
@@ -313,11 +351,13 @@ def generateSong(request):
         data = json.loads(request.body)
         prompt = data.get('prompt', '')
         num_runs = data.get('num_runs', 1)
+        songsInPlaylist = data.get('songsInPlaylist', [])
 
         if not prompt:
             return JsonResponse({'error': 'Missing prompt'}, status=400)
 
-        response = generate_response(prompt, num_runs)
+        print(f"Prompt: {prompt}")
+        response = generate_response(prompt, num_runs, songsInPlaylist)
         return JsonResponse(response, status=200)
 
     except json.JSONDecodeError:

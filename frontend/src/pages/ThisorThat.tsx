@@ -14,12 +14,31 @@ interface Song {
 }
 
 const ThisorThat: React.FC = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const [playlistSongs, setPlaylistSongs] = useState<Song[]>([]);
     const [selectedPlaylistID, setSelectedPlaylistID] = useState<string | null>("liked_songs");
+    const [selectedSong, setSelectedSong] = useState<Song | null>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const hasFetchedSongs = useRef(false);
     const hasFetchedSong = useRef(false);
     const [currentSong, setCurrentSong] = useState<Song | null>(null);
+
+    // checks if user is logged in, redirects to login page if not
+        useEffect(() => {
+            fetch('http://localhost:8000')
+                .then((res) => res.json())
+                .then((data) => {
+                    if (!data.user || !data.user.email) {
+                        window.location.href ="http://127.0.0.1:8000/login/"; // Redirect to login page
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
+        }, []);
     
     useEffect(() => {
         if(hasFetchedSong.current){
@@ -54,20 +73,25 @@ const ThisorThat: React.FC = () => {
 
     const generateSong = async () => {
         try {
-            const res = await fetch('http://127.0.0.1:8000/playlistAPI/generateSong/', {
+            const prompt = selectedSong 
+                ? `give me one more song similar to ${selectedSong.title} by ${selectedSong.artist}`
+                : playlistSongs.length > 0 
+                ? `give me one more song similar to ${playlistSongs.map(song => song.title).join(", ")}`
+                : `give me a popular song`;//on first load, playlistSongs is empty
+
+            const response = await fetch('http://localhost:8000/playlistAPI/generateSong/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    prompt: `give me one more song similar to ${playlistSongs.map(song => song.title).join(", ")}`,
-                    num_runs: 1,
-                    userInfo: "False"
+                    prompt: prompt,
+                    num_runs: 1
                 })
             });
 
-            const data = await res.json();
-            if (res.ok) {
+            const data = await response.json();
+            if (response.ok) {
                 const newSong: Song = {
                     trackID: data.trackID,
                     title: data.title,
@@ -94,13 +118,17 @@ const ThisorThat: React.FC = () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % playlistSongs.length);
 
         try {
+            const prompt = selectedSong 
+                ? `give me one more song similar to ${selectedSong.title} by ${selectedSong.artist}`
+                : `give me one more song similar to ${playlistSongs.map(song => song.title).join(", ")}`;
+
             const response = await fetch('http://localhost:8000/playlistAPI/generateSong/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    prompt: `give me one more song similar to ${playlistSongs.map(song => song.title).join(", ")}`,
+                    prompt: prompt,
                     num_runs: 1
                 })
             });
@@ -120,8 +148,9 @@ const ThisorThat: React.FC = () => {
                 console.error('Error:', data);
             }
         } catch (error) {
-            console.error('Error:', error);
-
+            console.error('Error:', error); 
+        }; 
+    };
     const addToPlaylist = async() => {
         generateSong();
         try {
@@ -153,18 +182,32 @@ const ThisorThat: React.FC = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + playlistSongs.length) % playlistSongs.length);
     };
 
+    const handleSelectSong = (song: Song) => {
+        console.log("Selected song:", song);
+        setSelectedSong(song);
+        generateSong();
+    };
 
     return (
+        isLoading ? (
+            //an idea maybe to add a loading gif
+            // <div className="loading">
+            //     <img src="/loading.gif" alt="Loading" />
+            // </div>
+            <></>
+        ) : (
         <div className="this-or-that-page">
             <div className="this-or-that-container">
                 <div className="this-or-that-content">
-                    <h1>Showing Songs Like</h1>
+                    <h1>Showing Songs Like:</h1>
                     <SongSelector
-                        title={currentSong?.title || "No Songs"}
-                        artist={currentSong?.artist || ""}
-                        image={currentSong?.image || ""}
-                        spotifyUrl={currentSong?.uri || ""}
-                        songs={playlistSongs} />
+                        title={selectedSong?.title || "No Songs"}
+                        artist={selectedSong?.artist || ""}
+                        image={selectedSong?.image || ""}
+                        spotifyUrl={selectedSong?.uri || ""}
+                        songs={playlistSongs}
+                        onSelectSong={handleSelectSong}
+                    />
 
                     {playlistSongs.length > 0 && (
                         <>
@@ -173,6 +216,7 @@ const ThisorThat: React.FC = () => {
                                 artist={currentSong?.artist || ""}
                                 album={currentSong?.album  || ""}
                                 image={currentSong?.image || ""}
+                                uri = {currentSong?.uri || ""}
                             />
 
                             <div className="action-buttons">
@@ -193,7 +237,8 @@ const ThisorThat: React.FC = () => {
                 <LikedSongList/>
             </div>
         </div>
+        )
     );
-};
+}
 
 export default ThisorThat;

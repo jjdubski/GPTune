@@ -18,9 +18,11 @@ interface SongSelectorProps {
     artist: string;
     image: string;
     spotifyUrl: string;
-    songs: Song[];}
+    songs: Song[];
+    onSelectSong: (song: Song) => void;
+}
 
-const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spotifyUrl, songs }) => {
+const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spotifyUrl, songs, onSelectSong }) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -28,6 +30,7 @@ const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spoti
     const handleClick = () => {
         window.open(spotifyUrl, '_blank'); 
     };
+
 
     return (
         <div className="song-selector">
@@ -53,6 +56,9 @@ const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spoti
                                 onClick={() => {
                                     setIsOpen(false);
                                     // handleClick(song.uri);
+
+                                    //callback function
+                                    onSelectSong(song);
                                 }}
 
                             >

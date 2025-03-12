@@ -30,6 +30,57 @@ const LikedSongList: React.FC = () => {
         fetchLikedSongs();
     }, []);
     console.log(likedSongs)
+
+    // useEffect(() => {
+    //     const removeSong = async () => {
+    //         try{
+    //             const response = await fetch('http://localhost:8000/playlistAPI/removeSong', {
+    //                 method : 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json'
+    //                 },
+    //                 body: JSON.stringify({
+    //                     playlistID: 'liked_songs',
+    //                     trackID: selectedTrackID,
+    //                 }),
+    //             });
+    //             if(response.ok){
+    //                 console.log('Song removed successfully, trackID:', selectedTrackID);
+    //             } else {
+    //                 console.error('Failed to remove song:', response);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error removing song:', error);
+    //         }
+            
+    //     };
+
+    //     removeSong();
+    // }, [selectedTrackID]);
+
+    const handleRemoveSong = async (trackID: string) => {
+        try{
+            const response = await fetch('http://localhost:8000/playlistAPI/removeSong/', {
+                method : 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    playlistID: 'liked_songs',
+                    trackID: trackID,
+                }),
+            });
+            if(response.ok){
+                console.log('Song removed successfully, trackID:', trackID);
+            } else {
+                console.error('Failed to remove song:', response);
+            }
+        } catch (error) {
+            console.error('Error removing song:', error);
+        }
+        
+    };
+
     return (
         <div className="liked-songs-container">
             <h1 className="liked-songs-title">Liked Songs</h1>
@@ -43,8 +94,8 @@ const LikedSongList: React.FC = () => {
                                 <p className="liked-song-artist">{song.artist}</p>
                                 <p className="liked-song-album">{song.album}</p>
                             </div>
-                            <button className="remove-song-btn">
-                                <span className="remove-icon">➖</span>
+                            <button className="remove-song-btn" onClick={async () => { await handleRemoveSong(song.trackID); }} >
+                                <img src="/remove-song-btn.png" alt="Remove" className="remove-icon" />
                             </button>
                         </div>
                     ))

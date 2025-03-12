@@ -29,8 +29,8 @@ interface Artist {
 
 const Search: React.FC = () => {
     const [query, setQuery] = useState<string>(''); 
-    const [songs, setSongs] = useState<any[]>([]); 
-    const [artists, setArtists] = useState<any[]>([]);
+    const [songs, setSongs] = useState<Song[]>([]); 
+    const [artists, setArtists] = useState<Song[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isLoadingSongs, setIsLoadingSongs] = useState(false);
