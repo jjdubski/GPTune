@@ -347,12 +347,13 @@ def generateSong(request):
         data = json.loads(request.body)
         prompt = data.get('prompt', '')
         num_runs = data.get('num_runs', 1)
+        songsInPlaylist = data.get('songsInPlaylist', [])
 
         if not prompt:
             return JsonResponse({'error': 'Missing prompt'}, status=400)
 
         print(f"Prompt: {prompt}")
-        response = generate_response(prompt, num_runs)
+        response = generate_response(prompt, num_runs, songsInPlaylist)
         return JsonResponse(response, status=200)
 
     except json.JSONDecodeError:

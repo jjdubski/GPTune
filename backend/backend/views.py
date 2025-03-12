@@ -220,7 +220,7 @@ def search_songs(request):
         #             "preview_url": track.get("preview_url"),
         #             "uri": track["uri"]
         #         })
-        response = run_prompt (promptSongs, 10, True)
+        response = run_prompt (promptSongs, 10, True, [])
         
         # Log the raw AI response
         logger.info(f"Raw OpenAI Response: {response}")
