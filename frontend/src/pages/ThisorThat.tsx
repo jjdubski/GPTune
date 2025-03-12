@@ -120,8 +120,9 @@ const ThisorThat: React.FC = () => {
                 console.error('Error:', data);
             }
         } catch (error) {
-            console.error('Error:', error);
-
+            console.error('Error:', error); 
+        }; 
+    };
     const addToPlaylist = async() => {
         generateSong();
         try {
@@ -158,7 +159,7 @@ const ThisorThat: React.FC = () => {
         <div className="this-or-that-page">
             <div className="this-or-that-container">
                 <div className="this-or-that-content">
-                    <h1>Showing Songs Like</h1>
+                    <h1>Showing Songs Like:</h1>
                     <SongSelector
                         title={currentSong?.title || "No Songs"}
                         artist={currentSong?.artist || ""}
