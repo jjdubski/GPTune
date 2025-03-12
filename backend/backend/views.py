@@ -114,12 +114,12 @@ def get_genre_of_the_day():
 
 @csrf_exempt
 def getGenreAndSubgenre(request):
-    if request.method == "GET":  # ✅ FIXED: Ensure it's GET
+    if request.method == "GET": 
         try:
             # Check if genre is cached
             stored_data = cache.get("GOTD_GENRE")
             if stored_data:
-                return JsonResponse(json.loads(stored_data))  # ✅ FIXED: Convert from string to JSON
+                return JsonResponse(json.loads(stored_data))  
 
             # Fetch new genre if not cached
             genre_prompt = "Pick a **musical genre** and one of its **subgenres**. Do NOT return a song."
@@ -215,20 +215,44 @@ def getRecommendations(request):
 def get_discover_songs(request):
     if request.method == "GET":
         try:
-            new_songs = generate_discover_songs("Give me 5 songs that were released in the past 5 months, make sure none repeat")
-            trending_songs = generate_discover_songs("Give me 5 most trending songs right now, make sure none repeat")
-            classic_songs = generate_discover_songs("Give me 5 songs that are older than 15 years and are deemed as classics, make sure none repeat")
+            # Fetch new songs
+            new_songs = generate_discover_songs("Give me 5 songs that were released in the past 5 months, make sure none repeat.")
+
+            # Fetch extra trending songs (so we have enough to filter from)
+            trending_songs = generate_discover_songs("Give me 10 most trending songs right now, make sure none repeat.")
+
+            # Convert new_songs list into a set of titles (case-insensitive) for filtering
+            new_song_titles = {song["title"].strip().lower() for song in new_songs}
+
+            # Remove songs from trending that also exist in new_songs
+            filtered_trending_songs = [
+                song for song in trending_songs if song["title"].strip().lower() not in new_song_titles
+            ]
+
+            # If filtering removed too many, fetch more trending songs dynamically
+            while len(filtered_trending_songs) < 5:
+                additional_songs = generate_discover_songs(
+                    "Give me 5 additional trending songs that do not exist in the new songs list."
+                )
+                for song in additional_songs:
+                    if song["title"].strip().lower() not in new_song_titles:
+                        filtered_trending_songs.append(song)
+                        if len(filtered_trending_songs) == 5:
+                            break  # Stop when we reach 5
+
+            # Trim to exactly 5 songs
+            filtered_trending_songs = filtered_trending_songs[:5]
 
             return JsonResponse({
                 "new": new_songs,
-                "trending": trending_songs,
-                "classics": classic_songs
+                "trending": filtered_trending_songs
             })
 
         except Exception as e:
             return JsonResponse({"error": f"Failed to fetch songs: {str(e)}"}, status=500)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
+
 
 
 
