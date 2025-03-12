@@ -94,4 +94,3 @@ const Discover: React.FC = () => {
 };
 
 export default Discover;
-
