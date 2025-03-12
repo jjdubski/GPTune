@@ -274,7 +274,7 @@ def removeSong(request):
         print(f"Error: {e}")
         return JsonResponse({'error': f"Failed to remove song: {str(e)}"}, status=500)
     
-def generate_response(prompt, num_runs=1):
+def generate_response(prompt, num_runs=1, songsInPlaylist=[]):
     # global response_index 
     # print(f"Response {response_index}: ")
     output = prompt_for_song(prompt, num_runs)
