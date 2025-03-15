@@ -92,59 +92,50 @@ GENRES = {
 }
 
 def get_genre_of_the_day():
-    """Retrieve or generate today's genre and subgenre."""
+    """Retrieve or generate today's genre and subgenre with proper cache expiration."""
+    
+    # Retrieve cached data
     cached_data = cache.get("GOTD_GENRE")
-    now = int(time.time())  # Current timestamp
+    now = int(time.time())  # Current timestamp in seconds
 
     if cached_data:
-        genre_data = json.loads(cached_data)
-        timestamp = genre_data.get("timestamp", 0)
+        try:
+            genre_data = json.loads(cached_data)
+            timestamp = genre_data.get("timestamp", 0)
 
-        if now - timestamp < 86400:  # 24 hours in seconds
-            return genre_data  # Return cached genre
+            # ✅ If cache is still valid (less than 24 hours old), return cached genre
+            if now - timestamp < 86400:
+                return genre_data
+        except json.JSONDecodeError:
+            # 🔴 If cache is corrupted, ignore it and regenerate the genre
+            pass 
 
-    # Pick a new genre and subgenre
+    # 🚀 Pick a new genre and subgenre
     genre = random.choice(list(GENRES.keys()))
     subgenre = random.choice(GENRES[genre])
 
-    # Cache the new selection
+    # ✅ Store new selection in cache with correct expiration
     genre_data = {"genre": genre, "subgenre": subgenre, "timestamp": now}
-    cache.set("GOTD_GENRE", json.dumps(genre_data), timeout=86400)  # Store for 24 hours
-
+    cache.set("GOTD_GENRE", json.dumps(genre_data), timeout=86400)  # Cache for 24 hours
+    print('Genre data =',genre_data)
     return genre_data
 
 @csrf_exempt
 def getGenreAndSubgenre(request):
     if request.method == "GET": 
         try:
-            # Check if genre is cached
+            get_genre_of_the_day()
             stored_data = cache.get("GOTD_GENRE")
             if stored_data:
-                return JsonResponse(json.loads(stored_data))  
+                return JsonResponse(json.loads(stored_data))
 
-            # Fetch new genre if not cached
-            genre_prompt = "Pick a **musical genre** and one of its **subgenres**. Do NOT return a song."
-            genre_response = generate_discover_songs(genre_prompt)
-
-            # Ensure the response contains valid genre data
-            if isinstance(genre_response, list) and len(genre_response) > 0:
-                genre_data = genre_response[0]
-                genre = genre_data.get("genre", "Rock")
-                subgenre = genre_data.get("subgenre", "Alternative Rock")
-            else:
-                genre = "Rock"
-                subgenre = "Alternative Rock"
-
-            # Store in cache
-            genre_info = {"genre": genre, "subgenre": subgenre, "timestamp": time.time()}
-            cache.set("GOTD_GENRE", json.dumps(genre_info), timeout=86400)  
-
-            return JsonResponse(genre_info)
+            return JsonResponse({"error": "No cached genre found"}, status=400)
 
         except Exception as e:
             return JsonResponse({"error": f"Failed to fetch genre: {str(e)}"}, status=500)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
+
 
 
 
