@@ -10,9 +10,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.views.decorators.csrf import csrf_exempt
 
-
 from utils.spotifyClient import sp
-
 
 # Create your views here.
 class SongViewSet(viewsets.ModelViewSet):

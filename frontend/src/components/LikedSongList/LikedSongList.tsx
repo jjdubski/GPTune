@@ -10,8 +10,13 @@ interface Song {
     uri: string;
 }
 
-const LikedSongList: React.FC = () => {
+interface LikedSongListProps {
+    songs: Song[];
+}
+
+const LikedSongList: React.FC<LikedSongListProps> = ({ songs }) => {
     const [likedSongs, setLikedSongs] = useState<Song[]>([]);
+    const [songList, setSongList] = useState<Song[]>([]);
 
     useEffect(() => {
         const fetchLikedSongs = async () => {
@@ -30,12 +35,71 @@ const LikedSongList: React.FC = () => {
         fetchLikedSongs();
     }, []);
     console.log(likedSongs)
+
+    // useEffect(() => {
+    //     const removeSong = async () => {
+    //         try{
+    //             const response = await fetch('http://localhost:8000/playlistAPI/removeSong', {
+    //                 method : 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json'
+    //                 },
+    //                 body: JSON.stringify({
+    //                     playlistID: 'liked_songs',
+    //                     trackID: selectedTrackID,
+    //                 }),
+    //             });
+    //             if(response.ok){
+    //                 console.log('Song removed successfully, trackID:', selectedTrackID);
+    //             } else {
+    //                 console.error('Failed to remove song:', response);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error removing song:', error);
+    //         }
+            
+    //     };
+
+    //     removeSong();
+    // }, [selectedTrackID]);
+
+    const handleRemoveSong = async (trackID: string) => {
+        try{
+            const response = await fetch('http://localhost:8000/playlistAPI/removeSong/', {
+                method : 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    playlistID: 'liked_songs',
+                    trackID: trackID,
+                }),
+            });
+            if(response.ok){
+                console.log('Song removed successfully, trackID:', trackID);
+            } else {
+                console.error('Failed to remove song:', response);
+            }
+        } catch (error) {
+            console.error('Error removing song:', error);
+        }
+        setSongList((prevSongs) => prevSongs.filter((song) => song.trackID !== trackID));
+    };
+
+    useEffect(() => {
+        if (songs && songs.length > 0) {
+            setSongList(songs);
+        } else {
+            setSongList(likedSongs);
+        }
+    }, [songs, likedSongs]);
+
     return (
         <div className="liked-songs-container">
             <h1 className="liked-songs-title">Liked Songs</h1>
             <div className="liked-songs-list scroll">
-                {likedSongs.length > 0 ? (
-                    likedSongs.map((song) => (
+                {songList.length > 0 ? (
+                    songList.map((song) => (
                         <div key={song.trackID} className="liked-song-item">
                             <img src={song.image} alt={song.title} className="liked-song-image" />
                             <div className="liked-song-info">
@@ -43,8 +107,8 @@ const LikedSongList: React.FC = () => {
                                 <p className="liked-song-artist">{song.artist}</p>
                                 <p className="liked-song-album">{song.album}</p>
                             </div>
-                            <button className="remove-song-btn">
-                                <span className="remove-icon">➖</span>
+                            <button className="remove-song-btn" onClick={async () => { await handleRemoveSong(song.trackID); }} >
+                                <img src="/remove-song-btn.png" alt="Remove" className="remove-icon" />
                             </button>
                         </div>
                     ))

@@ -18,9 +18,11 @@ interface SongSelectorProps {
     artist: string;
     image: string;
     spotifyUrl: string;
-    songs: Song[];}
+    songs: Song[];
+    onSelectSong: (song: Song) => void;
+}
 
-const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spotifyUrl, songs }) => {
+const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spotifyUrl, songs, onSelectSong }) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -29,14 +31,21 @@ const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spoti
         window.open(spotifyUrl, '_blank'); 
     };
 
+
     return (
         <div className="song-selector">
             <div className="song-selector-image-container" onClick={handleClick}>
-                <img src={image} alt="cover art" className="song-selector-image" />
+                <img src={image} className="song-selector-image" />
             </div>
             <div className="song-info">
-                <p className="song-title">{title}</p>
-                <p className="song-artist">{artist}</p>
+                {title && artist ? (
+                    <>
+                        <p className="song-title">{title}</p>
+                        <p className="song-artist">{artist}</p>
+                    </>
+                ) : (
+                    <p className="select-song-placeholder">Select a song</p>
+                )}
             </div>
             
             {/* Dropdown Button */}
@@ -53,10 +62,12 @@ const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spoti
                                 onClick={() => {
                                     setIsOpen(false);
                                     // handleClick(song.uri);
-                                }}
 
+                                    //callback function
+                                    onSelectSong(song);
+                                }}
                             >
-                                <img src={song.image} alt={`${song.title} album cover`} className="dropdown-song-image" />
+                                <img src={song.image} className="dropdown-song-image" />
                                 <p className="dropdown-song-title">{song.title}</p>
                             </div>
                         ))}

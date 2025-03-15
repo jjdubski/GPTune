@@ -10,8 +10,6 @@ interface SongProps {
     uri: string; 
 }
 
-
-
 const Song: React.FC<SongProps> = ({ title, artist, album, image, uri}) => {
     
     const changeSong = async () => {
