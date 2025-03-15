@@ -86,7 +86,7 @@ const Discover: React.FC = () => {
     
         try {
             const res = await fetch('http://127.0.0.1:8000/getGenreAndSubgenre/', {
-                method: 'GET',  // ✅ FIXED: Changed to GET
+                method: 'GET',  
                 headers: { 'Content-Type': 'application/json' }
             });
     
