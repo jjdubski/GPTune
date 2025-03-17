@@ -92,33 +92,53 @@ GENRES = {
 }
 
 def get_genre_of_the_day():
-    """Retrieve or generate today's genre and subgenre with proper cache expiration."""
-    
-    # Retrieve cached data
     cached_data = cache.get("GOTD_GENRE")
-    now = int(time.time())  # Current timestamp in seconds
+    now = int(time.time())
 
     if cached_data:
         try:
             genre_data = json.loads(cached_data)
             timestamp = genre_data.get("timestamp", 0)
 
-            # ✅ If cache is still valid (less than 24 hours old), return cached genre
             if now - timestamp < 86400:
                 return genre_data
         except json.JSONDecodeError:
-            # 🔴 If cache is corrupted, ignore it and regenerate the genre
             pass 
 
-    # 🚀 Pick a new genre and subgenre
     genre = random.choice(list(GENRES.keys()))
     subgenre = random.choice(GENRES[genre])
 
-    # ✅ Store new selection in cache with correct expiration
-    genre_data = {"genre": genre, "subgenre": subgenre, "timestamp": now}
-    cache.set("GOTD_GENRE", json.dumps(genre_data), timeout=86400)  # Cache for 24 hours
-    print('Genre data =',genre_data)
+    prompt = f"Recommend 5 unique, representative songs from the {subgenre} subgenre of {genre}."
+    songs_basic = generate_discover_songs(prompt)
+
+    # Enrich songs with Spotify data
+    enriched_songs = []
+    for song in songs_basic:
+        query = f"track:{song['title']} artist:{song['artist']}"
+        result = sp.search(q=query, type='track', limit=1)
+        if result['tracks']['items']:
+            track_info = result['tracks']['items'][0]
+            enriched_songs.append({
+                "trackID": track_info['id'],
+                "title": track_info['name'],
+                "artist": track_info['artists'][0]['name'],
+                "album": track_info['album']['name'],
+                "image": track_info['album']['images'][0]['url'] if track_info['album']['images'] else "",
+                "uri": track_info['uri']
+            })
+
+    genre_data = {
+        "genre": genre,
+        "subgenre": subgenre,
+        "songs": enriched_songs,
+        "timestamp": now
+    }
+
+    cache.set("GOTD_GENRE", json.dumps(genre_data), timeout=86400)
     return genre_data
+
+
+
 
 @csrf_exempt
 def getGenreAndSubgenre(request):
@@ -141,23 +161,21 @@ def getGenreAndSubgenre(request):
 
 #Implement getSongsForGenre
 def getSongsForGenre(request):
-    """Fetch songs based on the Genre of the Day."""
-    genre_data = get_genre_of_the_day()
-    genre, subgenre = genre_data["genre"], genre_data["subgenre"]
-
-    # Generate a prompt for OpenAI
-    prompt = f"Recommend 5 songs from the {subgenre} subgenre of {genre}. Make sure they are unique and representative of the genre."
-
+    """Fetch songs based on the Genre of the Day with caching."""
     try:
-        song_list = generate_discover_songs(prompt)
+        genre_data = get_genre_of_the_day()
 
+        # Directly return cached genre, subgenre, and songs
         return JsonResponse({
-            "genre": genre,
-            "subgenre": subgenre,
-            "songs": song_list
+            "genre": genre_data["genre"],
+            "subgenre": genre_data["subgenre"],
+            "songs": genre_data["songs"]
         })
+
     except Exception as e:
+        logger.error(f"Error fetching genre and songs: {str(e)}")
         return JsonResponse({"error": f"Failed to fetch songs: {str(e)}"}, status=500)
+
 
 
 

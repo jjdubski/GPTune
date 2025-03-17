@@ -66,46 +66,43 @@ const Discover: React.FC = () => {
         }
     }, []);
 
-    // Fetch genre and subgenre from GPT
     const fetchGenreAndSubgenre = useCallback(async () => {
-
         const storedData = localStorage.getItem("GOTD_GENRE");
         const now = new Date().getTime();
     
         if (storedData) {
-            const { genre, subgenre, timestamp } = JSON.parse(storedData);
-            if (now - timestamp < 24 * 60 * 60 * 1000) {
-                console.log(`Using stored genre: ${genre} - ${subgenre}`);
-                setGenre(genre);
-                setSubgenre(subgenre);
-                return { genre, subgenre };
+            const genreData = JSON.parse(storedData);
+    
+            if (now - genreData.timestamp < 86400000 && genreData.songs && genreData.songs.length > 0) {
+                console.log(`Using stored genre: ${genreData.genre} - ${genreData.subgenre}`);
+                setGenre(genreData.genre);
+                setSubgenre(genreData.subgenre);
+                setGOTDSongs(genreData.songs); 
+                return;
             }
         }
     
-        console.log("Fetching new genre and subgenre...");
+        console.log("Fetching new genre, subgenre, and songs...");
     
         try {
-            const res = await fetch('http://127.0.0.1:8000/getGenreAndSubgenre/', {
-                method: 'GET',  
-                headers: { 'Content-Type': 'application/json' }
-            });
-    
+        
+            const res = await fetch('http://127.0.0.1:8000/getSongsForGenre/');
             const data = await res.json();
-            if (res.ok && data.genre && data.subgenre) {
-                console.log(`Fetched new genre: ${data.genre} - ${data.subgenre}`);
-                localStorage.setItem("GOTD_GENRE", JSON.stringify({ ...data }));
+    
+            if (res.ok && data.genre && data.subgenre && data.songs) {
+                localStorage.setItem("GOTD_GENRE", JSON.stringify({ ...data, timestamp: now }));
                 setGenre(data.genre);
                 setSubgenre(data.subgenre);
-                return { genre: data.genre, subgenre: data.subgenre };
+                setGOTDSongs(data.songs);
             } else {
-                console.error("Error fetching genre:", data);
+                console.error("Error fetching genre songs:", data);
             }
         } catch (error) {
-            console.error("Error fetching genre:", error);
+            console.error("Error fetching genre songs:", error);
         }
-    
-        return { genre: "Rock", subgenre: "Alternative Rock" }; // Fallback
     }, []);
+    
+    
     
     // Fetch genre of the day
     const fetchGOTD = useCallback(async (genre: string, subgenre: string, setSongs: React.Dispatch<React.SetStateAction<Song[]>>) => {
@@ -118,9 +115,9 @@ const Discover: React.FC = () => {
     
         try {
             const res = await fetch('http://127.0.0.1:8000/getRecommendations/', {
-                method: 'POST',  // ✅ FIXED: Using POST
+                method: 'POST',  
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestData)  // ✅ FIXED: Ensure request body is sent
+                body: JSON.stringify(requestData)  
             });
     
             const data = await res.json();
