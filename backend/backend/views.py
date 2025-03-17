@@ -24,33 +24,6 @@ logger = logging.getLogger(__name__)
 unknown_songs = set()
 song_cache = {}
 
-# @csrf_exempt
-# def recommend_songs(request):
-#     if request.method == "POST":
-#         try:
-#             data = json.loads(request.body.decode("utf-8"))
-
-#             # Safely get values, defaulting to empty list if missing
-#             top_artists = data.get("top_artists", [])
-#             top_genres = data.get("top_genres", [])
-
-#             if not top_artists:
-#                 return JsonResponse({"error": "Missing 'top_artists' field"}, status=400)
-
-#             # Call OpenAI function
-#             recommendations = openai_client.generate_recommendations({
-#                 "top_artists": top_artists,
-#                 "top_genres": top_genres
-#             })
-            
-#             return JsonResponse({"recommendations": recommendations})
-        
-#         except json.JSONDecodeError:
-#             return JsonResponse({"error": "Invalid JSON format"}, status=400)
-
-#     return JsonResponse({"error": "Invalid request method"}, status=405)
-
-
 def index(request):
     current_time = datetime.now().strftime("%H:%M:%S")
     current_date = datetime.now().strftime("%d-%m-%Y")
@@ -79,8 +52,6 @@ def index(request):
     # print(profile_pic)
     # print(len(currentUser['images']))
     return JsonResponse(data)
-
-
 
 #Implement getGenreAndSubgenre
 GENRES = {
@@ -137,9 +108,6 @@ def get_genre_of_the_day():
     cache.set("GOTD_GENRE", json.dumps(genre_data), timeout=86400)
     return genre_data
 
-
-
-
 @csrf_exempt
 def getGenreAndSubgenre(request):
     if request.method == "GET": 
@@ -155,9 +123,6 @@ def getGenreAndSubgenre(request):
             return JsonResponse({"error": f"Failed to fetch genre: {str(e)}"}, status=500)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
-
-
-
 
 #Implement getSongsForGenre
 def getSongsForGenre(request):
@@ -175,10 +140,6 @@ def getSongsForGenre(request):
     except Exception as e:
         logger.error(f"Error fetching genre and songs: {str(e)}")
         return JsonResponse({"error": f"Failed to fetch songs: {str(e)}"}, status=500)
-
-
-
-
 
 @csrf_exempt
 def getRecommendations(request):
@@ -217,8 +178,6 @@ def getRecommendations(request):
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
     
     return JsonResponse({"error": "Invalid request method"}, status=405)
-
-
 
 #below is the function for Disocver page 
 @csrf_exempt
@@ -263,14 +222,7 @@ def get_discover_songs(request):
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
 
-
-
-
-
-
-
 #below is the function to search page user 
-
 def getAISongRecommendations(request):
     search_query = request.GET.get('query', '')
     
@@ -310,45 +262,7 @@ def search_songs(request):
         artists = promptForArtists(query, 6)  # Fetch 6 artists
         if not artists:
             return JsonResponse({"error": "No artists found"}, status=500)
-        
-        # Get song recommendations based on those artists
-        # ai_response = prompt_for_song(promptSongs, 10)
-        # if not ai_response:
-        #     return JsonResponse({"error": "Empty response from AI"}, status=500)
-        
-        # # Clean the AI response by removing JSON formatting markers
-        # cleaned_response = ai_response.strip().strip("```json").strip("```").strip()
-        
-        # try:
-        #     song_list = json.loads(cleaned_response)
-        # except json.JSONDecodeError:
-        #     print(f"Invalid JSON format from AI: {cleaned_response}")
-        #     logger.error(f"Invalid JSON format from AI: {cleaned_response}")
-        #     return JsonResponse({"error": "Invalid JSON format from AI"}, status=500)
-
-        # Search on Spotify for real data
-        # song_recommendations = []
-        # print("Song List:", song_list)
-        # for song in song_list:
-        #     title = song.get("title", "").strip()
-        #     artist = song.get("artist", "").strip()
-
-        #     if not title or not artist:
-        #         continue
-
-        #     search_query = f"track:{title} artist:{artist}"
-        #     results = sp.search(q=search_query, type="track", limit=1)
-
-        #     if results["tracks"]["items"]:
-        #         track = results["tracks"]["items"][0]
-        #         song_recommendations.append({
-        #             "title": track["name"],
-        #             "artist": track["artists"][0]["name"],
-        #             "album": track["album"]["name"],
-        #             "spotify_url": track["external_urls"]["spotify"],
-        #             "preview_url": track.get("preview_url"),
-        #             "uri": track["uri"]
-        #         })
+    
         response = run_prompt (promptSongs, 10, True, [])
         
         # Log the raw AI response
@@ -365,7 +279,6 @@ def search_songs(request):
                 "image": trackInfo['album']['images'][0]['url'],
                 "uri": trackInfo['uri']
             }
-
 
         artist_recommendations = []
         # print("Artist List:", artists)
@@ -739,12 +652,3 @@ def get_uris(request):  # Use snake_case naming
     except Exception as e:
         logger.error(f"Error fetching URIs: {str(e)}")
         return JsonResponse({'error': f"Failed to fetch URIs: {str(e)}"}, status=500)
-    
-# def addLikedSongs(request):
-#     try:
-#         sp.current_user_saved_tracks_add([request.GET.get('trackID')])
-#         return JsonResponse({"message": "Song added to liked songs"}, status=201)
-#     except Exception as e:
-#         logger.error(f"Error adding song to liked songs: {str(e)}")
-#         return JsonResponse({'error': f"Failed to add song to liked songs: {str(e)}"}, status=500)
-
