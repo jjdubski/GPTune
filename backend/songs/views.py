@@ -126,8 +126,7 @@ def getDiscoverSpotify(request):
                 }
                 for song in billboard_data.get("data", [])
             ]
-            
-                    # Check the first 5 songs from Billboard against Spotify API
+            # Check the first 5 songs from Billboard against Spotify API
             toSendtoFrontend = []
             for song in cleanedBillboardData[:5]:
                 query = f"{song['song']} {song['artist']}"
@@ -148,7 +147,6 @@ def getDiscoverSpotify(request):
                     print(f"Song not found: {query}")
             
             return JsonResponse({"newReleases": newReleases, "billboard": toSendtoFrontend}, status=200)
-            
             
         except Exception as e: 
             return JsonResponse({"error": str(e)}, status=500)
