@@ -3,6 +3,7 @@ import SongSelector from '../components/SongSelector/SongSelector';
 import SongCard from '../components/SongCard/SongCard';
 import './ThisorThat.css';
 import LikedSongList from '../components/LikedSongList/LikedSongList';
+import arrow from '../assets/images/arrow.png';
 
 interface Song {
     trackID: string;
@@ -22,6 +23,7 @@ const ThisorThat: React.FC = () => {
     const hasFetchedSongs = useRef(false);
     const hasFetchedSong = useRef(false);
     const [currentSong, setCurrentSong] = useState<Song | null>(null);
+    const [prevSongs, setPrevSongs] = useState<Song[]>([]);
 
     // checks if user is logged in, redirects to login page if not
         useEffect(() => {
@@ -101,6 +103,8 @@ const ThisorThat: React.FC = () => {
                     uri: data.uri
                 };
                 setCurrentSong(newSong);
+                setPrevSongs((prev) => [...prev, newSong]);
+                setCurrentIndex(currentIndex + 1);
             } else {
                 console.error('Error:', data);
             }
@@ -115,7 +119,7 @@ const ThisorThat: React.FC = () => {
         setCurrentIndex(0);
     };
     const handleNextSong = async () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % playlistSongs.length);
+        // setCurrentIndex((prevIndex) => (prevIndex + 1) % playlistSongs.length);
 
         try {
             const prompt = selectedSong 
@@ -182,9 +186,17 @@ const ThisorThat: React.FC = () => {
     };
 
     const handlePrevSong = () => {
-        setCurrentIndex((prevIndex) => (prevIndex - 1 + playlistSongs.length) % playlistSongs.length);
+        setCurrentIndex((prevIndex) => {
+            if (prevIndex > 0) {
+                const newIndex = prevIndex - 1;
+                setCurrentSong(prevSongs[newIndex]); // Update to the previous song
+                return newIndex;
+            } else {
+                console.log("No previous song available.");
+                return 0; // Keep at 0 if no previous songs
+            }
+        });
     };
-
     const handleSelectSong = (song: Song) => {
         console.log("Selected song:", song);
         setSelectedSong(song);
@@ -229,6 +241,9 @@ const ThisorThat: React.FC = () => {
                                 <button className="check-btn" onClick={addToPlaylist}>
                                     <img src="/check.png" alt="Check" />
                                 </button>
+                                <button className="arrow-button" onClick={handlePrevSong}>
+                                    <img src="/arrow.png" alt="Arrow" className="arrow-icon" />
+                                </button>
                             </div>
                         </>
                     )}
@@ -237,7 +252,9 @@ const ThisorThat: React.FC = () => {
 
             {/* Liked Songs on the Right Side */}
             <div className="liked-songs-sidebar">
-                <LikedSongList songs={playlistSongs}/>
+                <LikedSongList songs={playlistSongs} />
+                {/* <button className="arrow-button" onClick={() => console.log("")}>
+                    <img src="/arrow.png" alt="Arrow" className="arrow-icon" /> */}
             </div>
         </div>
         )
