@@ -1,1 +1,71 @@
+.this-or-that-container {
+    display: flex;
+    flex-direction: row; /* Ensure elements are side by side */
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: top;
+    /* background-color: var(--background); */
+}
 
+/* LEFT: Showing Songs Like */
+.this-or-that-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 50%;
+    padding: 20px;
+
+
+}
+
+
+
+.this-or-that-content h1 {
+    font-size: 1.8rem;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.exit-btn, .check-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.exit-btn img, .check-btn img {
+    width: 75px;
+    height: 75px;
+}
+
+.exit-btn:hover, .check-btn:hover {
+    transform: scale(1.1);
+}
+
+.this-or-that-page {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+
+/* 
+.this-or-that-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+} */
