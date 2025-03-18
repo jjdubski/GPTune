@@ -225,43 +225,54 @@ def getRecommendations(request):
 def get_discover_songs(request):
     if request.method == "GET":
         try:
-            # Fetch new songs
-            new_songs = generate_discover_songs("Give me 5 songs that were released in the past 5 months, make sure none repeat.")
+            now = int(time.time())
 
-            # Fetch extra trending songs (so we have enough to filter from)
-            trending_songs = generate_discover_songs("Give me 10 most trending songs right now, make sure none repeat.")
+            # Check cache
+            cached_data = cache.get("DISCOVER_SONGS")
+            if cached_data:
+                discover_data = json.loads(cached_data)
+                timestamp = discover_data.get("timestamp", 0)
+                if now - timestamp < 86400:
+                    return JsonResponse(discover_data)
 
-            # Convert new_songs list into a set of titles (case-insensitive) for filtering
-            new_song_titles = {song["title"].strip().lower() for song in new_songs}
+            # Fetch new and trending songs
+            new_songs = generate_discover_songs("Give me 5 songs that were released in the past 5 months.")
+            trending_songs = generate_discover_songs("Give me 5 most trending songs right now.")
 
-            # Remove songs from trending that also exist in new_songs
-            filtered_trending_songs = [
-                song for song in trending_songs if song["title"].strip().lower() not in new_song_titles
-            ]
+            # Ensure each song has an image
+            def enrich_song(song):
+                query = f"track:{song['title']} artist:{song['artist']}"
+                result = sp.search(q=query, type='track', limit=1)
+                if result['tracks']['items']:
+                    track_info = result['tracks']['items'][0]
+                    return {
+                        "trackID": track_info['id'],
+                        "title": track_info['name'],
+                        "artist": track_info['artists'][0]['name'],
+                        "album": track_info['album']['name'],
+                        "image": track_info['album']['images'][0]['url'] if track_info['album']['images'] else "",
+                        "uri": track_info['uri']
+                    }
+                return song  # If no match, return original
 
-            # If filtering removed too many, fetch more trending songs dynamically
-            while len(filtered_trending_songs) < 5:
-                additional_songs = generate_discover_songs(
-                    "Give me 5 additional trending songs that do not exist in the new songs list."
-                )
-                for song in additional_songs:
-                    if song["title"].strip().lower() not in new_song_titles:
-                        filtered_trending_songs.append(song)
-                        if len(filtered_trending_songs) == 5:
-                            break  # Stop when we reach 5
+            new_songs = [enrich_song(song) for song in new_songs]
+            trending_songs = [enrich_song(song) for song in trending_songs]
 
-            # Trim to exactly 5 songs
-            filtered_trending_songs = filtered_trending_songs[:5]
-
-            return JsonResponse({
+            discover_data = {
                 "new": new_songs,
-                "trending": filtered_trending_songs
-            })
+                "trending": trending_songs,
+                "timestamp": now
+            }
+
+            cache.set("DISCOVER_SONGS", json.dumps(discover_data), timeout=86400)
+
+            return JsonResponse(discover_data)
 
         except Exception as e:
             return JsonResponse({"error": f"Failed to fetch songs: {str(e)}"}, status=500)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
+
 
 
 

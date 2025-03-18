@@ -20,51 +20,52 @@ const Discover: React.FC = () => {
     const hasFetchedSongs = useRef(false);
 
     // Function to fetch songs based on category
-    const fetchSongs = useCallback(async (category: string, setSongs: React.Dispatch<React.SetStateAction<Song[]>>) => {
-        if (hasFetchedSongs.current) return;
+    const fetchDiscoverSongs = useCallback(async () => {
+        const storedData = localStorage.getItem("DISCOVER_SONGS");
+        const now = new Date().getTime();
 
-        console.log(`Fetching ${category} songs...`); //just for debug
-        const requestData = {
-            prompt: `Give me songs that are in ${category} category, you are an AI recommendation bot. Recommend unique songs.`,
-            num_runs: 5,
-            userInfo: "True"
-        };
+        if (storedData) {
+            const discoverData = JSON.parse(storedData);
+
+            // Check if cache is still valid (24 hours)
+            if (now - discoverData.timestamp < 86400000) {
+                console.log("Using cached discover songs");
+                setNewSongs(discoverData.new);
+                setTrendingSongs(discoverData.trending);
+                return;
+            }
+        }
+
+        console.log("Fetching new discover songs from API...");
 
         try {
-            const res = await fetch('http://127.0.0.1:8000/getRecommendations/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
-            });
+            console.log("Fetching discover songs...");
+    
+            const res = await fetch('http://127.0.0.1:8000/api/discover/');
 
-            const data = await res.json();
-            if (res.ok) {
-                const songList: Song[] = Object.values(data.songs as { 
-                    trackID: string; 
-                    title: string; 
-                    artist: string;
-                    album: string; 
-                    image: string; 
-                    uri: string;
-                }[]).map((item) => ({
-                    trackID: item.trackID,
-                    title: item.title,
-                    artist: item.artist,
-                    album: item.album,
-                    image: item.image,
-                    uri: item.uri
-                }));
-
-                setSongs(songList);
-            } else {
-                console.error(`Error fetching ${category} songs:`, data);
+            
+            if (!res.ok) {
+                console.error(`Error fetching discover songs: ${res.status} ${res.statusText}`);
+                return;
             }
+    
+            const data = await res.json();
+            
+            if (!data || !data.new || !data.trending) {
+                console.error("Invalid API response:", data);
+                return;
+            }
+    
+            console.log("Fetched discover songs:", data);
+            setNewSongs(data.new);
+            setTrendingSongs(data.trending);
+            localStorage.setItem("DISCOVER_SONGS", JSON.stringify({ ...data, timestamp: Date.now() }));
+    
         } catch (error) {
-            console.error(`Error fetching ${category} songs:`, error);
+            console.error("Error fetching discover songs:", error);
         }
     }, []);
+
 
     const fetchGenreAndSubgenre = useCallback(async () => {
         const storedData = localStorage.getItem("GOTD_GENRE");
@@ -85,20 +86,30 @@ const Discover: React.FC = () => {
         console.log("Fetching new genre, subgenre, and songs...");
     
         try {
-        
+            console.log("Fetching Genre of the Day...");
+    
             const res = await fetch('http://127.0.0.1:8000/getSongsForGenre/');
+    
+            if (!res.ok) {
+                console.error(`Error fetching genre: ${res.status} ${res.statusText}`);
+                return;
+            }
+    
             const data = await res.json();
     
-            if (res.ok && data.genre && data.subgenre && data.songs) {
-                localStorage.setItem("GOTD_GENRE", JSON.stringify({ ...data, timestamp: now }));
-                setGenre(data.genre);
-                setSubgenre(data.subgenre);
-                setGOTDSongs(data.songs);
-            } else {
-                console.error("Error fetching genre songs:", data);
+            if (!data || !data.genre || !data.subgenre || !data.songs) {
+                console.error("Invalid genre response:", data);
+                return;
             }
+    
+            console.log("Fetched genre:", data.genre, "-", data.subgenre);
+            setGenre(data.genre);
+            setSubgenre(data.subgenre);
+            setGOTDSongs(data.songs);
+            localStorage.setItem("GOTD_GENRE", JSON.stringify({ ...data, timestamp: Date.now() }));
+    
         } catch (error) {
-            console.error("Error fetching genre songs:", error);
+            console.error("Error fetching genre:", error);
         }
     }, []);
     
@@ -145,19 +156,19 @@ const Discover: React.FC = () => {
 
     // Fetch all categories on component mount
     useEffect(() => {
-        fetchSongs("new", setNewSongs);
-        fetchSongs("trending", setTrendingSongs);
-        fetchGenreAndSubgenre().then(({ genre, subgenre }) => {
-            if (genre && subgenre) {
-                console.log(`Fetching songs for ${genre} - ${subgenre}...`);
-                setGenre(genre);
-                setSubgenre(subgenre);
-                fetchGOTD(genre, subgenre, setGOTDSongs);
-            }
-        });
+        if (!hasFetchedSongs.current) {
+            fetchDiscoverSongs();
     
-        hasFetchedSongs.current = true;
-    }, []);
+            fetchGenreAndSubgenre().then(() => {
+                if (genre && subgenre) {
+                    console.log(`Fetching GOTD songs for ${genre} - ${subgenre}`);
+                    fetchGOTD(genre, subgenre, setGOTDSongs);
+                }
+            });
+    
+            hasFetchedSongs.current = true;
+        }
+    }, [fetchDiscoverSongs, fetchGenreAndSubgenre]);
     
     return (
         <div className="discover-container">
