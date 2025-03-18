@@ -53,7 +53,7 @@ try:
 
     print('\033[92mNode modules installed.\033[0m')
 
-    print('\033[93mSDeleting migrations...\033[0m')
+    print('\033[93mDeleting migrations...\033[0m')
     try:
         if os.name == 'posix':
             subprocess.run(['rm', '-rf', 'backend/songs/migrations'])
