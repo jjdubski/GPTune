@@ -176,7 +176,7 @@ const Discover: React.FC = () => {
                 </div>
                 <div className="category">
                 <h2 className="category-title classics">
-                    {genre && subgenre ? `GENRE OF THE DAY - ${subgenre}` : "Genre of the Day"}
+                    {genre && subgenre ? `GOTD - ${subgenre}` : "Genre of the Day"}
                 </h2>                    
                     <SongList tracks={gotdSongs} />
                 </div>
