@@ -1,7 +1,10 @@
+from datetime import datetime, timedelta
 import json
+import os
 from urllib import response
 from django.http import JsonResponse
 from django.shortcuts import render
+import requests
 from rest_framework import viewsets, generics
 from songs.models import Song
 from songs.serializers import SongSerializer
@@ -86,7 +89,66 @@ def playSong(request):
     
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
-def getDiscoverBillboard(request):
+def getDiscoverSpotify(request):
     if request.method == 'GET':
         try:
+            newReleases = sp.new_releases(limit=5)
+            print(newReleases)
+            response = requests.get("https://raw.githubusercontent.com/mhollingshead/billboard-hot-100/main/recent.json")
+            if response.status_code == 200:
+                billboard_data = response.json()
+                #print(billboard_data)
+            else:
+                return JsonResponse({"error": "Failed to fetch Billboard data"}, status=500)
             
+            #clean data
+            for songs in newReleases['albums']['items']:
+                if not Song.objects.filter(trackID=songs['id']):
+                    Song.objects.create(
+                        trackID = songs['id'],
+                        title = songs['name'],
+                        artist = songs['artists'][0]['name'],
+                        album = songs.get('name', None),
+                        release_date = songs.get('release_date', None),
+                        genre = ", ".join(songs.get('genres', [])),
+                        image = songs['images'][0]['url'] if songs.get('images') else None,
+                        uri = songs['uri']
+                    )
+            
+            cleanedBillboardData = [
+                {
+                    "song": song["song"],
+                    "artist": song["artist"],
+                    "this_week": song["this_week"],
+                    "last_week": song.get("last_week"),
+                    "peak_position": song.get("peak_position"),
+                    "weeks_on_chart": song.get("weeks_on_chart"),
+                }
+                for song in billboard_data.get("data", [])
+            ]
+            
+                    # Check the first 5 songs from Billboard against Spotify API
+            toSendtoFrontend = []
+            for song in cleanedBillboardData[:5]:
+                query = f"{song['song']} {song['artist']}"
+                results = sp.search(query, limit=1)
+                if results['tracks']['items']:
+                    track = results['tracks']['items'][0]
+                    toSendtoFrontend.append({
+                        "song": song['song'],
+                        "artist": song['artist'],
+                        "this_week": song['this_week'],
+                        "last_week": song.get("last_week"),
+                        "peak_position": song.get("peak_position"),
+                        "weeks_on_chart": song.get("weeks_on_chart"),
+                        "uri": track['uri'],
+                        "image": track['album']['images'][0]['url'] if track['album']['images'] else None
+                    })
+                else:
+                    print(f"Song not found: {query}")
+            
+            return JsonResponse({"newReleases": newReleases, "billboard": toSendtoFrontend}, status=200)
+            
+            
+        except Exception as e: 
+            return JsonResponse({"error": str(e)}, status=500)
