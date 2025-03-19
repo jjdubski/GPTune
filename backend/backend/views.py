@@ -181,8 +181,19 @@ def getRecommendations(request):
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 def getNewReleases():
-    newReleases = sp.new_releases(limit=5)
-    new_releases_data = [
+    # token_info = sp.auth_manager.get_cached_token()
+    # if not token_info:
+    #     raise Exception("Spotify token not found")
+
+    # headers = {
+    #     "Authorization": f"Bearer {token_info['access_token']}"
+    # }
+    # url = "https://api.spotify.com/v1/browse/new-releases"
+    # response = requests.get(url, headers=headers)
+    
+    response = sp.new_releases(limit=20)  
+    # Extract singles from the new releases
+    singles = [
         {
             "trackID": song['id'],
             "title": song['name'],
@@ -191,9 +202,25 @@ def getNewReleases():
             "image": song['images'][0]['url'] if song.get('images') else None,
             "uri": song['uri']
         }
-        for song in newReleases['albums']['items']
+        for song in response['albums']['items']
+        if song['album_type'] == 'single'
     ]
-    return new_releases_data
+    
+    finalSendBack = []
+    for song in singles[:5]:
+        search = sp.search(q=f"track:{song['title']} artist:{song['artist']}", type="track", limit=1)
+        if search['tracks']['items']:
+            track = search['tracks']['items'][0]
+            finalSendBack.append({
+                "trackID": track['id'],
+                "title": song['title'],
+                "artist": song['artist'],
+                "album": song['album'],
+                "image": track['album']['images'][0]['url'] if track['album']['images'] else None,
+                "uri": track['uri']
+            })
+    
+    return finalSendBack
 
 
 def getBillboard():
@@ -254,6 +281,7 @@ def get_discover_songs(request):
             discover_data = {
                 "new": new_songs,
                 "trending": trending_songs,
+                "GOTD": get_genre_of_the_day(),
                 "timestamp": now
             }
 
@@ -351,26 +379,26 @@ def search_songs(request):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+    
 def generate_response(prompt, num_runs=10, songsInPlaylist=[]):
-    # global response_index 
-    # print(f"Response {response_index}: ")
     output = prompt_for_song(prompt, num_runs)
     # Clean the output by removing triple backticks and the json keyword
     # Parse the JSON string into a list of dictionaries
     output_list = process_json(output)
     track_ids = []
     ban_list = set()
-    # print(output_list)
+
     while len(track_ids) < num_runs:
         for song in output_list:
             if len(track_ids) >= num_runs:
                 break
             artist = song["artist"].strip()
             title = song["title"].strip()
+            
             # Determine if song is valid and return track ID
             track_id = find_new_song(title, artist, track_ids)
             if track_id in songsInPlaylist:
-                # print(f"\t\tTrack already in playlist, skipping.")
+                
                 track_id = None
             if track_id:
                 ban_list.add(title+"-"+artist)
@@ -463,12 +491,9 @@ def check_song_exists(title, artist, verbose=True):
     if search_result['tracks']['items']:
         track_id = search_result['tracks']['items'][0]['id']
         song_cache[track_id] = search_result['tracks']['items'][0]
-        # if(verbose):
-            # print(f"\t\tTrack ID: {track_id}")
         return track_id
     else:
         if(verbose):
-            # print(f"\t\tTrack not found")
             unknown_songs.add(f"{title}-{artist}")
         return None
 
