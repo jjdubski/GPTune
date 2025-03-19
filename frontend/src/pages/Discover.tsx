@@ -40,23 +40,6 @@ const Discover: React.FC = () => {
 
     // Function to fetch songs based on category
     const fetchDiscoverSongs = useCallback(async () => {
-        const storedData = localStorage.getItem("DISCOVER_SONGS");
-        const now = new Date().getTime();
-
-        // if (storedData) {
-        //     const discoverData = JSON.parse(storedData);
-
-        //     // Check if cache is still valid (24 hours)
-        //     if (now - discoverData.timestamp < 86400000) {
-        //         console.log("Using cached discover songs");
-        //         setNewSongs(discoverData.new);
-        //         console.log(discoverData.new);
-        //         setTrendingSongs(discoverData.trending);
-        //         console.log(discoverData.trending);
-        //         return;
-        //     }
-        // }
-
         console.log("Fetching new discover songs from API...");
 
         try {
@@ -89,21 +72,6 @@ const Discover: React.FC = () => {
 
 
     const fetchGenreAndSubgenre = useCallback(async () => {
-        const storedData = localStorage.getItem("GOTD_GENRE");
-        const now = new Date().getTime();
-    
-        if (storedData) {
-            const genreData = JSON.parse(storedData);
-    
-            if (now - genreData.timestamp < 86400000 && genreData.songs && genreData.songs.length > 0) {
-                console.log(`Using stored genre: ${genreData.genre} - ${genreData.subgenre}`);
-                setGenre(genreData.genre);
-                setSubgenre(genreData.subgenre);
-                setGOTDSongs(genreData.songs); 
-                return;
-            }
-        }
-    
         console.log("Fetching new genre, subgenre, and songs...");
     
         try {
