@@ -119,3 +119,7 @@
     position: relative;
     transition: transform 0.2s ease-in-out;
 }   
+
+.trash-btn:hover, .heart-btn:hover {
+    transform: scale(1.1);
+}

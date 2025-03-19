@@ -34,8 +34,8 @@
 }
 
 .liked-song-image {
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
     border-radius: 5px;
 }
 
@@ -83,7 +83,7 @@
     display: flex;
     justify-content: flex-end;
     width: 100%;
-    margin-top: 18px;   
+    margin-top: 20px;   
 }
 
 .close-liked-songs > button {
@@ -92,8 +92,10 @@
     padding: 10px 20px;
     margin-right: 10px;
     font-size: 24px;
+    font-weight: bold;
 }
 
 .close-liked-songs > button:hover {
     color: red;
+    scale: 1.2;
 }

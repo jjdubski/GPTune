@@ -50,7 +50,8 @@ const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spoti
                         <p className="song-artist">{artist}</p>
                     </>
                 ) : (
-                    <p className="select-song-placeholder">Select a song</p>
+                    // <p className="select-song-placeholder">Select a song</p>
+                    <></>
                 )}
             </div>
             
