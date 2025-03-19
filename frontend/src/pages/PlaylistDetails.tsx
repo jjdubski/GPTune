@@ -66,5 +66,4 @@ const PlaylistDetails: React.FC = () => {
         </>
     );
 };
-
 export default PlaylistDetails;

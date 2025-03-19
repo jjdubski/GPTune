@@ -17,6 +17,10 @@ interface LikedSongListProps {
 const LikedSongList: React.FC<LikedSongListProps> = ({ songs }) => {
     const [likedSongs, setLikedSongs] = useState<Song[]>([]);
     const [songList, setSongList] = useState<Song[]>([]);
+    const [isOpen, setIsOpen] = useState(true);
+    const onClose = () => {
+        setIsOpen(false);
+    };
 
     useEffect(() => {
         const fetchLikedSongs = async () => {
@@ -95,8 +99,11 @@ const LikedSongList: React.FC<LikedSongListProps> = ({ songs }) => {
     }, [songs, likedSongs]);
 
     return (
-        <div className="liked-songs-container">
-            <h1 className="liked-songs-title">Liked Songs</h1>
+        
+  <div className="liked-songs-container" style={{ display: isOpen ? 'inline-block' : 'none' }}>
+            {/* Close Button */}
+        <button className="close-liked-songs" onClick={onClose}>X</button>
+        <h1 className="liked-songs-title">Liked Songs</h1>
             <div className="liked-songs-list scroll">
                 {songList.length > 0 ? (
                     songList.map((song) => (
