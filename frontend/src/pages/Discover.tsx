@@ -40,22 +40,22 @@ const Discover: React.FC = () => {
 
     // Function to fetch songs based on category
     const fetchDiscoverSongs = useCallback(async () => {
-        const storedData = localStorage.getItem("DISCOVER_SONGS");
-        const now = new Date().getTime();
+        // const storedData = localStorage.getItem("DISCOVER_SONGS");
+        // const now = new Date().getTime();
 
-        if (storedData) {
-            const discoverData = JSON.parse(storedData);
+        // if (storedData) {
+        //     const discoverData = JSON.parse(storedData);
 
-            // Check if cache is still valid (24 hours)
-            if (now - discoverData.timestamp < 86400000) {
-                console.log("Using cached discover songs");
-                setNewSongs(discoverData.new);
-                console.log(discoverData.new);
-                setTrendingSongs(discoverData.trending);
-                console.log(discoverData.trending);
-                return;
-            }
-        }
+        //     // Check if cache is still valid (24 hours)
+        //     if (now - discoverData.timestamp < 86400000) {
+        //         console.log("Using cached discover songs");
+        //         setNewSongs(discoverData.new);
+        //         console.log(discoverData.new);
+        //         setTrendingSongs(discoverData.trending);
+        //         console.log(discoverData.trending);
+        //         return;
+        //     }
+        // }
 
         console.log("Fetching new discover songs from API...");
 
@@ -80,7 +80,7 @@ const Discover: React.FC = () => {
             console.log("Fetched discover songs:", data);
             setNewSongs(data.new);
             setTrendingSongs(data.trending);
-            localStorage.setItem("DISCOVER_SONGS", JSON.stringify({ ...data, timestamp: Date.now() }));
+            // localStorage.setItem("DISCOVER_SONGS", JSON.stringify({ ...data, timestamp: Date.now() }));
     
         } catch (error) {
             console.error("Error fetching discover songs:", error);
@@ -89,20 +89,20 @@ const Discover: React.FC = () => {
 
 
     const fetchGenreAndSubgenre = useCallback(async () => {
-        const storedData = localStorage.getItem("GOTD_GENRE");
-        const now = new Date().getTime();
+        // const storedData = localStorage.getItem("GOTD_GENRE");
+        // const now = new Date().getTime();
     
-        if (storedData) {
-            const genreData = JSON.parse(storedData);
+        // if (storedData) {
+        //     const genreData = JSON.parse(storedData);
     
-            if (now - genreData.timestamp < 86400000 && genreData.songs && genreData.songs.length > 0) {
-                console.log(`Using stored genre: ${genreData.genre} - ${genreData.subgenre}`);
-                setGenre(genreData.genre);
-                setSubgenre(genreData.subgenre);
-                setGOTDSongs(genreData.songs); 
-                return;
-            }
-        }
+        //     if (now - genreData.timestamp < 86400000 && genreData.songs && genreData.songs.length > 0) {
+        //         console.log(`Using stored genre: ${genreData.genre} - ${genreData.subgenre}`);
+        //         setGenre(genreData.genre);
+        //         setSubgenre(genreData.subgenre);
+        //         setGOTDSongs(genreData.songs); 
+        //         return;
+        //     }
+        // }
     
         console.log("Fetching new genre, subgenre, and songs...");
     
@@ -127,7 +127,7 @@ const Discover: React.FC = () => {
             setGenre(data.genre);
             setSubgenre(data.subgenre);
             setGOTDSongs(data.songs);
-            localStorage.setItem("GOTD_GENRE", JSON.stringify({ ...data, timestamp: Date.now() }));
+            // localStorage.setItem("GOTD_GENRE", JSON.stringify({ ...data, timestamp: Date.now() }));
     
         } catch (error) {
             console.error("Error fetching genre:", error);
@@ -156,7 +156,7 @@ const Discover: React.FC = () => {
             console.log("GOTD API Response:", data);
     
             if (res.ok && data.songs) {
-                const songList: Song[] = Object.values(data.songs).map((item) => ({
+                const songList: Song[] = Object.values(data.songs).map((item: any) => ({
                     trackID: item.trackID,
                     title: item.title,
                     artist: item.artist,

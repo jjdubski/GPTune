@@ -41,15 +41,18 @@ div {
 .song-title {
     font-size: 1.1em;
     font-weight: bold;
+    text-align: left;
 }
 .song-artist {
     font-size: 1em;
     opacity: 90%;
+    text-align: left;
     /* font-weight: bold; */
 }
 .song-album {
     font-size: 0.9em;
     opacity: 80%;
+    text-align: left;
     /* font-weight: bold; */
 }
 .play-button {
