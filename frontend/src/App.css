@@ -19,7 +19,7 @@
   overflow-y: auto; /* Changed from auto to scroll */
   align-items: center;
   margin-top: 20px;
-  max-height: 72vh; /* Adjusted height for better spacing */
+  max-height: 78vh; /* Adjusted height for better spacing */
   width: 100%;
   scrollbar-width: thin; /* For Firefox */
   scrollbar-color: var(--secondary) var(--primary); /* For Firefox */

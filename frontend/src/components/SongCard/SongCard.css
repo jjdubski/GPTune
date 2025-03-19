@@ -1,6 +1,6 @@
 .song-card {
     background-color: #FFEDDF;
-    padding: 20px;
+    padding: 30px 120px;
     margin-top: 30px;
     border-radius: 30px;
     /* width: clamp(200px, 40%, 300px); */
@@ -25,7 +25,7 @@
     text-align: center; /* Centers text */
     color: #000;
     font-size: 14px;
-    
+    width: 260px;
 }
 
 .song-card-album {

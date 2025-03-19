@@ -20,19 +20,22 @@ interface SongSelectorProps {
     spotifyUrl: string;
     songs: Song[];
     onSelectSong: (song: Song) => void;
+    isOpen: boolean;
+    handleOpen: (isOpen: boolean) => void;
 }
 
-const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spotifyUrl, songs, onSelectSong }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const toggleDropdown = () => {
-        setIsOpen(!isOpen);
-    };
+const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spotifyUrl, songs, onSelectSong, isOpen, handleOpen }) => {
+    // const [isOpen, setIsOpen] = useState(false);
+    // const toggleDropdown = () => {
+    //     setIsOpen(!isOpen);
+    // };
     const handleClick = () => {
         window.open(spotifyUrl, '_blank'); 
     };
 
     const displayLikedSongs = () => {
-        setIsOpen(!isOpen);
+        // setIsOpen(!isOpen);
+        handleOpen(!isOpen)
     };
 
     return (
@@ -56,14 +59,14 @@ const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spoti
                 <button className="dropbtn" onClick={displayLikedSongs}>
                     <img src={editIcon} alt="edit icon" className="edit-icon" />
                 </button>
-                {isOpen && (
+                {/* {isOpen && (
                     <div className="dropdown-content">
                         {songs.map((song) => (
                             <div 
                                 key={song.trackID} 
                                 className="dropdown-item" 
                                 onClick={() => {
-                                    setIsOpen(false);
+                                    // setIsOpen(false);
                                     // handleClick(song.uri);
 
                                     //callback function
@@ -75,7 +78,7 @@ const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spoti
                             </div>
                         ))}
                     </div>
-                )}
+                )} */}
             </div>
         </div>
     );
