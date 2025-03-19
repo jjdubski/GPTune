@@ -202,8 +202,11 @@ const ThisorThat: React.FC = () => {
             <div className="this-or-that-container">
                 <div className="this-or-that-content">
                     <div className ="song-selector-container">
-                            
-                        <h1>Showing Songs Like:</h1>
+                        {selectedSong ? (
+                            <h1>Showing Songs Like:</h1>
+                        ) : (
+                            <h1>Select a song:</h1>
+                        )}
                         <SongSelector
                             title={selectedSong?.title || "No Songs"}
                             artist={selectedSong?.artist || ""}

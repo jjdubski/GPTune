@@ -3,9 +3,9 @@
     top: 10px; 
     right: 15px;  */
     right: 30px;
-    top: 0px;
+    top: 25px;
     position: absolute;
-    font-size: 16px; 
+    font-size: 18px; 
     font-weight: bold;
     color: white;
     cursor: pointer;
@@ -67,7 +67,7 @@
 }
 
 .menu-item:first-of-type{
-    margin-top: 50px;
+    margin-top: 100px;
 }
 
 .menu-item:last-of-type {

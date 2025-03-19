@@ -111,9 +111,9 @@ const LikedSongList: React.FC<LikedSongListProps> = ({ songs, isOpen, handleOpen
                         <div key={song.trackID} className="liked-song-item">
                             <img src={song.image} alt={song.title} className="liked-song-image" />
                             <div className="liked-song-info">
-                                <p className="liked-song-title">{song.title}</p>
-                                <p className="liked-song-artist">{song.artist}</p>
-                                <p className="liked-song-album">{song.album}</p>
+                                <p id="liked-song-title">{song.title}</p>
+                                <p id="liked-song-artist">{song.artist}</p>
+                                <p id="liked-song-album">{song.album}</p>
                             </div>
                             <button className="remove-song-btn" onClick={async () => { await handleRemoveSong(song.trackID); }} >
                                 <img src="/remove-song-btn.png" alt="Remove" className="remove-icon" />
