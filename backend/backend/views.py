@@ -3,6 +3,7 @@ import os
 import json
 import time
 import random
+import requests
 import spotipy
 from django.http import HttpResponse, JsonResponse
 from datetime import datetime
@@ -23,33 +24,6 @@ logger = logging.getLogger(__name__)
 
 unknown_songs = set()
 song_cache = {}
-
-# @csrf_exempt
-# def recommend_songs(request):
-#     if request.method == "POST":
-#         try:
-#             data = json.loads(request.body.decode("utf-8"))
-
-#             # Safely get values, defaulting to empty list if missing
-#             top_artists = data.get("top_artists", [])
-#             top_genres = data.get("top_genres", [])
-
-#             if not top_artists:
-#                 return JsonResponse({"error": "Missing 'top_artists' field"}, status=400)
-
-#             # Call OpenAI function
-#             recommendations = openai_client.generate_recommendations({
-#                 "top_artists": top_artists,
-#                 "top_genres": top_genres
-#             })
-            
-#             return JsonResponse({"recommendations": recommendations})
-        
-#         except json.JSONDecodeError:
-#             return JsonResponse({"error": "Invalid JSON format"}, status=400)
-
-#     return JsonResponse({"error": "Invalid request method"}, status=405)
-
 
 def index(request):
     current_time = datetime.now().strftime("%H:%M:%S")
@@ -79,8 +53,6 @@ def index(request):
     # print(profile_pic)
     # print(len(currentUser['images']))
     return JsonResponse(data)
-
-
 
 #Implement getGenreAndSubgenre
 GENRES = {
@@ -137,9 +109,6 @@ def get_genre_of_the_day():
     cache.set("GOTD_GENRE", json.dumps(genre_data), timeout=86400)
     return genre_data
 
-
-
-
 @csrf_exempt
 def getGenreAndSubgenre(request):
     if request.method == "GET": 
@@ -155,9 +124,6 @@ def getGenreAndSubgenre(request):
             return JsonResponse({"error": f"Failed to fetch genre: {str(e)}"}, status=500)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
-
-
-
 
 #Implement getSongsForGenre
 def getSongsForGenre(request):
@@ -175,10 +141,6 @@ def getSongsForGenre(request):
     except Exception as e:
         logger.error(f"Error fetching genre and songs: {str(e)}")
         return JsonResponse({"error": f"Failed to fetch songs: {str(e)}"}, status=500)
-
-
-
-
 
 @csrf_exempt
 def getRecommendations(request):
@@ -218,8 +180,57 @@ def getRecommendations(request):
     
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
+def getNewReleases():
+    newReleases = sp.new_releases(limit=5)
+    new_releases_data = [
+        {
+            "trackID": song['id'],
+            "title": song['name'],
+            "artist": song['artists'][0]['name'],
+            "album": song.get('name', None),
+            "image": song['images'][0]['url'] if song.get('images') else None,
+            "uri": song['uri']
+        }
+        for song in newReleases['albums']['items']
+    ]
+    return new_releases_data
 
 
+def getBillboard():
+    response = requests.get("https://raw.githubusercontent.com/mhollingshead/billboard-hot-100/main/recent.json")
+    if response.status_code != 200:
+        return JsonResponse({"error": "Failed to fetch Billboard data"}, status=500)
+    
+    billboard_data = response.json()
+    cleanedBillboardData = [
+        {
+            "song": song["song"],
+            "artist": song["artist"],
+            "this_week": song["this_week"],
+            "last_week": song.get("last_week"),
+            "peak_position": song.get("peak_position"),
+            "weeks_on_chart": song.get("weeks_on_chart"),
+        }
+        for song in billboard_data.get("data", [])
+    ]
+
+    # Check the first 5 songs from Billboard against Spotify API
+    trending_data = []
+    for song in cleanedBillboardData[:5]:
+        query = f"{song['song']} {song['artist']}"
+        results = sp.search(query, limit=1)
+        if results['tracks']['items']:
+            track = results['tracks']['items'][0]
+            trending_data.append({
+                "trackID": track['id'],
+                "title": song['song'],
+                "artist": song['artist'],
+                "album": track['album']['name'],
+                "image": track['album']['images'][0]['url'] if track['album']['images'] else None,
+                "uri": track['uri']
+            })
+    
+    return trending_data
 #below is the function for Disocver page 
 @csrf_exempt
 def get_discover_songs(request):
@@ -235,28 +246,10 @@ def get_discover_songs(request):
                 if now - timestamp < 86400:
                     return JsonResponse(discover_data)
 
-            # Fetch new and trending songs
-            new_songs = generate_discover_songs("Give me 5 songs that were released in the past 5 months.")
-            trending_songs = generate_discover_songs("Give me 5 most trending songs right now.")
-
-            # Ensure each song has an image
-            def enrich_song(song):
-                query = f"track:{song['title']} artist:{song['artist']}"
-                result = sp.search(q=query, type='track', limit=1)
-                if result['tracks']['items']:
-                    track_info = result['tracks']['items'][0]
-                    return {
-                        "trackID": track_info['id'],
-                        "title": track_info['name'],
-                        "artist": track_info['artists'][0]['name'],
-                        "album": track_info['album']['name'],
-                        "image": track_info['album']['images'][0]['url'] if track_info['album']['images'] else "",
-                        "uri": track_info['uri']
-                    }
-                return song  # If no match, return original
-
-            new_songs = [enrich_song(song) for song in new_songs]
-            trending_songs = [enrich_song(song) for song in trending_songs]
+            new_songs = getNewReleases()
+            print(new_songs)
+            trending_songs = getBillboard()
+            print(trending_songs)
 
             discover_data = {
                 "new": new_songs,
@@ -273,15 +266,7 @@ def get_discover_songs(request):
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
 
-
-
-
-
-
-
-
 #below is the function to search page user 
-
 def getAISongRecommendations(request):
     search_query = request.GET.get('query', '')
     
@@ -321,45 +306,7 @@ def search_songs(request):
         artists = promptForArtists(query, 6)  # Fetch 6 artists
         if not artists:
             return JsonResponse({"error": "No artists found"}, status=500)
-        
-        # Get song recommendations based on those artists
-        # ai_response = prompt_for_song(promptSongs, 10)
-        # if not ai_response:
-        #     return JsonResponse({"error": "Empty response from AI"}, status=500)
-        
-        # # Clean the AI response by removing JSON formatting markers
-        # cleaned_response = ai_response.strip().strip("```json").strip("```").strip()
-        
-        # try:
-        #     song_list = json.loads(cleaned_response)
-        # except json.JSONDecodeError:
-        #     print(f"Invalid JSON format from AI: {cleaned_response}")
-        #     logger.error(f"Invalid JSON format from AI: {cleaned_response}")
-        #     return JsonResponse({"error": "Invalid JSON format from AI"}, status=500)
-
-        # Search on Spotify for real data
-        # song_recommendations = []
-        # print("Song List:", song_list)
-        # for song in song_list:
-        #     title = song.get("title", "").strip()
-        #     artist = song.get("artist", "").strip()
-
-        #     if not title or not artist:
-        #         continue
-
-        #     search_query = f"track:{title} artist:{artist}"
-        #     results = sp.search(q=search_query, type="track", limit=1)
-
-        #     if results["tracks"]["items"]:
-        #         track = results["tracks"]["items"][0]
-        #         song_recommendations.append({
-        #             "title": track["name"],
-        #             "artist": track["artists"][0]["name"],
-        #             "album": track["album"]["name"],
-        #             "spotify_url": track["external_urls"]["spotify"],
-        #             "preview_url": track.get("preview_url"),
-        #             "uri": track["uri"]
-        #         })
+    
         response = run_prompt (promptSongs, 10, True, [])
         
         # Log the raw AI response
@@ -376,7 +323,6 @@ def search_songs(request):
                 "image": trackInfo['album']['images'][0]['url'],
                 "uri": trackInfo['uri']
             }
-
 
         artist_recommendations = []
         # print("Artist List:", artists)
@@ -561,6 +507,11 @@ def logout(request):
     except Exception as e:
         logger = logging.getLogger(__name__)
         logger.error(f"Error cleaning up database: {str(e)}")
+    try:
+        cache.clear()
+    except Exception as e:
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error cleaning up cache: {str(e)}")
     return redirect('http://localhost:3000/')
 
 def callback(request):
@@ -751,11 +702,8 @@ def get_uris(request):  # Use snake_case naming
         logger.error(f"Error fetching URIs: {str(e)}")
         return JsonResponse({'error': f"Failed to fetch URIs: {str(e)}"}, status=500)
     
-# def addLikedSongs(request):
-#     try:
-#         sp.current_user_saved_tracks_add([request.GET.get('trackID')])
-#         return JsonResponse({"message": "Song added to liked songs"}, status=201)
-#     except Exception as e:
-#         logger.error(f"Error adding song to liked songs: {str(e)}")
-#         return JsonResponse({'error': f"Failed to add song to liked songs: {str(e)}"}, status=500)
-
+def printCache(request):
+    cacheData = cache.get("DISCOVER_SONGS")
+    if cacheData:
+        return JsonResponse(json.loads(cacheData))
+    return JsonResponse({"error": "No cache data found"}, status=400)

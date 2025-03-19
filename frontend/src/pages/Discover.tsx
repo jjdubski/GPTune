@@ -19,6 +19,25 @@ const Discover: React.FC = () => {
     const [subgenre, setSubgenre] = useState<string | null>(null);
     const hasFetchedSongs = useRef(false);
 
+    const [isLoading, setIsLoading] = useState(true);
+    //check if user is logged in
+    // checks if user is logged in, redirects to login page if not
+            useEffect(() => {
+                fetch('http://localhost:8000')
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (!data.user || !data.user.email) {
+                            window.location.href ="http://127.0.0.1:8000/login/"; // Redirect to login page
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    })
+                    .finally(() => {
+                        setIsLoading(false);
+                    });
+            }, []);
+
     // Function to fetch songs based on category
     const fetchDiscoverSongs = useCallback(async () => {
         const storedData = localStorage.getItem("DISCOVER_SONGS");
@@ -31,7 +50,9 @@ const Discover: React.FC = () => {
             if (now - discoverData.timestamp < 86400000) {
                 console.log("Using cached discover songs");
                 setNewSongs(discoverData.new);
+                console.log(discoverData.new);
                 setTrendingSongs(discoverData.trending);
+                console.log(discoverData.trending);
                 return;
             }
         }
@@ -171,25 +192,29 @@ const Discover: React.FC = () => {
     }, [fetchDiscoverSongs, fetchGenreAndSubgenre]);
     
     return (
-        <div className="discover-container">
-            <h1 className="discover-title">DISCOVER</h1>
-            <div className="categories">
-                <div className="category">
-                    <h2 className="category-title new">NEW</h2>
-                    <SongList tracks={newSongs} />
-                </div>
-                <div className="category">
-                    <h2 className="category-title trending">TRENDING</h2>
-                    <SongList tracks={trendingSongs} />
-                </div>
-                <div className="category">
-                <h2 className="category-title classics">
-                    {genre && subgenre ? `GOTD - ${subgenre}` : "Genre of the Day"}
-                </h2>                    
-                    <SongList tracks={gotdSongs} />
+        isLoading ? (
+            <div></div>
+        ) : (
+            <div className="discover-container">
+                <h1 className="discover-title">DISCOVER</h1>
+                <div className="categories">
+                    <div className="category">
+                        <h2 className="category-title new">NEW</h2>
+                        <SongList tracks={newSongs} />
+                    </div>
+                    <div className="category">
+                        <h2 className="category-title trending">TRENDING</h2>
+                        <SongList tracks={trendingSongs} />
+                    </div>
+                    <div className="category">
+                        <h2 className="category-title classics">
+                            {genre && subgenre ? `GOTD - ${subgenre}` : "Genre of the Day"}
+                        </h2>
+                        <SongList tracks={gotdSongs} />
+                    </div>
                 </div>
             </div>
-        </div>
+        )
     );
 };
 

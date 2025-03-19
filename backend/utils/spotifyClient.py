@@ -66,9 +66,7 @@ auth_manager = SpotifyOAuth(
     redirect_uri="http://localhost:8000/callback",
     scope="user-library-read user-read-email user-top-read user-read-private user-follow-read playlist-read-private playlist-read-collaborative app-remote-control streaming user-read-currently-playing user-modify-playback-state user-read-playback-state playlist-modify-private playlist-modify-public user-library-modify",
     cache_handler=CustomCacheHandler()    
-    # cache_handler=CustomCacheHandler(cache_path=".cache")
 )
-# token = auth_manager.get_access_token()
 sp = Spotify(auth_manager=auth_manager)
 
 @api_view(['GET'])

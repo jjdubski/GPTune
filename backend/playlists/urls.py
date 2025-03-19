@@ -10,7 +10,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('getPlaylists/', views.AddPlaylists, name='AddPlaylists'),
     path('getPlaylistSongs/<str:playlist_id>/', views.getPlaylistSongs, name='getPlaylistSongs'),
-    # path('getLikedSongs/', views.getLikedSongs, name='getLikedSongs'),
     path('addSongToPlaylist', views.addSongToPlaylist, name = "addSongToPlaylist"),
     path('thisorthat', views.thisOrThat, name = "thisOrThat"),
     path('generateSong/', views.generateSong, name = "generateSong"),

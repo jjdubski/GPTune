@@ -42,6 +42,8 @@ urlpatterns = [
     path('getGenreAndSubgenre/', views.getGenreAndSubgenre, name='getGenreAndSubgenre'),
     path('getSongsForGenre/', views.getSongsForGenre, name='getSongsForGenre'),
     path('getCurrentPlayback/', utils.spotifyClient.get_current_playback, name='getCurrentPlayback'),  
+    
+    path('printCache/', views.printCache, name='printCache'),
 ]
 
 # if settings.DEBUG:

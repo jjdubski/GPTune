@@ -9,7 +9,6 @@ class Playlist(models.Model):
     image = models.URLField(null=True, blank=True)
     songs = models.ManyToManyField(Song, related_name="playlists")
     
-    
     def __str__(self):
         return self.name
     
