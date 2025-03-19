@@ -281,6 +281,7 @@ def get_discover_songs(request):
             discover_data = {
                 "new": new_songs,
                 "trending": trending_songs,
+                "GOTD": get_genre_of_the_day(),
                 "timestamp": now
             }
 
