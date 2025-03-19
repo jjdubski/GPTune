@@ -378,26 +378,26 @@ def search_songs(request):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+    
 def generate_response(prompt, num_runs=10, songsInPlaylist=[]):
-    # global response_index 
-    # print(f"Response {response_index}: ")
     output = prompt_for_song(prompt, num_runs)
     # Clean the output by removing triple backticks and the json keyword
     # Parse the JSON string into a list of dictionaries
     output_list = process_json(output)
     track_ids = []
     ban_list = set()
-    # print(output_list)
+
     while len(track_ids) < num_runs:
         for song in output_list:
             if len(track_ids) >= num_runs:
                 break
             artist = song["artist"].strip()
             title = song["title"].strip()
+            
             # Determine if song is valid and return track ID
             track_id = find_new_song(title, artist, track_ids)
             if track_id in songsInPlaylist:
-                # print(f"\t\tTrack already in playlist, skipping.")
+                
                 track_id = None
             if track_id:
                 ban_list.add(title+"-"+artist)
@@ -490,12 +490,9 @@ def check_song_exists(title, artist, verbose=True):
     if search_result['tracks']['items']:
         track_id = search_result['tracks']['items'][0]['id']
         song_cache[track_id] = search_result['tracks']['items'][0]
-        # if(verbose):
-            # print(f"\t\tTrack ID: {track_id}")
         return track_id
     else:
         if(verbose):
-            # print(f"\t\tTrack not found")
             unknown_songs.add(f"{title}-{artist}")
         return None
 

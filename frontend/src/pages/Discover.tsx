@@ -72,6 +72,21 @@ const Discover: React.FC = () => {
 
 
     const fetchGenreAndSubgenre = useCallback(async () => {
+        const storedData = localStorage.getItem("GOTD_GENRE");
+        const now = new Date().getTime();
+    
+        if (storedData) {
+            const genreData = JSON.parse(storedData);
+    
+            if (now - genreData.timestamp < 86400000 && genreData.songs && genreData.songs.length > 0) {
+                console.log(`Using stored genre: ${genreData.genre} - ${genreData.subgenre}`);
+                setGenre(genreData.genre);
+                setSubgenre(genreData.subgenre);
+                setGOTDSongs(genreData.songs); 
+                return;
+            }
+        }
+    
         console.log("Fetching new genre, subgenre, and songs...");
     
         try {
