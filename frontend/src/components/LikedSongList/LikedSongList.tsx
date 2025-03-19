@@ -12,15 +12,14 @@ interface Song {
 
 interface LikedSongListProps {
     songs: Song[];
+    isOpen?: boolean;
+    handleOpen?: (isOpen: boolean) => void;
 }
 
-const LikedSongList: React.FC<LikedSongListProps> = ({ songs }) => {
+const LikedSongList: React.FC<LikedSongListProps> = ({ songs, isOpen, handleOpen }) => {
     const [likedSongs, setLikedSongs] = useState<Song[]>([]);
     const [songList, setSongList] = useState<Song[]>([]);
-    const [isOpen, setIsOpen] = useState(true);
-    const onClose = () => {
-        setIsOpen(false);
-    };
+    // const [isOpen, setIsOpen] = useState(true);
 
     useEffect(() => {
         const fetchLikedSongs = async () => {
@@ -101,8 +100,10 @@ const LikedSongList: React.FC<LikedSongListProps> = ({ songs }) => {
     return (
         
   <div className="liked-songs-container" style={{ display: isOpen ? 'inline-block' : 'none' }}>
-            {/* Close Button */}
-        <button className="close-liked-songs" onClick={onClose}>X</button>
+        {/* Close Button */}
+        <div className="close-liked-songs">
+            <button onClick={() => handleOpen && handleOpen(false)}>X</button>
+        </div>
         <h1 className="liked-songs-title">Liked Songs</h1>
             <div className="liked-songs-list scroll">
                 {songList.length > 0 ? (

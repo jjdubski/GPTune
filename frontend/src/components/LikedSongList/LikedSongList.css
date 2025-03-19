@@ -5,8 +5,7 @@
     background-color: #2f4a2f; /* Dark green */
     color: white;
     padding: 20px;
-    border-radius: 10px;
-    width: 350px;
+    width: 35vw;
     height: 100vh;
 }
 
@@ -78,4 +77,23 @@
     border-radius: 0;
     padding: 0%;
     border: none;
+}
+
+.close-liked-songs {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 18px;   
+}
+
+.close-liked-songs > button {
+    background-color: transparent;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.close-liked-songs > button:hover {
+    color: red;
 }

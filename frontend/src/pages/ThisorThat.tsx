@@ -3,7 +3,6 @@ import SongSelector from '../components/SongSelector/SongSelector';
 import SongCard from '../components/SongCard/SongCard';
 import './ThisorThat.css';
 import LikedSongList from '../components/LikedSongList/LikedSongList';
-import arrow from '../assets/images/arrow.png';
 
 interface Song {
     trackID: string;
@@ -24,34 +23,35 @@ const ThisorThat: React.FC = () => {
     const hasFetchedSong = useRef(false);
     const [currentSong, setCurrentSong] = useState<Song | null>(null);
     const [prevSongs, setPrevSongs] = useState<Song[]>([]);
+    const [isOpen, setIsOpen] = useState(false);
 
     // checks if user is logged in, redirects to login page if not
-        useEffect(() => {
-            fetch('http://localhost:8000')
-                .then((res) => res.json())
-                .then((data) => {
-                    if (!data.user || !data.user.email) {
-                        window.location.href ="http://127.0.0.1:8000/login/"; // Redirect to login page
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                })
-                .finally(() => {
-                    setIsLoading(false);
-                });
-        }, []);
-    
+    useEffect(() => {
+        fetch('http://localhost:8000')
+            .then((res) => res.json())
+            .then((data) => {
+                if (!data.user || !data.user.email) {
+                    window.location.href ="http://127.0.0.1:8000/login/"; // Redirect to login page
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    }, []);
+
     useEffect(() => {
         if(hasFetchedSong.current){
             return;
         }
         generateSong();
         hasFetchedSong.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-
         const fetchPlaylists = async () => {
             if (!selectedPlaylistID) {
                 return;
@@ -113,48 +113,12 @@ const ThisorThat: React.FC = () => {
         }
     }
 
-    const handleSelectPlaylist = (playlistID: string) => {
-        setPlaylistSongs([]);
-        setSelectedPlaylistID(playlistID);
-        setCurrentIndex(0);
-    };
-    const handleNextSong = async () => {
-        // setCurrentIndex((prevIndex) => (prevIndex + 1) % playlistSongs.length);
+    // const handleSelectPlaylist = (playlistID: string) => {
+    //     setPlaylistSongs([]);
+    //     setSelectedPlaylistID(playlistID);
+    //     setCurrentIndex(0);
+    // };
 
-        try {
-            const prompt = selectedSong 
-                ? `give me one more song similar to ${selectedSong.title} by ${selectedSong.artist}`
-                : `give me one more song similar to ${playlistSongs.map(song => song.title).join(", ")}`;
-
-            const response = await fetch('http://localhost:8000/playlistAPI/generateSong/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    prompt: prompt,
-                    num_runs: 1
-                })
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                const newSong: Song = {
-                    trackID: data.trackID,
-                    title: data.title,
-                    artist: data.artist,
-                    album: data.album,
-                    image: data.image,
-                    uri: data.uri
-                };
-                setPlaylistSongs((prevSongs) => [...prevSongs, newSong]);
-            } else {
-                console.error('Error:', data);
-            }
-        } catch (error) {
-            console.error('Error:', error); 
-        }; 
-    };
     const addToPlaylist = async() => {
         if (currentSong) {
             setPlaylistSongs((prevSongs) => [currentSong, ...prevSongs]);
@@ -185,23 +149,43 @@ const ThisorThat: React.FC = () => {
         }
     };
 
-    const handlePrevSong = () => {
-        setCurrentIndex((prevIndex) => {
-            if (prevIndex > 0) {
-                const newIndex = prevIndex - 1;
-                setCurrentSong(prevSongs[newIndex]); // Update to the previous song
-                return newIndex;
-            } else {
-                console.log("No previous song available.");
-                return 0; // Keep at 0 if no previous songs
-            }
-        });
+    // const handleNextSong = async () => {
+    //     // setCurrentIndex((prevIndex) => (prevIndex + 1) % playlistSongs.length);
+    //     generateSong();  
+    // };  
+
+    // const handlePrevSong = () => {
+    //     setCurrentIndex((prevIndex) => {
+    //         if (prevIndex > 0) {
+    //             const newIndex = prevIndex - 1;
+    //             setCurrentSong(prevSongs[newIndex]); // Update to the previous song
+    //             return newIndex;
+    //         } else {
+    //             console.log("No previous song available.");
+    //             return 0; // Keep at 0 if no previous songs
+    //         }
+    //     });
+    // };
+
+    const handleUndoAction = () => {
+        if (prevSongs.length > 0) {
+            const newPrevSongs = [...prevSongs];
+            const lastSong = newPrevSongs.pop();
+            setCurrentSong(lastSong || null);
+            setPrevSongs(newPrevSongs);
+        }
     };
+
     const handleSelectSong = (song: Song) => {
         console.log("Selected song:", song);
         setSelectedSong(song);
         generateSong();
     };
+
+    const handleOpen = (open: boolean) => {
+        setIsOpen(open); // Update the isOpen state
+    };
+    
 
     return (
         isLoading ? (
@@ -212,11 +196,9 @@ const ThisorThat: React.FC = () => {
             <></>
         ) : (
         <div className="this-or-that-page">
-            <div className="liked-songs-sidebar">
-                <LikedSongList songs={playlistSongs} />
-                {/* <button className="arrow-button" onClick={() => console.log("")}>
-                    <img src="/arrow.png" alt="Arrow" className="arrow-icon" /> */}
-            </div>
+            <LikedSongList songs={playlistSongs} isOpen={isOpen} handleOpen={handleOpen}/>
+            {/* <button className="arrow-button" onClick={() => console.log("")}>
+                <img src="/arrow.png" alt="Arrow" className="arrow-icon" /> */}
             <div className="this-or-that-container">
                 <div className="this-or-that-content">
                     <div className ="song-selector-container">
@@ -229,15 +211,17 @@ const ThisorThat: React.FC = () => {
                             spotifyUrl={selectedSong?.uri || ""}
                             songs={playlistSongs}
                             onSelectSong={handleSelectSong}
-                            onEditClick= {setOpen}
+                            isOpen={isOpen}
+                            handleOpen={handleOpen}
+                            // onEditClick= {setOpen}
                         />  
-                        <button className="arrow-button" onClick={handlePrevSong}>
-                                    <img src="/arrow.png" alt="Arrow" className="arrow-icon" />
-                                </button>
+                        <button className="arrow-button" onClick={handleUndoAction}>
+                            <img src="/arrow.png" alt="Arrow" className="arrow-icon" />
+                        </button>
                     </div>
 
                     {playlistSongs.length > 0 && (
-                        <> 
+                    <> 
                         <div className="song-card-container">
                             <SongCard
                                 title={currentSong?.title || "No Songs"}
@@ -254,28 +238,21 @@ const ThisorThat: React.FC = () => {
                                 <button className="check-btn" onClick={addToPlaylist}>
                                     <img src="/check.png" alt="Check" /> */}
                                 {/* </button> */}
-                        <div className="action-buttons">
-                            <button className="trash-btn" onClick={generateSong}>
-                                {/* <i className="trash"></i> */}
-                                <img src="/trash-btn.png" alt="trash" />
-                            </button>
+                            <div className="action-buttons">
+                                <button className="trash-btn" onClick={generateSong}>
+                                    {/* <i className="trash"></i> */}
+                                    <img src="/trash-btn.png" alt="trash" />
+                                </button>
 
-                            <button className="heart-btn" onClick={addToPlaylist}>
-                                <img src="/heart-btn.png" alt="heart" />
-                            </button>
+                                <button className="heart-btn" onClick={addToPlaylist}>
+                                    <img src="/heart-btn.png" alt="heart" />
+                                </button>
+                            </div>
                         </div>
-
-
-                                            </div>
-
-
-                        </>
+                    </>
                     )}
                 </div>
             </div>
-
-            {/* Liked Songs on the Right Side */}
-        
         </div>
         )
     );
