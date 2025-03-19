@@ -43,19 +43,19 @@ const Discover: React.FC = () => {
         const storedData = localStorage.getItem("DISCOVER_SONGS");
         const now = new Date().getTime();
 
-        if (storedData) {
-            const discoverData = JSON.parse(storedData);
+        // if (storedData) {
+        //     const discoverData = JSON.parse(storedData);
 
-            // Check if cache is still valid (24 hours)
-            if (now - discoverData.timestamp < 86400000) {
-                console.log("Using cached discover songs");
-                setNewSongs(discoverData.new);
-                console.log(discoverData.new);
-                setTrendingSongs(discoverData.trending);
-                console.log(discoverData.trending);
-                return;
-            }
-        }
+        //     // Check if cache is still valid (24 hours)
+        //     if (now - discoverData.timestamp < 86400000) {
+        //         console.log("Using cached discover songs");
+        //         setNewSongs(discoverData.new);
+        //         console.log(discoverData.new);
+        //         setTrendingSongs(discoverData.trending);
+        //         console.log(discoverData.trending);
+        //         return;
+        //     }
+        // }
 
         console.log("Fetching new discover songs from API...");
 
