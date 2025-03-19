@@ -41,18 +41,11 @@ const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spoti
     return (
         <div className="song-selector" onClick={displayLikedSongs}>
             <div className="song-selector-image-container" onClick={handleClick}>
-                <img src={image} className="song-selector-image" />
+                <img src={image} alt="cover art" className="song-selector-image" />
             </div>
             <div className="song-info">
-                {title && artist ? (
-                    <>
-                        <p className="song-title">{title}</p>
-                        <p className="song-artist">{artist}</p>
-                    </>
-                ) : (
-                    // <p className="select-song-placeholder">Select a song</p>
-                    <></>
-                )}
+                <p className="song-title">{title}</p>
+                <p className="song-artist">{artist}</p>
             </div>
             
             {/* Dropdown Button */}
@@ -73,8 +66,9 @@ const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spoti
                                     //callback function
                                     onSelectSong(song);
                                 }}
+
                             >
-                                <img src={song.image} className="dropdown-song-image" />
+                                <img src={song.image} alt={`${song.title} album cover`} className="dropdown-song-image" />
                                 <p className="dropdown-song-title">{song.title}</p>
                             </div>
                         ))}
