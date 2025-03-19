@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from django.core.cache import cache
 import json
 import os
 from urllib import response
@@ -12,14 +13,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.views.decorators.csrf import csrf_exempt
-
 from utils.spotifyClient import sp
 
 # Create your views here.
 class SongViewSet(viewsets.ModelViewSet):
     queryset = Song.objects.all()
     serializer_class = SongSerializer
-     
+    
 class AddSongView(generics.CreateAPIView):
     queryset = Song.objects.all()
     serializer_class = SongSerializer 
@@ -89,32 +89,41 @@ def playSong(request):
     
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
+@csrf_exempt
 def getDiscoverSpotify(request):
     if request.method == 'GET':
         try:
+            now = int(datetime.now().timestamp())
+
+            # Check cache
+            cached_data = cache.get("DISCOVER_SONGS")
+            if cached_data:
+                # cache.delete("DISCOVER_SONGS")
+                discover_data = json.loads(cached_data)
+                timestamp = discover_data.get("timestamp", 0)
+                if now - timestamp < 86400:  # Cache valid for 24 hours
+                    return JsonResponse(discover_data)
+
+            # Fetch new releases from Spotify
             newReleases = sp.new_releases(limit=5)
-            print(newReleases)
+            new_releases_data = [
+                {
+                    "trackID": song['id'],
+                    "title": song['name'],
+                    "artist": song['artists'][0]['name'],
+                    "album": song.get('name', None),
+                    "image": song['images'][0]['url'] if song.get('images') else None,
+                    "uri": song['uri']
+                }
+                for song in newReleases['albums']['items']
+            ]
+
+            # Fetch Billboard data
             response = requests.get("https://raw.githubusercontent.com/mhollingshead/billboard-hot-100/main/recent.json")
-            if response.status_code == 200:
-                billboard_data = response.json()
-                #print(billboard_data)
-            else:
+            if response.status_code != 200:
                 return JsonResponse({"error": "Failed to fetch Billboard data"}, status=500)
             
-            #clean data
-            for songs in newReleases['albums']['items']:
-                if not Song.objects.filter(trackID=songs['id']):
-                    Song.objects.create(
-                        trackID = songs['id'],
-                        title = songs['name'],
-                        artist = songs['artists'][0]['name'],
-                        album = songs.get('name', None),
-                        release_date = songs.get('release_date', None),
-                        genre = ", ".join(songs.get('genres', [])),
-                        image = songs['images'][0]['url'] if songs.get('images') else None,
-                        uri = songs['uri']
-                    )
-            
+            billboard_data = response.json()
             cleanedBillboardData = [
                 {
                     "song": song["song"],
@@ -126,27 +135,34 @@ def getDiscoverSpotify(request):
                 }
                 for song in billboard_data.get("data", [])
             ]
+
             # Check the first 5 songs from Billboard against Spotify API
-            toSendtoFrontend = []
+            trending_data = []
             for song in cleanedBillboardData[:5]:
                 query = f"{song['song']} {song['artist']}"
                 results = sp.search(query, limit=1)
                 if results['tracks']['items']:
                     track = results['tracks']['items'][0]
-                    toSendtoFrontend.append({
-                        "song": song['song'],
+                    trending_data.append({
+                        "trackID": track['id'],
+                        "title": song['song'],
                         "artist": song['artist'],
-                        "this_week": song['this_week'],
-                        "last_week": song.get("last_week"),
-                        "peak_position": song.get("peak_position"),
-                        "weeks_on_chart": song.get("weeks_on_chart"),
-                        "uri": track['uri'],
-                        "image": track['album']['images'][0]['url'] if track['album']['images'] else None
+                        "album": track['album']['name'],
+                        "image": track['album']['images'][0]['url'] if track['album']['images'] else None,
+                        "uri": track['uri']
                     })
-                else:
-                    print(f"Song not found: {query}")
-            
-            return JsonResponse({"newReleases": newReleases, "billboard": toSendtoFrontend}, status=200)
-            
-        except Exception as e: 
+
+            # Combine data and cache it
+            discover_data = {
+                "new": new_releases_data,
+                "trending": trending_data,
+                "timestamp": now
+            }
+            cache.set("DISCOVER_SONGS", json.dumps(discover_data), timeout=86400)
+
+            return JsonResponse(discover_data, status=200)
+
+        except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)

@@ -50,7 +50,9 @@ const Discover: React.FC = () => {
             if (now - discoverData.timestamp < 86400000) {
                 console.log("Using cached discover songs");
                 setNewSongs(discoverData.new);
+                console.log(discoverData.new);
                 setTrendingSongs(discoverData.trending);
+                console.log(discoverData.trending);
                 return;
             }
         }
