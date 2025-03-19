@@ -181,8 +181,19 @@ def getRecommendations(request):
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 def getNewReleases():
-    newReleases = sp.new_releases(limit=5)
-    new_releases_data = [
+    # token_info = sp.auth_manager.get_cached_token()
+    # if not token_info:
+    #     raise Exception("Spotify token not found")
+
+    # headers = {
+    #     "Authorization": f"Bearer {token_info['access_token']}"
+    # }
+    # url = "https://api.spotify.com/v1/browse/new-releases"
+    # response = requests.get(url, headers=headers)
+    
+    response = sp.new_releases(limit=20)  
+    # Extract singles from the new releases
+    singles = [
         {
             "trackID": song['id'],
             "title": song['name'],
@@ -191,9 +202,25 @@ def getNewReleases():
             "image": song['images'][0]['url'] if song.get('images') else None,
             "uri": song['uri']
         }
-        for song in newReleases['albums']['items']
+        for song in response['albums']['items']
+        if song['album_type'] == 'single'
     ]
-    return new_releases_data
+    
+    finalSendBack = []
+    for song in singles[:5]:
+        search = sp.search(q=f"track:{song['title']} artist:{song['artist']}", type="track", limit=1)
+        if search['tracks']['items']:
+            track = search['tracks']['items'][0]
+            finalSendBack.append({
+                "trackID": track['id'],
+                "title": song['title'],
+                "artist": song['artist'],
+                "album": song['album'],
+                "image": track['album']['images'][0]['url'] if track['album']['images'] else None,
+                "uri": track['uri']
+            })
+    
+    return finalSendBack
 
 
 def getBillboard():
