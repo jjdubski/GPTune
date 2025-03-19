@@ -212,20 +212,33 @@ const ThisorThat: React.FC = () => {
             <></>
         ) : (
         <div className="this-or-that-page">
+            <div className="liked-songs-sidebar">
+                <LikedSongList songs={playlistSongs} />
+                {/* <button className="arrow-button" onClick={() => console.log("")}>
+                    <img src="/arrow.png" alt="Arrow" className="arrow-icon" /> */}
+            </div>
             <div className="this-or-that-container">
                 <div className="this-or-that-content">
-                    <h1>Showing Songs Like:</h1>
-                    <SongSelector
-                        title={selectedSong?.title || "No Songs"}
-                        artist={selectedSong?.artist || ""}
-                        image={selectedSong?.image || ""}
-                        spotifyUrl={selectedSong?.uri || ""}
-                        songs={playlistSongs}
-                        onSelectSong={handleSelectSong}
-                    />
+                    <div className ="song-selector-container">
+                            
+                        <h1>Showing Songs Like:</h1>
+                        <SongSelector
+                            title={selectedSong?.title || "No Songs"}
+                            artist={selectedSong?.artist || ""}
+                            image={selectedSong?.image || ""}
+                            spotifyUrl={selectedSong?.uri || ""}
+                            songs={playlistSongs}
+                            onSelectSong={handleSelectSong}
+                            onEditClick= {setOpen}
+                        />  
+                        <button className="arrow-button" onClick={handlePrevSong}>
+                                    <img src="/arrow.png" alt="Arrow" className="arrow-icon" />
+                                </button>
+                    </div>
 
                     {playlistSongs.length > 0 && (
-                        <>
+                        <> 
+                        <div className="song-card-container">
                             <SongCard
                                 title={currentSong?.title || "No Songs"}
                                 artist={currentSong?.artist || ""}
@@ -233,29 +246,36 @@ const ThisorThat: React.FC = () => {
                                 image={currentSong?.image || ""}
                                 uri = {currentSong?.uri || ""}
                             />
-
+{/* 
                             <div className="action-buttons">
                                 <button className="exit-btn" onClick={generateSong}>
                                     <img src="/exit.png" alt="Exit" />
                                 </button>
                                 <button className="check-btn" onClick={addToPlaylist}>
-                                    <img src="/check.png" alt="Check" />
-                                </button>
-                                <button className="arrow-button" onClick={handlePrevSong}>
-                                    <img src="/arrow.png" alt="Arrow" className="arrow-icon" />
-                                </button>
-                            </div>
+                                    <img src="/check.png" alt="Check" /> */}
+                                {/* </button> */}
+                        <div className="action-buttons">
+                            <button className="trash-btn" onClick={generateSong}>
+                                {/* <i className="trash"></i> */}
+                                <img src="/trash-btn.png" alt="trash" />
+                            </button>
+
+                            <button className="heart-btn" onClick={addToPlaylist}>
+                                <img src="/heart-btn.png" alt="heart" />
+                            </button>
+                        </div>
+
+
+                                            </div>
+
+
                         </>
                     )}
                 </div>
             </div>
 
             {/* Liked Songs on the Right Side */}
-            <div className="liked-songs-sidebar">
-                <LikedSongList songs={playlistSongs} />
-                {/* <button className="arrow-button" onClick={() => console.log("")}>
-                    <img src="/arrow.png" alt="Arrow" className="arrow-icon" /> */}
-            </div>
+        
         </div>
         )
     );

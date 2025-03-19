@@ -31,6 +31,9 @@ const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spoti
         window.open(spotifyUrl, '_blank'); 
     };
 
+    const displayLikedSongs = () => {
+        setIsOpen(!isOpen);
+    };
 
     return (
         <div className="song-selector">
@@ -50,7 +53,7 @@ const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spoti
             
             {/* Dropdown Button */}
             <div className="dropdown">
-                <button className="dropbtn" onClick={toggleDropdown}>
+                <button className="dropbtn" onClick={displayLikedSongs}>
                     <img src={editIcon} alt="edit icon" className="edit-icon" />
                 </button>
                 {isOpen && (
