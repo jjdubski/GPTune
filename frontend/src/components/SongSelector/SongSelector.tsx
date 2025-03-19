@@ -18,13 +18,13 @@ interface SongSelectorProps {
     artist: string;
     image: string;
     spotifyUrl: string;
-    songs: Song[];
-    onSelectSong: (song: Song) => void;
+    // songs: Song[];
+    // onSelectSong: (song: Song) => void;
     isOpen: boolean;
     handleOpen: (isOpen: boolean) => void;
 }
 
-const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spotifyUrl, songs, onSelectSong, isOpen, handleOpen }) => {
+const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spotifyUrl, isOpen, handleOpen }) => {
     // const [isOpen, setIsOpen] = useState(false);
     // const toggleDropdown = () => {
     //     setIsOpen(!isOpen);
@@ -39,7 +39,7 @@ const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spoti
     };
 
     return (
-        <div className="song-selector">
+        <div className="song-selector" onClick={displayLikedSongs}>
             <div className="song-selector-image-container" onClick={handleClick}>
                 <img src={image} className="song-selector-image" />
             </div>
@@ -56,10 +56,10 @@ const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spoti
             </div>
             
             {/* Dropdown Button */}
-            <div className="dropdown">
+            {/* <div className="dropdown">
                 <button className="dropbtn" onClick={displayLikedSongs}>
                     <img src={editIcon} alt="edit icon" className="edit-icon" />
-                </button>
+                </button> */}
                 {/* {isOpen && (
                     <div className="dropdown-content">
                         {songs.map((song) => (
@@ -80,7 +80,7 @@ const SongSelector: React.FC<SongSelectorProps> = ({ title, artist, image, spoti
                         ))}
                     </div>
                 )} */}
-            </div>
+            {/* </div> */}
         </div>
     );
 };

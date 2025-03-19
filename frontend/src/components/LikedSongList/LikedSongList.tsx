@@ -12,11 +12,12 @@ interface Song {
 
 interface LikedSongListProps {
     songs: Song[];
-    isOpen?: boolean;
-    handleOpen?: (isOpen: boolean) => void;
+    isOpen: boolean;
+    handleOpen: (isOpen: boolean) => void;
+    onSelectSong: (song: Song) => void;
 }
 
-const LikedSongList: React.FC<LikedSongListProps> = ({ songs, isOpen, handleOpen }) => {
+const LikedSongList: React.FC<LikedSongListProps> = ({ songs, isOpen, handleOpen, onSelectSong }) => {
     const [likedSongs, setLikedSongs] = useState<Song[]>([]);
     const [songList, setSongList] = useState<Song[]>([]);
     // const [isOpen, setIsOpen] = useState(true);
@@ -108,7 +109,7 @@ const LikedSongList: React.FC<LikedSongListProps> = ({ songs, isOpen, handleOpen
             <div className="liked-songs-list scroll">
                 {songList.length > 0 ? (
                     songList.map((song) => (
-                        <div key={song.trackID} className="liked-song-item">
+                        <div key={song.trackID} className="liked-song-item" onClick={() => onSelectSong(song)}>
                             <img src={song.image} alt={song.title} className="liked-song-image" />
                             <div className="liked-song-info">
                                 <p id="liked-song-title">{song.title}</p>
