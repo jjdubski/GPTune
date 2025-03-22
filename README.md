@@ -42,9 +42,33 @@
 
 # File Structure:
 
-### Repository Folder:
+### Overall:  
+![image](https://github.com/user-attachments/assets/a56695ff-5d26-4eb3-8b7a-683d334ced9c)  
 
-**Need to update this.**
+### The backend:  
+![image](https://github.com/user-attachments/assets/415b0308-0302-448a-bc69-098fd8f4d2de)  
+
+- playlists app:  
+![image](https://github.com/user-attachments/assets/fc06d070-4de5-48f8-9063-aa91a40d2e73)  
+
+- songs app:  
+![image](https://github.com/user-attachments/assets/c5334002-99c9-4e46-ab45-f4725fab0a8e)  
+
+### The frontend:  
+![image](https://github.com/user-attachments/assets/119669f7-ba32-4e97-bbe9-b959978f68d9)  
+
+- public directory:  
+![image](https://github.com/user-attachments/assets/7321f9d3-232b-4a2c-9de7-1f170fce9aa5)
+
+- src directory:  
+![image](https://github.com/user-attachments/assets/b08f4f86-c982-4c82-94d6-d3c83340e03c)  
+
+- components directory:  
+![image](https://github.com/user-attachments/assets/2e28e651-3b8a-4920-b0ed-f4f9cce4a37a)
+
+- pages directory:  
+![image](https://github.com/user-attachments/assets/be07a0b3-5332-4643-be8c-1c9256c898fd)  
+
 
 # List of Commands:
 
