@@ -55,6 +55,9 @@ Required environment variables include:
 - `DATABASE_PASSWORD`
 - `DATABASE_HOST`
 - `DATABASE_PORT`
+- `OPENAI_API_KEY`
+- `DJANGO_APP_SPOTIFY_CLIENT_ID`
+- `DJANGO_APP_SPOTIFY_SECRET`
 
 The backend also expects the Spotify and OpenAI-related values used by the project.
 
